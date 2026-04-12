@@ -13,12 +13,18 @@ class StudentApplication extends Model
         'firstname',
         'middlename',
         'lastname',
-        'years_old',
+        'name_extender',
+        'age',
+        'sex',
+        'civil_status',
+        'date_of_birth',
+        'birth_place',
         'contact_number',
         'gmail_account',
         'temporary_address',
         'permanent_address',
         'guardian_name',
+        'guardian_relationship',
         'guardian_phone',
         'student_type',
         'campus',
@@ -26,9 +32,4 @@ class StudentApplication extends Model
         'course',
         'status'
     ];
-
-    public function getFullNameAttribute()
-    {
-        return $this->firstname . ' ' . ($this->middlename ? $this->middlename . ' ' : '') . $this->lastname;
-    }
 }
