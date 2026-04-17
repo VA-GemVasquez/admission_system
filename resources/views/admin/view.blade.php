@@ -406,6 +406,75 @@
                         </div>
                     </div>
 
+                    <!-- Documents Section -->
+                    <div class="mt-12 bg-gray-50 rounded-xl p-8 border border-gray-200">
+                        <h3 class="text-xl font-bold text-[#000035] mb-6 flex items-center border-b pb-4">
+                            <svg class="w-6 h-6 mr-2 text-yellow-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"></path>
+                            </svg>
+                            Submitted Documents
+                        </h3>
+                        
+                        <div class="grid md:grid-cols-3 gap-8">
+                            <!-- Photo -->
+                            <div class="bg-white p-6 rounded-xl shadow-sm border border-gray-100 flex flex-col items-center">
+                                <p class="text-xs font-bold uppercase tracking-wider text-gray-400 mb-4">Applicant Photo</p>
+                                @if($application->photo_path)
+                                    <div class="w-40 h-40 mb-4 rounded-xl overflow-hidden shadow-lg border-4 border-white">
+                                        <img src="{{ asset('storage/' . $application->photo_path) }}" class="w-full h-full object-cover">
+                                    </div>
+                                    <a href="{{ asset('storage/' . $application->photo_path) }}" target="_blank" 
+                                       class="inline-flex items-center text-[#000035] hover:text-yellow-600 font-bold text-sm transition">
+                                        <svg class="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14"></path>
+                                        </svg>
+                                        View Full Size
+                                    </a>
+                                @else
+                                    <div class="w-40 h-40 mb-4 rounded-xl bg-gray-100 flex items-center justify-center border-2 border-dashed border-gray-300">
+                                        <span class="text-gray-400 italic text-sm">No Photo Uploaded</span>
+                                    </div>
+                                @endif
+                            </div>
+
+                            <!-- Birth Certificate -->
+                            <div class="bg-white p-6 rounded-xl shadow-sm border border-gray-100 flex flex-col items-center justify-center">
+                                <p class="text-xs font-bold uppercase tracking-wider text-gray-400 mb-4">Birth Certificate (PSA)</p>
+                                @if($application->birth_certificate_path)
+                                    <div class="w-20 h-20 mb-6 bg-red-50 rounded-2xl flex items-center justify-center text-red-500">
+                                        <svg class="w-10 h-10" fill="currentColor" viewBox="0 0 20 20">
+                                            <path d="M9 2a2 2 0 00-2 2v8a2 2 0 002 2h6a2 2 0 002-2V6.414A2 2 0 0016.414 5L14 2.586A2 2 0 0012.586 2H9z"/>
+                                        </svg>
+                                    </div>
+                                    <a href="{{ asset('storage/' . $application->birth_certificate_path) }}" target="_blank" 
+                                       class="w-full bg-[#000035] text-white py-3 rounded-lg text-sm font-bold hover:bg-opacity-90 transition text-center shadow-lg">
+                                        View PSA Certificate
+                                    </a>
+                                @else
+                                    <p class="text-gray-400 italic text-sm">Not provided</p>
+                                @endif
+                            </div>
+
+                            <!-- Report Card -->
+                            <div class="bg-white p-6 rounded-xl shadow-sm border border-gray-100 flex flex-col items-center justify-center">
+                                <p class="text-xs font-bold uppercase tracking-wider text-gray-400 mb-4">Report Card (Form 137)</p>
+                                @if($application->report_card_path)
+                                    <div class="w-20 h-20 mb-6 bg-blue-50 rounded-2xl flex items-center justify-center text-blue-500">
+                                        <svg class="w-10 h-10" fill="currentColor" viewBox="0 0 20 20">
+                                            <path d="M9 2a2 2 0 00-2 2v8a2 2 0 002 2h6a2 2 0 002-2V6.414A2 2 0 0016.414 5L14 2.586A2 2 0 0012.586 2H9z"/>
+                                        </svg>
+                                    </div>
+                                    <a href="{{ asset('storage/' . $application->report_card_path) }}" target="_blank" 
+                                       class="w-full bg-[#000035] text-white py-3 rounded-lg text-sm font-bold hover:bg-opacity-90 transition text-center shadow-lg">
+                                        View Report Card
+                                    </a>
+                                @else
+                                    <p class="text-gray-400 italic text-sm">Not provided</p>
+                                @endif
+                            </div>
+                        </div>
+                    </div>
+
                     <!-- Action Buttons -->
                     <div class="mt-8 pt-6 border-t border-gray-200 flex justify-between items-center">
                         <a href="{{ route('admin.applications') }}" 

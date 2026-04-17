@@ -6,6 +6,8 @@ use App\Models\Campus;
 use App\Models\StudentApplication;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Mail;
+use App\Mail\ApplicationStatusUpdated;
 
 class AdminController extends Controller
 {
@@ -107,6 +109,9 @@ class AdminController extends Controller
     {
         $application = StudentApplication::findOrFail($id);
         $application->update(['status' => 'Approved']);
+        
+        $this->sendStatusEmail($application);
+        
         return redirect()->back()->with('success', 'Application approved successfully!');
     }
 
@@ -114,6 +119,9 @@ class AdminController extends Controller
     {
         $application = StudentApplication::findOrFail($id);
         $application->update(['status' => 'Rejected']);
+        
+        $this->sendStatusEmail($application);
+        
         return redirect()->back()->with('success', 'Application rejected successfully!');
     }
 
@@ -121,7 +129,19 @@ class AdminController extends Controller
     {
         $application = StudentApplication::findOrFail($id);
         $application->update(['status' => 'Waitlisted']);
+        
+        $this->sendStatusEmail($application);
+        
         return redirect()->back()->with('success', 'Application waitlisted successfully!');
+    }
+
+    private function sendStatusEmail($application)
+    {
+        try {
+            Mail::to($application->gmail_account)->send(new ApplicationStatusUpdated($application));
+        } catch (\Exception $e) {
+            \Log::error('Status mail failed: ' . $e->getMessage());
+        }
     }
 
     public function editApplication($id)

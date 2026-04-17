@@ -106,7 +106,7 @@
                         </h2>
                         <span class="method-badge">Secure Lookup</span>
                     </div>
-                    <p class="text-[#000035] mt-2 ml-11">Enter your credentials below to check your admission status</p>
+                    <p class="text-[#000035] mt-2 ml-11">Enter your Application ID to check your admission progress</p>
                 </div>
 
                 <div class="p-8">
@@ -148,7 +148,7 @@
                         <svg class="w-5 h-5 text-[#000035] mr-3 mt-0.5 flex-shrink-0" fill="currentColor" viewBox="0 0 20 20">
                             <path fill-rule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7-4a1 1 0 11-2 0 1 1 0 012 0zM9 9a1 1 0 000 2v3a1 1 0 001 1h1a1 1 0 100-2v-3a1 1 0 00-1-1H9z" clip-rule="evenodd"/>
                         </svg>
-                        <p class="text-sm text-[#000035]">Enter either your Application ID or the Gmail address you used to apply. Your information is secure and encrypted.</p>
+                        <p class="text-sm text-[#000035]">Enter your Application ID to check your admission status. Your information is secure and encrypted.</p>
                     </div>
 
                     <form action="{{ route('student.lookup') }}" method="GET" class="space-y-6" id="trackForm" onsubmit="return validateForm()">
@@ -177,44 +177,6 @@
                             </p>
                         </div>
 
-                        <div class="relative">
-                            <div class="absolute inset-0 flex items-center">
-                                <div class="w-full border-t border-gray-300"></div>
-                            </div>
-                            <div class="relative flex justify-center">
-                                <span class="px-4 bg-white text-sm text-gray-500 font-medium">OR</span>
-                            </div>
-                        </div>
-
-                        <!-- Gmail Field -->
-                        <div class="bg-gray-50 p-6 rounded-xl border-2 border-transparent hover:border-yellow-400 transition" id="emailField">
-                            <label class="block text-sm font-medium text-gray-700 mb-2">
-                                <span class="flex items-center">
-                                    <svg class="w-4 h-4 mr-1 text-[#000035]" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"></path>
-                                    </svg>
-                                    Gmail Address
-                                </span>
-                            </label>
-                            <div class="flex">
-                                <input type="text" 
-                                       name="email" 
-                                       id="email"
-                                       placeholder="your.email" 
-                                       value="{{ request('email') }}"
-                                       class="flex-1 px-4 py-3 border border-gray-300 rounded-l-lg focus:ring-2 focus:ring-yellow-400 focus:border-yellow-400 transition"
-                                       onfocus="clearOtherField('application_id')">
-                                <span class="inline-flex items-center px-4 bg-gray-100 border border-l-0 border-gray-300 rounded-r-lg text-gray-600 font-medium">
-                                    @gmail.com
-                                </span>
-                            </div>
-                            <p class="text-xs text-gray-500 mt-2 flex items-center">
-                                <svg class="w-3 h-3 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 19v-8.93a2 2 0 01.89-1.664l7-4.666a2 2 0 012.22 0l7 4.666A2 2 0 0121 10.07V19a2 2 0 01-2 2H5a2 2 0 01-2-2z"></path>
-                                </svg>
-                                Use the Gmail you used in your application
-                            </p>
-                        </div>
 
                         <!-- Action Buttons -->
                         <div class="flex flex-col sm:flex-row justify-between items-center gap-4 pt-4">
@@ -246,10 +208,6 @@
                                 <li class="flex items-start">
                                     <span class="text-yellow-500 mr-2">•</span>
                                     Application ID is a number (e.g., 12345)
-                                </li>
-                                <li class="flex items-start">
-                                    <span class="text-yellow-500 mr-2">•</span>
-                                    Don't include @gmail.com in the email field
                                 </li>
                                 <li class="flex items-start">
                                     <span class="text-yellow-500 mr-2">•</span>
@@ -296,39 +254,21 @@
     </div>
 
     <script>
-        // Function to clear the other field when one is focused
-        function clearOtherField(fieldName) {
-            if (fieldName === 'email') {
-                document.getElementById('application_id').value = '';
-            } else {
-                document.getElementById('email').value = '';
-            }
-        }
 
         // Form validation function
         function validateForm() {
             const appId = document.getElementById('application_id').value.trim();
-            const email = document.getElementById('email').value.trim();
             
-            // Check if both fields are empty
-            if (!appId && !email) {
-                alert('Please enter either an Application ID or Gmail address.');
+            // Check if field is empty
+            if (!appId) {
+                alert('Please enter your Application ID.');
                 return false;
             }
             
             // Validate Application ID format (should be numbers only)
-            if (appId && !/^\d+$/.test(appId)) {
+            if (!/^\d+$/.test(appId)) {
                 alert('Application ID should contain only numbers.');
                 return false;
-            }
-            
-            // Validate email format if provided
-            if (email) {
-                // Check if email contains @ symbol (should not, based on your field setup)
-                if (email.includes('@')) {
-                    alert('Please enter only the username part without @gmail.com');
-                    return false;
-                }
             }
             
             return true; // Allow form submission
@@ -337,9 +277,7 @@
         // Add event listeners for highlighting
         document.addEventListener('DOMContentLoaded', function() {
             const appIdField = document.getElementById('application_id');
-            const emailField = document.getElementById('email');
             const idFieldDiv = document.getElementById('idField');
-            const emailFieldDiv = document.getElementById('emailField');
 
             if (appIdField) {
                 appIdField.addEventListener('focus', function() {
@@ -348,16 +286,6 @@
                 
                 appIdField.addEventListener('blur', function() {
                     idFieldDiv.classList.remove('border-yellow-400');
-                });
-            }
-            
-            if (emailField) {
-                emailField.addEventListener('focus', function() {
-                    emailFieldDiv.classList.add('border-yellow-400');
-                });
-                
-                emailField.addEventListener('blur', function() {
-                    emailFieldDiv.classList.remove('border-yellow-400');
                 });
             }
         });

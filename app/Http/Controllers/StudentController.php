@@ -6,6 +6,8 @@ use App\Models\Campus;
 use App\Models\StudentApplication;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Validator;
+use Illuminate\Support\Facades\Mail;
+use App\Mail\ApplicationSubmitted;
 
 class StudentController extends Controller
 {
@@ -38,7 +40,10 @@ class StudentController extends Controller
             'campus' => 'required|string',
             'college' => 'required|string',
             'course' => 'required|string',
-            'terms' => 'required|accepted'
+            'terms' => 'required|accepted',
+            'photo' => 'required|image|mimes:jpeg,png,jpg|max:2048',
+            'birth_certificate' => 'required|mimes:pdf,jpeg,png,jpg|max:2048',
+            'report_card' => 'required|mimes:pdf,jpeg,png,jpg|max:2048',
         ]);
 
         if ($validator->fails()) {
@@ -46,6 +51,10 @@ class StudentController extends Controller
                 ->withErrors($validator)
                 ->withInput();
         }
+
+        $photoPath = $request->file('photo')->store('documents/photos', 'public');
+        $birthCertPath = $request->file('birth_certificate')->store('documents/birth_certificates', 'public');
+        $reportCardPath = $request->file('report_card')->store('documents/report_cards', 'public');
 
         $application = StudentApplication::create([
             'firstname' => $request->firstname,
@@ -68,11 +77,22 @@ class StudentController extends Controller
             'campus' => $request->campus,
             'college' => $request->college,
             'course' => $request->course,
+            'photo_path' => $photoPath,
+            'birth_certificate_path' => $birthCertPath,
+            'report_card_path' => $reportCardPath,
             'status' => 'Pending'
         ]);
 
+        // Send Email
+        try {
+            Mail::to($application->gmail_account)->send(new ApplicationSubmitted($application));
+        } catch (\Exception $e) {
+            // Log error but continue
+            \Log::error('Mail failed: ' . $e->getMessage());
+        }
+
         return redirect()->route('student.review', $application->id)
-            ->with('success', 'Application submitted successfully! Please review your application.');
+            ->with('success', 'Application submitted successfully! A confirmation email has been sent to your Gmail.');
     }
 
     public function reviewApplication($id)
@@ -173,8 +193,7 @@ class StudentController extends Controller
     public function lookupApplication(Request $request)
     {
         $validator = Validator::make($request->all(), [
-            'application_id' => 'nullable|string',
-            'email' => 'nullable|string'
+            'application_id' => 'required|string',
         ]);
 
         if ($validator->fails()) {
@@ -183,51 +202,23 @@ class StudentController extends Controller
                 ->withInput();
         }
 
-        if (!$request->filled('application_id') && !$request->filled('email')) {
+        $appId = ltrim($request->application_id, '0');
+        
+        if ($appId === '') {
             return redirect()->back()
-                ->with('error', 'Please enter either an Application ID or Gmail address.')
+                ->with('error', 'Invalid Application ID format.')
                 ->withInput();
         }
-
-        if ($request->filled('application_id')) {
-            $appId = ltrim($request->application_id, '0');
-            
-            if ($appId === '') {
-                return redirect()->back()
-                    ->with('error', 'Invalid Application ID format.')
-                    ->withInput();
-            }
-            
-            $application = StudentApplication::find($appId);
-            
-            if ($application) {
-                return redirect()->route('student.status', $application->id)
-                    ->with('success', 'Application found!');
-            } else {
-                return redirect()->back()
-                    ->with('error', 'No application found with ID: ' . $request->application_id)
-                    ->withInput();
-            }
-        }
-
-        if ($request->filled('email')) {
-            $email = trim($request->email);
-            $email = str_replace(['@gmail.com', '@'], '', $email);
-            
-            $application = StudentApplication::where('gmail_account', $email)->first();
-            
-            if ($application) {
-                return redirect()->route('student.status', $application->id)
-                    ->with('success', 'Application found!');
-            } else {
-                return redirect()->back()
-                    ->with('error', 'No application found with Gmail: ' . $request->email)
-                    ->withInput();
-            }
-        }
         
-        return redirect()->back()
-            ->with('error', 'Please enter either an Application ID or Gmail address.')
-            ->withInput();
+        $application = StudentApplication::find($appId);
+        
+        if ($application) {
+            return redirect()->route('student.status', $application->id)
+                ->with('success', 'Application found!');
+        } else {
+            return redirect()->back()
+                ->with('error', 'No application found with ID: ' . $request->application_id)
+                ->withInput();
+        }
     }
 }
