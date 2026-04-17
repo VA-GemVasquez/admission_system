@@ -260,7 +260,7 @@
                     <div>
                         <div class="flex justify-between mb-2">
                             <div>
-                                <span class="font-semibold text-gray-700">{{ $campus }} Campus</span>
+                                <span class="font-semibold text-gray-700">{{ $campus }}{{ str_contains(strtolower($campus), 'campus') ? '' : ' Campus' }}</span>
                                 <span class="ml-2 text-sm text-gray-500">{{ $count }} applicants</span>
                             </div>
                             <span class="text-sm font-semibold text-[#000035]">

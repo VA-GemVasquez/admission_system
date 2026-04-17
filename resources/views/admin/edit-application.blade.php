@@ -410,9 +410,9 @@
                                     </label>
                                     <select name="campus" required id="campus"
                                             class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-yellow-400 focus:border-yellow-400 transition">
-                                        <option value="Goa" {{ old('campus', $application->campus) == 'Goa' ? 'selected' : '' }}>Goa Campus</option>
-                                        <option value="San Jose" {{ old('campus', $application->campus) == 'San Jose' ? 'selected' : '' }}>San Jose Campus</option>
-                                        <option value="Lagonoy" {{ old('campus', $application->campus) == 'Lagonoy' ? 'selected' : '' }}>Lagonoy Campus</option>
+                                        @foreach($campuses as $campus)
+                                            <option value="{{ $campus->name }}" {{ old('campus', $application->campus) == $campus->name ? 'selected' : '' }}>{{ $campus->name }}</option>
+                                        @endforeach
                                     </select>
                                 </div>
                             </div>
@@ -506,19 +506,18 @@
     </div>
     
     <script>
-        const campusData = {
-            'Goa': {
-                'COED': ['BS Science', 'BS English', 'BS Physical Education'],
-                'CEC': ['BS Information Technology', 'BS Computer Science', 'BS Civil Engineering', 'BS Electrical Engineering', 'BS Sanitary Engineering']
-            },
-            'San Jose': {
-                'Hospitality Management': ['BS Hospitality Management', 'BS Tourism']
-            },
-            'Lagonoy': {
-                'Criminology': ['BS Criminology'],
-                'Nutrition and Dietetics': ['BS Nutrition and Dietetics']
-            }
-        };
+        const campusData = {};
+        
+        @foreach($campuses as $campus)
+            campusData['{{ $campus->name }}'] = {};
+            @foreach($campus->colleges as $college)
+                campusData['{{ $campus->name }}']['{{ $college->name }}'] = [
+                    @foreach($college->courses as $course)
+                        '{{ $course->name }}',
+                    @endforeach
+                ];
+            @endforeach
+        @endforeach
 
         const campusSelect = document.getElementById('campus');
         const collegeSelect = document.getElementById('college');

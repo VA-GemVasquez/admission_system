@@ -216,9 +216,9 @@
                             <label class="block text-sm font-medium text-gray-700 mb-2">Campus</label>
                             <select name="campus" class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-yellow-400 focus:border-yellow-400">
                                 <option value="">All Campuses</option>
-                                <option value="Goa" {{ request('campus') == 'Goa' ? 'selected' : '' }}>Goa Campus</option>
-                                <option value="San Jose" {{ request('campus') == 'San Jose' ? 'selected' : '' }}>San Jose Campus</option>
-                                <option value="Lagonoy" {{ request('campus') == 'Lagonoy' ? 'selected' : '' }}>Lagonoy Campus</option>
+                                @foreach($campuses as $campus)
+                                    <option value="{{ $campus->name }}" {{ request('campus') == $campus->name ? 'selected' : '' }}>{{ $campus->name }}</option>
+                                @endforeach
                             </select>
                         </div>
                         

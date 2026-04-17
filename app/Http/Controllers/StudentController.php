@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Campus;
 use App\Models\StudentApplication;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Validator;
@@ -10,7 +11,8 @@ class StudentController extends Controller
 {
     public function showForm()
     {
-        return view('student.admission-form');
+        $campuses = Campus::with('colleges.courses')->get();
+        return view('student.admission-form', compact('campuses'));
     }
 
     public function submitApplication(Request $request)
@@ -33,7 +35,7 @@ class StudentController extends Controller
             'guardian_relationship' => 'required|string',
             'guardian_phone' => 'required|string|max:20',
             'student_type' => 'required|in:Regular,Irregular,Transferee',
-            'campus' => 'required|in:Goa,San Jose,Lagonoy',
+            'campus' => 'required|string',
             'college' => 'required|string',
             'course' => 'required|string',
             'terms' => 'required|accepted'
@@ -88,7 +90,8 @@ class StudentController extends Controller
                 ->with('error', 'Cannot edit application that is already ' . $application->status);
         }
         
-        return view('student.edit-form', compact('application'));
+        $campuses = Campus::with('colleges.courses')->get();
+        return view('student.edit-form', compact('application', 'campuses'));
     }
 
     public function updateApplication(Request $request, $id)
@@ -118,7 +121,7 @@ class StudentController extends Controller
             'guardian_relationship' => 'required|string',
             'guardian_phone' => 'required|string|max:20',
             'student_type' => 'required|in:Regular,Irregular,Transferee',
-            'campus' => 'required|in:Goa,San Jose,Lagonoy',
+            'campus' => 'required|string',
             'college' => 'required|string',
             'course' => 'required|string',
         ]);

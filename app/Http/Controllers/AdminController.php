@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Campus;
 use App\Models\StudentApplication;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -45,11 +46,11 @@ class AdminController extends Controller
         $irregularStudents = StudentApplication::where('student_type', 'Irregular')->count();
         $transferees = StudentApplication::where('student_type', 'Transferee')->count();
         
-        $campusCounts = [
-            'Goa' => StudentApplication::where('campus', 'Goa')->count(),
-            'San Jose' => StudentApplication::where('campus', 'San Jose')->count(),
-            'Lagonoy' => StudentApplication::where('campus', 'Lagonoy')->count(),
-        ];
+        $campusCounts = [];
+        $campuses = Campus::all();
+        foreach ($campuses as $campus) {
+            $campusCounts[$campus->name] = StudentApplication::where('campus', $campus->name)->count();
+        }
 
         return view('admin.dashboard', compact(
             'totalApplicants', 
@@ -91,8 +92,9 @@ class AdminController extends Controller
         }
 
         $applications = $query->orderBy('created_at', 'desc')->paginate(15);
+        $campuses = Campus::all();
         
-        return view('admin.applications', compact('applications'));
+        return view('admin.applications', compact('applications', 'campuses'));
     }
 
     public function viewApplication($id)
@@ -125,7 +127,8 @@ class AdminController extends Controller
     public function editApplication($id)
     {
         $application = StudentApplication::findOrFail($id);
-        return view('admin.edit-application', compact('application'));
+        $campuses = Campus::with('colleges.courses')->get();
+        return view('admin.edit-application', compact('application', 'campuses'));
     }
 
     public function updateApplication(Request $request, $id)
@@ -143,7 +146,7 @@ class AdminController extends Controller
             'guardian_name' => 'required|string|max:255',
             'guardian_phone' => 'required|string|max:20',
             'student_type' => 'required|in:Regular,Irregular,Transferee',
-            'campus' => 'required|in:Goa,San Jose,Lagonoy',
+            'campus' => 'required|string',
             'college' => 'required|string',
             'course' => 'required|string',
             'status' => 'required|in:Pending,Approved,Rejected,Waitlisted',
