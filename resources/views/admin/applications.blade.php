@@ -7,7 +7,7 @@
     @vite(['resources/css/app.css'], ['resources/js/app.js'])
     <style>
         .psu-blue-bg {
-            background: linear-gradient(135deg, #003366 0%, #004080 100%);
+            background: linear-gradient(135deg, #000035 0%, #00004d 100%);
         }
         .psu-gold-bg {
             background: linear-gradient(135deg, #FFD700 0%, #FDB931 100%);
@@ -16,11 +16,11 @@
             color: #FFD700;
         }
         .psu-blue-text {
-            color: #003366;
+            color: #000035;
         }
         .sidebar-active {
             background: linear-gradient(90deg, #FFD700 0%, #FDB931 100%);
-            color: #003366;
+            color: #000035;
             font-weight: bold;
         }
         .status-badge {
@@ -53,6 +53,21 @@
         .quick-stat-card {
             @apply bg-white rounded-lg shadow p-4 border-l-4 hover:shadow-md transition;
         }
+        .logo-container {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            overflow: hidden;
+            background: linear-gradient(135deg, #FFD700 0%, #FDB931 100%);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        .logo-container img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
     </style>
 </head>
 <body class="bg-gray-100">
@@ -62,8 +77,11 @@
             <!-- Logo -->
             <div class="p-6 border-b border-blue-700">
                 <div class="flex items-center space-x-3">
-                    <div class="w-10 h-10 bg-gradient-to-br from-yellow-400 to-yellow-600 rounded-lg flex items-center justify-center">
-                        <span class="text-xl font-bold text-blue-900">PSU</span>
+                    <!-- PSU Logo Image -->
+                    <div class="logo-container">
+                        <img src="{{ asset('images/PSU_LOGO.png') }}" 
+                             alt="PSU Logo" 
+                             onerror="this.onerror=null; this.parentElement.style.backgroundColor='#FFD700'; this.parentElement.innerHTML='<span class=\'text-xl font-bold text-[#000035]\'>PSU</span>';">
                     </div>
                     <div>
                         <h2 class="text-xl font-bold">Admin Panel</h2>
@@ -108,7 +126,7 @@
             <div class="mb-8">
                 <div class="flex justify-between items-center mb-4">
                     <div>
-                        <h1 class="text-3xl font-bold text-blue-900">Applications Management</h1>
+                        <h1 class="text-3xl font-bold text-[#000035]">Applications Management</h1>
                         <p class="text-gray-600">View and manage all student applications</p>
                     </div>
                     <div class="flex space-x-3">
@@ -133,7 +151,7 @@
                 <div class="grid grid-cols-1 md:grid-cols-5 gap-4 mb-6">
                     <div class="quick-stat-card border-l-yellow-400">
                         <p class="text-sm text-gray-500">Total Applicants</p>
-                        <p class="text-2xl font-bold text-blue-900">{{ $totalApplicants ?? $applications->total() }}</p>
+                        <p class="text-2xl font-bold text-[#000035]">{{ $totalApplicants ?? $applications->total() }}</p>
                     </div>
                     <div class="quick-stat-card border-l-yellow-400">
                         <p class="text-sm text-gray-500">Pending</p>
@@ -174,7 +192,7 @@
             
             <!-- Search and Filter Card -->
             <div class="bg-white rounded-xl shadow-lg p-6 mb-6 border-t-4 border-yellow-400">
-                <h2 class="text-lg font-semibold text-blue-900 mb-4 flex items-center">
+                <h2 class="text-lg font-semibold text-[#000035] mb-4 flex items-center">
                     <svg class="w-5 h-5 mr-2 text-yellow-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 4a1 1 0 011-1h16a1 1 0 011 1v2.586a1 1 0 01-.293.707l-6.414 6.414a1 1 0 00-.293.707V17l-4 4v-6.586a1 1 0 00-.293-.707L3.293 7.293A1 1 0 013 6.586V4z"></path>
                     </svg>
@@ -198,9 +216,9 @@
                             <label class="block text-sm font-medium text-gray-700 mb-2">Campus</label>
                             <select name="campus" class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-yellow-400 focus:border-yellow-400">
                                 <option value="">All Campuses</option>
-                                <option value="Goa" {{ request('campus') == 'Goa' ? 'selected' : '' }}>Goa Campus</option>
-                                <option value="San Jose" {{ request('campus') == 'San Jose' ? 'selected' : '' }}>San Jose Campus</option>
-                                <option value="Lagonoy" {{ request('campus') == 'Lagonoy' ? 'selected' : '' }}>Lagonoy Campus</option>
+                                @foreach($campuses as $campus)
+                                    <option value="{{ $campus->name }}" {{ request('campus') == $campus->name ? 'selected' : '' }}>{{ $campus->name }}</option>
+                                @endforeach
                             </select>
                         </div>
                         
@@ -233,7 +251,7 @@
                             </svg>
                             Clear Filters
                         </a>
-                        <button type="submit" class="px-4 py-2 psu-blue-bg text-white rounded-lg hover:bg-blue-800 transition flex items-center">
+                        <button type="submit" class="px-4 py-2 psu-blue-bg text-white rounded-lg hover:bg-opacity-90 transition flex items-center">
                             <svg class="w-4 h-4 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"></path>
                             </svg>
@@ -418,7 +436,7 @@
             // Get headers (excluding Actions column)
             const headers = [];
             table.querySelectorAll('thead th').forEach((th, index) => {
-                if (index < 8) { // Exclude Actions column (index 8)
+                if (index < 8) {
                     headers.push('"' + th.textContent.trim() + '"');
                 }
             });
@@ -426,12 +444,11 @@
             
             // Get data rows (excluding Actions column)
             rows.forEach((row, rowIndex) => {
-                if (rowIndex === 0) return; // Skip header row
+                if (rowIndex === 0) return;
                 const rowData = [];
                 row.querySelectorAll('td').forEach((td, colIndex) => {
-                    if (colIndex < 8) { // Exclude Actions column
+                    if (colIndex < 8) {
                         let text = td.textContent.trim();
-                        // Clean up text (remove extra spaces, newlines)
                         text = text.replace(/\s+/g, ' ').trim();
                         rowData.push('"' + text + '"');
                     }
@@ -439,7 +456,6 @@
                 if (rowData.length) csv.push(rowData.join(','));
             });
             
-            // Download CSV
             const csvContent = csv.join('\n');
             const blob = new Blob([csvContent], { type: 'text/csv' });
             const url = window.URL.createObjectURL(blob);
@@ -450,7 +466,6 @@
             window.URL.revokeObjectURL(url);
         }
 
-        // Auto-submit form when select changes
         document.querySelectorAll('#filterForm select').forEach(select => {
             select.addEventListener('change', () => {
                 document.getElementById('filterForm').submit();

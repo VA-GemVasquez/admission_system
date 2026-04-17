@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Campus;
 use App\Models\StudentApplication;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Validator;
@@ -10,7 +11,8 @@ class StudentController extends Controller
 {
     public function showForm()
     {
-        return view('student.admission-form');
+        $campuses = Campus::with('colleges.courses')->get();
+        return view('student.admission-form', compact('campuses'));
     }
 
     public function submitApplication(Request $request)
@@ -19,15 +21,21 @@ class StudentController extends Controller
             'firstname' => 'required|string|max:255',
             'middlename' => 'nullable|string|max:255',
             'lastname' => 'required|string|max:255',
-            'years_old' => 'required|integer|min:15|max:100',
+            'name_extender' => 'nullable|string|max:10',
+            'age' => 'required|integer|min:15|max:100',
+            'sex' => 'required|in:Male,Female',
+            'civil_status' => 'required|string',
+            'date_of_birth' => 'required|date',
+            'birth_place' => 'required|string|max:255',
             'contact_number' => 'required|string|max:20',
             'gmail_account' => 'required|email|unique:student_applications,gmail_account',
             'temporary_address' => 'required|string',
             'permanent_address' => 'required|string',
             'guardian_name' => 'required|string|max:255',
+            'guardian_relationship' => 'required|string',
             'guardian_phone' => 'required|string|max:20',
             'student_type' => 'required|in:Regular,Irregular,Transferee',
-            'campus' => 'required|in:Goa,San Jose,Lagonoy',
+            'campus' => 'required|string',
             'college' => 'required|string',
             'course' => 'required|string',
             'terms' => 'required|accepted'
@@ -43,12 +51,18 @@ class StudentController extends Controller
             'firstname' => $request->firstname,
             'middlename' => $request->middlename,
             'lastname' => $request->lastname,
-            'years_old' => $request->years_old,
+            'name_extender' => $request->name_extender,
+            'age' => $request->age,
+            'sex' => $request->sex,
+            'civil_status' => $request->civil_status,
+            'date_of_birth' => $request->date_of_birth,
+            'birth_place' => $request->birth_place,
             'contact_number' => $request->contact_number,
             'gmail_account' => $request->gmail_account,
             'temporary_address' => $request->temporary_address,
             'permanent_address' => $request->permanent_address,
             'guardian_name' => $request->guardian_name,
+            'guardian_relationship' => $request->guardian_relationship,
             'guardian_phone' => $request->guardian_phone,
             'student_type' => $request->student_type,
             'campus' => $request->campus,
@@ -71,13 +85,13 @@ class StudentController extends Controller
     {
         $application = StudentApplication::findOrFail($id);
         
-        // Only allow editing if status is pending
         if ($application->status !== 'Pending') {
             return redirect()->route('student.status', $id)
                 ->with('error', 'Cannot edit application that is already ' . $application->status);
         }
         
-        return view('student.edit-form', compact('application'));
+        $campuses = Campus::with('colleges.courses')->get();
+        return view('student.edit-form', compact('application', 'campuses'));
     }
 
     public function updateApplication(Request $request, $id)
@@ -93,15 +107,21 @@ class StudentController extends Controller
             'firstname' => 'required|string|max:255',
             'middlename' => 'nullable|string|max:255',
             'lastname' => 'required|string|max:255',
-            'years_old' => 'required|integer|min:15|max:100',
+            'name_extender' => 'nullable|string|max:10',
+            'age' => 'required|integer|min:15|max:100',
+            'sex' => 'required|in:Male,Female',
+            'civil_status' => 'required|string',
+            'date_of_birth' => 'required|date',
+            'birth_place' => 'required|string|max:255',
             'contact_number' => 'required|string|max:20',
             'gmail_account' => 'required|email|unique:student_applications,gmail_account,' . $id,
             'temporary_address' => 'required|string',
             'permanent_address' => 'required|string',
             'guardian_name' => 'required|string|max:255',
+            'guardian_relationship' => 'required|string',
             'guardian_phone' => 'required|string|max:20',
             'student_type' => 'required|in:Regular,Irregular,Transferee',
-            'campus' => 'required|in:Goa,San Jose,Lagonoy',
+            'campus' => 'required|string',
             'college' => 'required|string',
             'course' => 'required|string',
         ]);
@@ -116,12 +136,18 @@ class StudentController extends Controller
             'firstname' => $request->firstname,
             'middlename' => $request->middlename,
             'lastname' => $request->lastname,
-            'years_old' => $request->years_old,
+            'name_extender' => $request->name_extender,
+            'age' => $request->age,
+            'sex' => $request->sex,
+            'civil_status' => $request->civil_status,
+            'date_of_birth' => $request->date_of_birth,
+            'birth_place' => $request->birth_place,
             'contact_number' => $request->contact_number,
             'gmail_account' => $request->gmail_account,
             'temporary_address' => $request->temporary_address,
             'permanent_address' => $request->permanent_address,
             'guardian_name' => $request->guardian_name,
+            'guardian_relationship' => $request->guardian_relationship,
             'guardian_phone' => $request->guardian_phone,
             'student_type' => $request->student_type,
             'campus' => $request->campus,
@@ -145,65 +171,63 @@ class StudentController extends Controller
     }
 
     public function lookupApplication(Request $request)
-{
-    $validator = Validator::make($request->all(), [
-        'application_id' => 'nullable|string', // Changed from integer to string
-        'email' => 'nullable|string'
-    ]);
+    {
+        $validator = Validator::make($request->all(), [
+            'application_id' => 'nullable|string',
+            'email' => 'nullable|string'
+        ]);
 
-    if ($validator->fails()) {
-        return redirect()->back()
-            ->withErrors($validator)
-            ->withInput();
-    }
+        if ($validator->fails()) {
+            return redirect()->back()
+                ->withErrors($validator)
+                ->withInput();
+        }
 
-    // Check if neither field is provided
-    if (!$request->filled('application_id') && !$request->filled('email')) {
+        if (!$request->filled('application_id') && !$request->filled('email')) {
+            return redirect()->back()
+                ->with('error', 'Please enter either an Application ID or Gmail address.')
+                ->withInput();
+        }
+
+        if ($request->filled('application_id')) {
+            $appId = ltrim($request->application_id, '0');
+            
+            if ($appId === '') {
+                return redirect()->back()
+                    ->with('error', 'Invalid Application ID format.')
+                    ->withInput();
+            }
+            
+            $application = StudentApplication::find($appId);
+            
+            if ($application) {
+                return redirect()->route('student.status', $application->id)
+                    ->with('success', 'Application found!');
+            } else {
+                return redirect()->back()
+                    ->with('error', 'No application found with ID: ' . $request->application_id)
+                    ->withInput();
+            }
+        }
+
+        if ($request->filled('email')) {
+            $email = trim($request->email);
+            $email = str_replace(['@gmail.com', '@'], '', $email);
+            
+            $application = StudentApplication::where('gmail_account', $email)->first();
+            
+            if ($application) {
+                return redirect()->route('student.status', $application->id)
+                    ->with('success', 'Application found!');
+            } else {
+                return redirect()->back()
+                    ->with('error', 'No application found with Gmail: ' . $request->email)
+                    ->withInput();
+            }
+        }
+        
         return redirect()->back()
             ->with('error', 'Please enter either an Application ID or Gmail address.')
             ->withInput();
     }
-
-    // Search by Application ID
-    if ($request->filled('application_id')) {
-        // Remove leading zeros and convert to integer for lookup
-        $appId = ltrim($request->application_id, '0');
-        
-        // If after removing zeros it's empty, it means the ID was all zeros
-        if ($appId === '') {
-            return redirect()->back()
-                ->with('error', 'Invalid Application ID format.')
-                ->withInput();
-        }
-        
-        $application = StudentApplication::find($appId);
-        
-        if ($application) {
-            return redirect()->route('student.status', $application->id)
-                ->with('success', 'Application found!');
-        } else {
-            return redirect()->back()
-                ->with('error', 'No application found with ID: ' . $request->application_id)
-                ->withInput();
-        }
-    }
-
-    // Search by Gmail
-    if ($request->filled('email')) {
-        // Clean the email
-        $email = trim($request->email);
-        $email = str_replace(['@gmail.com', '@'], '', $email);
-        
-        $application = StudentApplication::where('gmail_account', $email)->first();
-        
-        if ($application) {
-            return redirect()->route('student.status', $application->id)
-                ->with('success', 'Application found!');
-        } else {
-            return redirect()->back()
-                ->with('error', 'No application found with Gmail: ' . $request->email)
-                ->withInput();
-        }
-    }
-}
 }

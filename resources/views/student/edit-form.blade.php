@@ -7,7 +7,7 @@
     @vite(['resources/css/app.css'], ['resources/js/app.js'])
     <style>
         .psu-blue-bg {
-            background: linear-gradient(135deg, #003366 0%, #004080 100%);
+            background: linear-gradient(135deg, #000035 0%, #00004d 100%);
         }
         .psu-gold-bg {
             background: linear-gradient(135deg, #FFD700 0%, #FDB931 100%);
@@ -16,13 +16,13 @@
             color: #FFD700;
         }
         .psu-blue-text {
-            color: #003366;
+            color: #000035;
         }
         .form-section {
             @apply bg-gray-50 rounded-xl p-6 border border-gray-200 hover:shadow-md transition;
         }
         .form-section-title {
-            @apply text-lg font-bold text-blue-900 mb-4 flex items-center;
+            @apply text-lg font-bold text-[#000035] mb-4 flex items-center;
         }
         .input-field {
             @apply w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-yellow-400 focus:border-yellow-400 transition;
@@ -33,6 +33,21 @@
         .status-pending {
             @apply bg-yellow-100 text-yellow-800;
         }
+        .logo-container {
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
+            overflow: hidden;
+            background: linear-gradient(135deg, #FFD700 0%, #FDB931 100%);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        .logo-container img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
     </style>
 </head>
 <body class="bg-gray-100">
@@ -41,8 +56,11 @@
         <div class="container mx-auto px-4 py-4">
             <div class="flex items-center justify-between">
                 <div class="flex items-center space-x-3">
-                    <div class="w-12 h-12 bg-gradient-to-br from-yellow-400 to-yellow-600 rounded-lg flex items-center justify-center">
-                        <span class="text-2xl font-bold text-blue-900">PSU</span>
+                    <!-- PSU Logo Image -->
+                    <div class="logo-container">
+                        <img src="{{ asset('images/PSU_LOGO.png') }}" 
+                             alt="PSU Logo" 
+                             onerror="this.onerror=null; this.parentElement.style.backgroundColor='#FFD700'; this.parentElement.innerHTML='<span class=\'text-2xl font-bold text-[#000035]\'>PSU</span>';">
                     </div>
                     <div>
                         <h1 class="text-2xl font-bold text-white">Partido State University</h1>
@@ -62,15 +80,15 @@
         <div class="max-w-5xl mx-auto">
             <!-- Navigation Breadcrumb -->
             <div class="mb-6 flex items-center text-sm">
-                <a href="{{ route('home') }}" class="text-gray-500 hover:text-blue-900 transition">Home</a>
+                <a href="{{ route('home') }}" class="text-gray-500 hover:text-[#000035] transition">Home</a>
                 <svg class="w-4 h-4 mx-2 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"></path>
                 </svg>
-                <a href="{{ route('student.review', $application->id) }}" class="text-gray-500 hover:text-blue-900 transition">Review Application</a>
+                <a href="{{ route('student.review', $application->id) }}" class="text-gray-500 hover:text-[#000035] transition">Review Application</a>
                 <svg class="w-4 h-4 mx-2 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"></path>
                 </svg>
-                <span class="text-blue-900 font-semibold">Edit Application</span>
+                <span class="text-[#000035] font-semibold">Edit Application</span>
             </div>
 
             <!-- Warning Alert for Pending Status -->
@@ -132,6 +150,13 @@
                             <div class="grid md:grid-cols-3 gap-6">
                                 <div>
                                     <label class="block text-sm font-medium text-gray-700 mb-2">
+                                        Last Name <span class="text-red-500">*</span>
+                                    </label>
+                                    <input type="text" name="lastname" value="{{ old('lastname', $application->lastname) }}" required
+                                           class="input-field">
+                                </div>
+                                <div>
+                                    <label class="block text-sm font-medium text-gray-700 mb-2">
                                         First Name <span class="text-red-500">*</span>
                                     </label>
                                     <input type="text" name="firstname" value="{{ old('firstname', $application->firstname) }}" required
@@ -142,23 +167,72 @@
                                     <input type="text" name="middlename" value="{{ old('middlename', $application->middlename) }}"
                                            class="input-field">
                                 </div>
-                                <div>
-                                    <label class="block text-sm font-medium text-gray-700 mb-2">
-                                        Last Name <span class="text-red-500">*</span>
-                                    </label>
-                                    <input type="text" name="lastname" value="{{ old('lastname', $application->lastname) }}" required
-                                           class="input-field">
-                                </div>
+                            </div>
+                            
+                            <div class="mt-4">
+                                <label class="block text-sm font-medium text-gray-700 mb-2">Name Extender</label>
+                                <select name="name_extender" class="input-field w-full md:w-64">
+                                    <option value="">None</option>
+                                    <option value="Jr." {{ old('name_extender', $application->name_extender) == 'Jr.' ? 'selected' : '' }}>Jr.</option>
+                                    <option value="Sr." {{ old('name_extender', $application->name_extender) == 'Sr.' ? 'selected' : '' }}>Sr.</option>
+                                    <option value="I" {{ old('name_extender', $application->name_extender) == 'I' ? 'selected' : '' }}>I</option>
+                                    <option value="II" {{ old('name_extender', $application->name_extender) == 'II' ? 'selected' : '' }}>II</option>
+                                    <option value="III" {{ old('name_extender', $application->name_extender) == 'III' ? 'selected' : '' }}>III</option>
+                                </select>
                             </div>
                             
                             <div class="grid md:grid-cols-3 gap-6 mt-4">
                                 <div>
                                     <label class="block text-sm font-medium text-gray-700 mb-2">
-                                        Years Old <span class="text-red-500">*</span>
+                                        Age <span class="text-red-500">*</span>
                                     </label>
-                                    <input type="number" name="years_old" value="{{ old('years_old', $application->years_old) }}" required min="15" max="100"
+                                    <input type="number" name="age" value="{{ old('age', $application->age) }}" required min="15" max="100"
                                            class="input-field">
                                 </div>
+                                <div>
+                                    <label class="block text-sm font-medium text-gray-700 mb-2">
+                                        Sex <span class="text-red-500">*</span>
+                                    </label>
+                                    <select name="sex" required class="input-field">
+                                        <option value="">Select Sex</option>
+                                        <option value="Male" {{ old('sex', $application->sex) == 'Male' ? 'selected' : '' }}>Male</option>
+                                        <option value="Female" {{ old('sex', $application->sex) == 'Female' ? 'selected' : '' }}>Female</option>
+                                    </select>
+                                </div>
+                                <div>
+                                    <label class="block text-sm font-medium text-gray-700 mb-2">
+                                        Civil Status <span class="text-red-500">*</span>
+                                    </label>
+                                    <select name="civil_status" required class="input-field">
+                                        <option value="">Select Civil Status</option>
+                                        <option value="Single" {{ old('civil_status', $application->civil_status) == 'Single' ? 'selected' : '' }}>Single</option>
+                                        <option value="Married" {{ old('civil_status', $application->civil_status) == 'Married' ? 'selected' : '' }}>Married</option>
+                                        <option value="Widowed" {{ old('civil_status', $application->civil_status) == 'Widowed' ? 'selected' : '' }}>Widowed</option>
+                                        <option value="Divorced" {{ old('civil_status', $application->civil_status) == 'Divorced' ? 'selected' : '' }}>Divorced</option>
+                                        <option value="Separated" {{ old('civil_status', $application->civil_status) == 'Separated' ? 'selected' : '' }}>Separated</option>
+                                    </select>
+                                </div>
+                            </div>
+                            
+                            <div class="grid md:grid-cols-2 gap-6 mt-4">
+                                <div>
+                                    <label class="block text-sm font-medium text-gray-700 mb-2">
+                                        Date of Birth <span class="text-red-500">*</span>
+                                    </label>
+                                    <input type="date" name="date_of_birth" value="{{ old('date_of_birth', $application->date_of_birth) }}" required
+                                           class="input-field">
+                                </div>
+                                <div>
+                                    <label class="block text-sm font-medium text-gray-700 mb-2">
+                                        Place of Birth <span class="text-red-500">*</span>
+                                    </label>
+                                    <input type="text" name="birth_place" value="{{ old('birth_place', $application->birth_place) }}" required
+                                           placeholder="City, Province"
+                                           class="input-field">
+                                </div>
+                            </div>
+                            
+                            <div class="grid md:grid-cols-2 gap-6 mt-4">
                                 <div>
                                     <label class="block text-sm font-medium text-gray-700 mb-2">
                                         Contact Number <span class="text-red-500">*</span>
@@ -207,13 +281,30 @@
                                 Guardian Information
                             </h3>
                             
-                            <div class="grid md:grid-cols-2 gap-6">
+                            <div class="grid md:grid-cols-3 gap-6">
                                 <div>
                                     <label class="block text-sm font-medium text-gray-700 mb-2">
-                                        Guardian Full Name <span class="text-red-500">*</span>
+                                        Guardian Complete Name <span class="text-red-500">*</span>
                                     </label>
                                     <input type="text" name="guardian_name" value="{{ old('guardian_name', $application->guardian_name) }}" required
                                            class="input-field">
+                                </div>
+                                <div>
+                                    <label class="block text-sm font-medium text-gray-700 mb-2">
+                                        Relationship <span class="text-red-500">*</span>
+                                    </label>
+                                    <select name="guardian_relationship" required class="input-field">
+                                        <option value="">Select Relationship</option>
+                                        <option value="Mother" {{ old('guardian_relationship', $application->guardian_relationship) == 'Mother' ? 'selected' : '' }}>Mother</option>
+                                        <option value="Father" {{ old('guardian_relationship', $application->guardian_relationship) == 'Father' ? 'selected' : '' }}>Father</option>
+                                        <option value="Brother" {{ old('guardian_relationship', $application->guardian_relationship) == 'Brother' ? 'selected' : '' }}>Brother</option>
+                                        <option value="Sister" {{ old('guardian_relationship', $application->guardian_relationship) == 'Sister' ? 'selected' : '' }}>Sister</option>
+                                        <option value="Grandmother" {{ old('guardian_relationship', $application->guardian_relationship) == 'Grandmother' ? 'selected' : '' }}>Grandmother</option>
+                                        <option value="Grandfather" {{ old('guardian_relationship', $application->guardian_relationship) == 'Grandfather' ? 'selected' : '' }}>Grandfather</option>
+                                        <option value="Auntie" {{ old('guardian_relationship', $application->guardian_relationship) == 'Auntie' ? 'selected' : '' }}>Auntie</option>
+                                        <option value="Uncle" {{ old('guardian_relationship', $application->guardian_relationship) == 'Uncle' ? 'selected' : '' }}>Uncle</option>
+                                        <option value="Legal Guardian" {{ old('guardian_relationship', $application->guardian_relationship) == 'Legal Guardian' ? 'selected' : '' }}>Legal Guardian</option>
+                                    </select>
                                 </div>
                                 <div>
                                     <label class="block text-sm font-medium text-gray-700 mb-2">
@@ -251,9 +342,9 @@
                                         Preferred Campus <span class="text-red-500">*</span>
                                     </label>
                                     <select name="campus" required id="campus" class="input-field">
-                                        <option value="Goa" {{ old('campus', $application->campus) == 'Goa' ? 'selected' : '' }}>Goa Campus</option>
-                                        <option value="San Jose" {{ old('campus', $application->campus) == 'San Jose' ? 'selected' : '' }}>San Jose Campus</option>
-                                        <option value="Lagonoy" {{ old('campus', $application->campus) == 'Lagonoy' ? 'selected' : '' }}>Lagonoy Campus</option>
+                                        @foreach($campuses as $campus)
+                                            <option value="{{ $campus->name }}" {{ old('campus', $application->campus) == $campus->name ? 'selected' : '' }}>{{ $campus->name }}</option>
+                                        @endforeach
                                     </select>
                                 </div>
                             </div>
@@ -292,7 +383,7 @@
                                     Cancel
                                 </a>
                                 <button type="submit"
-                                        class="px-8 py-3 psu-blue-bg text-white rounded-lg font-semibold hover:bg-blue-800 transition transform hover:scale-105 shadow-lg flex items-center">
+                                        class="px-8 py-3 psu-blue-bg text-white rounded-lg font-semibold hover:bg-opacity-90 transition transform hover:scale-105 shadow-lg flex items-center">
                                     <svg class="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7H5a2 2 0 00-2 2v9a2 2 0 002 2h14a2 2 0 002-2V9a2 2 0 00-2-2h-3m-1 4l-3 3m0 0l-3-3m3 3V4"></path>
                                     </svg>
@@ -305,13 +396,13 @@
             </div>
 
             <!-- Help Card -->
-            <div class="mt-6 bg-blue-50 border-l-4 border-blue-900 p-4 rounded-r-lg">
+            <div class="mt-6 bg-blue-50 border-l-4 border-[#000035] p-4 rounded-r-lg">
                 <div class="flex">
-                    <svg class="w-6 h-6 text-blue-900 mr-3" fill="currentColor" viewBox="0 0 20 20">
+                    <svg class="w-6 h-6 text-[#000035] mr-3" fill="currentColor" viewBox="0 0 20 20">
                         <path fill-rule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7-4a1 1 0 11-2 0 1 1 0 012 0zM9 9a1 1 0 000 2v3a1 1 0 001 1h1a1 1 0 100-2v-3a1 1 0 00-1-1H9z" clip-rule="evenodd"/>
                     </svg>
                     <div>
-                        <h4 class="font-bold text-blue-900 mb-1">Need Help?</h4>
+                        <h4 class="font-bold text-[#000035] mb-1">Need Help?</h4>
                         <p class="text-sm text-gray-600">
                             If you need assistance with your application, please contact the Office of Admissions at 
                             <span class="font-semibold">admissions@psu.edu.ph</span> or call <span class="font-semibold">(054) 123-4567</span>.
@@ -323,19 +414,18 @@
     </div>
     
     <script>
-        const campusData = {
-            'Goa': {
-                'COED': ['BS Science', 'BS English', 'BS Physical Education'],
-                'CEC': ['BS Information Technology', 'BS Computer Science', 'BS Civil Engineering', 'BS Electrical Engineering', 'BS Sanitary Engineering']
-            },
-            'San Jose': {
-                'Hospitality Management': ['BS Hospitality Management', 'BS Tourism']
-            },
-            'Lagonoy': {
-                'Criminology': ['BS Criminology'],
-                'Nutrition and Dietetics': ['BS Nutrition and Dietetics']
-            }
-        };
+        const campusData = {};
+        
+        @foreach($campuses as $campus)
+            campusData['{{ $campus->name }}'] = {};
+            @foreach($campus->colleges as $college)
+                campusData['{{ $campus->name }}']['{{ $college->name }}'] = [
+                    @foreach($college->courses as $course)
+                        '{{ $course->name }}',
+                    @endforeach
+                ];
+            @endforeach
+        @endforeach
 
         const campusSelect = document.getElementById('campus');
         const collegeSelect = document.getElementById('college');

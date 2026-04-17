@@ -7,7 +7,7 @@
     @vite(['resources/css/app.css'], ['resources/js/app.js'])
     <style>
         .psu-blue-bg {
-            background: linear-gradient(135deg, #003366 0%, #004080 100%);
+            background: linear-gradient(135deg, #000035 0%, #00004d 100%);
         }
         .psu-gold-bg {
             background: linear-gradient(135deg, #FFD700 0%, #FDB931 100%);
@@ -16,7 +16,7 @@
             color: #FFD700;
         }
         .psu-blue-text {
-            color: #003366;
+            color: #000035;
         }
         .status-badge {
             @apply px-6 py-2 rounded-full text-sm font-semibold;
@@ -45,6 +45,21 @@
         .action-btn {
             @apply px-6 py-3 rounded-lg font-semibold transition transform hover:scale-105 flex items-center;
         }
+        .logo-container {
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
+            overflow: hidden;
+            background: linear-gradient(135deg, #FFD700 0%, #FDB931 100%);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        .logo-container img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
     </style>
 </head>
 <body class="bg-gray-100">
@@ -53,8 +68,11 @@
         <div class="container mx-auto px-4 py-4">
             <div class="flex items-center justify-between">
                 <div class="flex items-center space-x-3">
-                    <div class="w-12 h-12 bg-gradient-to-br from-yellow-400 to-yellow-600 rounded-lg flex items-center justify-center">
-                        <span class="text-2xl font-bold text-blue-900">PSU</span>
+                    <!-- PSU Logo Image -->
+                    <div class="logo-container">
+                        <img src="{{ asset('images/PSU_LOGO.png') }}" 
+                             alt="PSU Logo" 
+                             onerror="this.onerror=null; this.parentElement.style.backgroundColor='#FFD700'; this.parentElement.innerHTML='<span class=\'text-2xl font-bold text-[#000035]\'>PSU</span>';">
                     </div>
                     <div>
                         <h1 class="text-2xl font-bold text-white">Partido State University</h1>
@@ -69,11 +87,11 @@
         <div class="max-w-3xl mx-auto">
             <!-- Navigation Breadcrumb -->
             <div class="mb-6 flex items-center text-sm">
-                <a href="{{ route('home') }}" class="text-gray-500 hover:text-blue-900 transition">Home</a>
+                <a href="{{ route('home') }}" class="text-gray-500 hover:text-[#000035] transition">Home</a>
                 <svg class="w-4 h-4 mx-2 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"></path>
                 </svg>
-                <span class="text-blue-900 font-semibold">Application Status</span>
+                <span class="text-[#000035] font-semibold">Application Status</span>
             </div>
             
             @if(session('error'))
@@ -100,14 +118,14 @@
                 <div class="psu-gold-bg px-8 py-4">
                     <div class="flex justify-between items-center">
                         <div class="flex items-center">
-                            <div class="bg-blue-900 p-2 rounded-lg mr-4">
+                            <div class="bg-[#000035] p-2 rounded-lg mr-4">
                                 <svg class="w-6 h-6 text-yellow-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"></path>
                                 </svg>
                             </div>
                             <div>
-                                <h1 class="text-2xl font-bold text-blue-900">Application Status</h1>
-                                <p class="text-blue-800 text-sm">Track your application progress</p>
+                                <h1 class="text-2xl font-bold text-[#000035]">Application Status</h1>
+                                <p class="text-[#000035] text-sm">Track your application progress</p>
                             </div>
                         </div>
                         <span class="status-badge 
@@ -129,13 +147,13 @@
                 <div class="p-8">
                     <!-- Applicant Information -->
                     <div class="text-center mb-8">
-                        <div class="w-24 h-24 bg-blue-900 rounded-full flex items-center justify-center mx-auto mb-4">
+                        <div class="w-24 h-24 bg-[#000035] rounded-full flex items-center justify-center mx-auto mb-4">
                             <span class="text-4xl font-bold text-yellow-400">
                                 {{ substr($application->firstname, 0, 1) }}{{ substr($application->lastname, 0, 1) }}
                             </span>
                         </div>
-                        <h2 class="text-3xl font-bold text-blue-900">{{ $application->full_name }}</h2>
-                        <div class="flex items-center justify-center mt-2 space-x-4">
+                        <h2 class="text-3xl font-bold text-[#000035]">{{ $application->full_name }}</h2>
+                        <div class="flex items-center justify-center mt-2 space-x-4 flex-wrap gap-2">
                             <p class="text-gray-600 flex items-center">
                                 <svg class="w-4 h-4 mr-1 text-yellow-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"></path>
@@ -154,7 +172,7 @@
                     
                     <!-- Status Timeline Card -->
                     <div class="mb-8 p-6 bg-gray-50 rounded-xl border border-gray-200">
-                        <h3 class="text-lg font-bold text-blue-900 mb-6 flex items-center">
+                        <h3 class="text-lg font-bold text-[#000035] mb-6 flex items-center">
                             <svg class="w-5 h-5 mr-2 text-yellow-500" fill="currentColor" viewBox="0 0 20 20">
                                 <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm1-12a1 1 0 10-2 0v4a1 1 0 00.293.707l2.828 2.829a1 1 0 101.415-1.415L11 9.586V6z" clip-rule="evenodd"/>
                             </svg>
@@ -263,7 +281,7 @@
                                 </svg>
                                 <p class="text-sm font-medium text-gray-500">Campus</p>
                             </div>
-                            <p class="text-lg font-bold text-blue-900">{{ $application->campus }} Campus</p>
+                            <p class="text-lg font-bold text-[#000035]">{{ $application->campus }} Campus</p>
                         </div>
                         <div class="summary-card">
                             <div class="flex items-center mb-2">
@@ -273,7 +291,7 @@
                                 </svg>
                                 <p class="text-sm font-medium text-gray-500">Course</p>
                             </div>
-                            <p class="text-lg font-bold text-blue-900">{{ $application->course }}</p>
+                            <p class="text-lg font-bold text-[#000035]">{{ $application->course }}</p>
                             <p class="text-xs text-gray-500">{{ $application->college }}</p>
                         </div>
                     </div>
@@ -287,7 +305,7 @@
                                 </svg>
                                 <p class="text-sm font-medium text-gray-500">Student Type</p>
                             </div>
-                            <p class="text-lg font-bold text-blue-900">{{ $application->student_type }}</p>
+                            <p class="text-lg font-bold text-[#000035]">{{ $application->student_type }}</p>
                         </div>
                         <div class="summary-card">
                             <div class="flex items-center mb-2">
@@ -296,7 +314,7 @@
                                 </svg>
                                 <p class="text-sm font-medium text-gray-500">Last Updated</p>
                             </div>
-                            <p class="text-lg font-bold text-blue-900">{{ $application->updated_at->format('M d, Y') }}</p>
+                            <p class="text-lg font-bold text-[#000035]">{{ $application->updated_at->format('M d, Y') }}</p>
                             <p class="text-xs text-gray-500">{{ $application->updated_at->format('h:i A') }}</p>
                         </div>
                     </div>
@@ -305,7 +323,7 @@
                     <div class="flex flex-wrap justify-center gap-4">
                         @if($application->status == 'Pending')
                             <a href="{{ route('student.edit', $application->id) }}" 
-                               class="action-btn bg-blue-900 text-white hover:bg-blue-800">
+                               class="action-btn bg-[#000035] text-white hover:bg-opacity-90">
                                 <svg class="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z"></path>
                                 </svg>
@@ -314,7 +332,7 @@
                         @endif
                         
                         <a href="{{ route('student.review', $application->id) }}" 
-                           class="action-btn bg-yellow-500 text-blue-900 hover:bg-yellow-400">
+                           class="action-btn bg-yellow-500 text-[#000035] hover:bg-yellow-400">
                             <svg class="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"></path>
                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z"></path>
@@ -334,13 +352,13 @@
             </div>
 
             <!-- Contact Support -->
-            <div class="mt-6 bg-blue-50 border-l-4 border-blue-900 p-4 rounded-r-lg">
+            <div class="mt-6 bg-blue-50 border-l-4 border-[#000035] p-4 rounded-r-lg">
                 <div class="flex">
-                    <svg class="w-6 h-6 text-blue-900 mr-3" fill="currentColor" viewBox="0 0 20 20">
+                    <svg class="w-6 h-6 text-[#000035] mr-3" fill="currentColor" viewBox="0 0 20 20">
                         <path fill-rule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7-4a1 1 0 11-2 0 1 1 0 012 0zM9 9a1 1 0 000 2v3a1 1 0 001 1h1a1 1 0 100-2v-3a1 1 0 00-1-1H9z" clip-rule="evenodd"/>
                     </svg>
                     <div>
-                        <h4 class="font-bold text-blue-900 mb-1">Need Assistance?</h4>
+                        <h4 class="font-bold text-[#000035] mb-1">Need Assistance?</h4>
                         <p class="text-sm text-gray-600">
                             If you have questions about your application status, please contact the Office of Admissions at 
                             <span class="font-semibold">admissions@psu.edu.ph</span> or call <span class="font-semibold">(054) 123-4567</span>.

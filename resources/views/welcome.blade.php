@@ -10,164 +10,191 @@
         body { visibility: hidden; }
         .loaded body { visibility: visible; }
         
-        /* Custom PSU colors and styles */
-        .psu-blue-bg {
-            background: linear-gradient(135deg, #003366 0%, #004080 100%);
+        /* Updated PSU colors: Deep Navy #000035 + Gold */
+        .psu-navy-bg {
+            background: linear-gradient(135deg, #000035 0%, #000028 100%);
         }
-        .psu-gold-text {
-            color: #FFD700;
+        .psu-gold {
+            color: #FFD966;
         }
         .psu-gold-bg {
-            background: linear-gradient(135deg, #FFD700 0%, #FDB931 100%);
+            background-color: #FFD966;
         }
-        .psu-blue-text {
-            color: #003366;
+        .psu-navy {
+            color: #000035;
         }
-        .hover-gold:hover {
-            background: linear-gradient(135deg, #FFD700 0%, #FDB931 100%);
-            color: #003366;
-            border: 2px solid #003366;
+        .btn-gold {
+            background-color: #FFD966;
+            color: #000035;
+            transition: all 0.2s ease;
         }
-        .hover-blue:hover {
-            background: linear-gradient(135deg, #003366 0%, #004080 100%);
-            color: #FFD700;
-            border: 2px solid #FFD700;
+        .btn-gold:hover {
+            background-color: #e6c456;
+            transform: translateY(-2px);
         }
-        .border-gold {
-            border: 2px solid #FFD700;
+        .btn-navy {
+            background-color: #000035;
+            color: white;
+            transition: all 0.2s ease;
         }
-        .border-blue {
-            border: 2px solid #003366;
+        .btn-navy:hover {
+            background-color: #000045;
+            transform: translateY(-2px);
+        }
+        .card-simple {
+            transition: transform 0.2s ease, box-shadow 0.2s ease;
+        }
+        .card-simple:hover {
+            transform: translateY(-4px);
+            box-shadow: 0 12px 24px -8px rgba(0,0,0,0.12);
         }
         .hero-pattern {
-            background-color: #003366;
-            background-image: url("data:image/svg+xml,%3Csvg width='60' height='60' viewBox='0 0 60 60' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='none' fill-rule='evenodd'%3E%3Cg fill='%23FFD700' fill-opacity='0.1'%3E%3Cpath d='M36 34v-4h-2v4h-4v2h4v4h2v-4h4v-2h-4zm0-30V0h-2v4h-4v2h4v4h2V6h4V4h-4zM6 34v-4H4v4H0v2h4v4h2v-4h4v-2H6zM6 4V0H4v4H0v2h4v4h2V6h4V4H6z'/%3E%3C/g%3E%3C/g%3E%3C/svg%3E");
+            background-color: #000035;
+            background-image: radial-gradient(circle at 10% 20%, rgba(255,217,102,0.06) 2px, transparent 2px);
+            background-size: 28px 28px;
+        }
+        
+        /* Circular Logo Container Styles */
+        .logo-circle {
+            width: 56px;
+            height: 56px;
+            border-radius: 50%;
+            background: linear-gradient(135deg, #FFD966 0%, #F5C542 100%);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            overflow: hidden;
+            box-shadow: 0 4px 10px rgba(0,0,0,0.2);
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+        
+        .logo-circle:hover {
+            transform: scale(1.05);
+            box-shadow: 0 6px 15px rgba(0,0,0,0.3);
+        }
+        
+        .logo-circle img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            border-radius: 50%;
+        }
+        
+        /* Footer logo circle - smaller */
+        .logo-circle-footer {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            background: linear-gradient(135deg, #FFD966 0%, #F5C542 100%);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            overflow: hidden;
+            box-shadow: 0 2px 6px rgba(0,0,0,0.2);
+        }
+        
+        .logo-circle-footer img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            border-radius: 50%;
+        }
+        
+        /* Responsive adjustments */
+        @media (max-width: 768px) {
+            .logo-circle {
+                width: 48px;
+                height: 48px;
+            }
+        }
+        
+        .psu-logo-img {
+            object-fit: cover;
         }
     </style>
 </head>
 <body class="bg-gray-50 min-h-screen">
-    <!-- Hero Section with PSU Blue -->
-    <div class="psu-blue-bg hero-pattern relative overflow-hidden">
-        <!-- Decorative Gold Accents -->
-        <div class="absolute top-0 right-0 w-64 h-64 bg-gradient-to-br from-yellow-300 to-yellow-500 opacity-10 rounded-full transform translate-x-32 -translate-y-32"></div>
-        <div class="absolute bottom-0 left-0 w-96 h-96 bg-gradient-to-tr from-yellow-300 to-yellow-500 opacity-10 rounded-full transform -translate-x-48 translate-y-48"></div>
+    <!-- Hero Section - PSU Navy #000035 -->
+    <div class="psu-navy-bg hero-pattern relative overflow-hidden">
+        <!-- Simple decorative -->
+        <div class="absolute top-0 right-0 w-72 h-72 bg-yellow-400/5 rounded-full blur-2xl"></div>
+        <div class="absolute bottom-0 left-0 w-72 h-72 bg-yellow-400/5 rounded-full blur-2xl"></div>
         
-        <!-- Navigation -->
-        <nav class="relative z-10 container mx-auto px-6 py-6">
-            <div class="flex items-center justify-between">
+        <!-- Navigation - with PSU Logo in Circle -->
+        <nav class="relative z-10 container mx-auto px-6 py-5">
+            <div class="flex items-center justify-between flex-wrap gap-3">
                 <div class="flex items-center space-x-3">
-                    <div class="w-12 h-12 bg-gradient-to-br from-yellow-400 to-yellow-600 rounded-lg flex items-center justify-center">
-                        <span class="text-2xl font-bold text-blue-900">PSU</span>
+                    <!-- PSU Logo Circular Container -->
+                    <div class="logo-circle">
+                        <img src="{{ asset('images/PSU_LOGO.png') }}" 
+                             alt="PSU Logo" 
+                             class="w-full h-full object-cover"
+                             onerror="this.onerror=null; this.parentElement.style.backgroundColor='#FFD966'; this.parentElement.innerHTML='<span class=\'text-2xl font-bold text-[#000035]\' style=\'font-size: 24px;\'>PSU</span>';">
                     </div>
                     <div>
-                        <h2 class="text-2xl font-bold text-white">University Admission System</h2>
-                        <p class="text-yellow-300 text-sm">Excellence | Service | Leadership</p>
+                        <h2 class="text-xl md:text-2xl font-bold text-white tracking-tight">Admission System</h2>
+                        <p class="text-[#FFD966] text-xs">Excellence | Service | Leadership</p>
                     </div>
                 </div>
-                <div class="flex space-x-4">
-                    <a href="#" class="text-white hover:text-yellow-300 transition px-4 py-2">About</a>
-                    <a href="#" class="text-white hover:text-yellow-300 transition px-4 py-2">Contact</a>
-                    <a href="#" class="bg-yellow-400 text-blue-900 px-6 py-2 rounded-lg font-semibold hover:bg-yellow-500 transition">
-                        Help
-                    </a>
+                <div class="flex space-x-3 text-sm">
+                    <a href="#" class="text-white/80 hover:text-[#FFD966] transition px-3 py-1">About</a>
+                    <a href="#" class="text-white/80 hover:text-[#FFD966] transition px-3 py-1">Contact</a>
+                    <a href="#" class="bg-[#FFD966]/20 text-[#FFD966] px-4 py-1.5 rounded-lg text-sm hover:bg-[#FFD966] hover:text-[#000035] transition">Help</a>
                 </div>
             </div>
         </nav>
 
-        <!-- Main Hero Content -->
-        <div class="container mx-auto px-6 py-16 relative z-10">
-            <div class="max-w-4xl mx-auto text-center">
-                <div class="inline-block bg-yellow-400 text-blue-900 px-6 py-2 rounded-full font-semibold mb-6">
-                    🎓 Admission for AY 2025-2026 Now Open!
+        <!-- Hero Content - clean -->
+        <div class="container mx-auto px-6 py-12 md:py-16 relative z-10">
+            <div class="max-w-3xl mx-auto text-center">
+                <div class="inline-block bg-[#FFD966]/10 border border-[#FFD966]/30 text-[#FFD966] px-4 py-1.5 rounded-full text-sm font-medium mb-5">
+                    🎓 AY 2025-2026 Now Open
                 </div>
-                <h1 class="text-5xl md:text-6xl font-bold text-white mb-6">
-                    Welcome to <span class="text-yellow-400">Admission </span><br>System
+                <h1 class="text-4xl md:text-5xl font-bold text-white mb-4">
+                    Welcome to <span class="text-[#FFD966]">Admission</span>
                 </h1>
-                <p class="text-xl text-blue-100 mb-8">
-                    Your journey to excellence starts here. Join the Partido State University community and be part of our tradition of academic excellence.
+                <p class="text-blue-100/90 text-base md:text-lg mb-8">
+                    Your journey to excellence starts here. Join Partido State University.
                 </p>
-                <div class="flex justify-center space-x-4">
-                    <a href="#portals" class="bg-yellow-400 text-blue-900 px-8 py-4 rounded-lg font-bold text-lg hover:bg-yellow-500 transition transform hover:scale-105 shadow-lg">
-                        Get Started
-                    </a>
-                    <a href="#" class="border-2 border-yellow-400 text-yellow-400 px-8 py-4 rounded-lg font-bold text-lg hover:bg-yellow-400 hover:text-blue-900 transition transform hover:scale-105">
-                        Learn More
-                    </a>
+                <div class="flex justify-center gap-4">
+                    <a href="#student-portal" class="btn-gold px-6 py-3 rounded-lg font-semibold shadow-md">Apply Now</a>
+                    <a href="#admin-portal" class="border-2 border-[#FFD966] text-[#FFD966] px-6 py-3 rounded-lg font-semibold hover:bg-[#FFD966] hover:text-[#000035] transition">Admin</a>
                 </div>
             </div>
         </div>
 
-        <!-- Wave Divider -->
-        <div class="relative z-10">
-            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1440 320" class="w-full">
-                <path fill="#ffffff" fill-opacity="1" d="M0,96L48,112C96,128,192,160,288,160C384,160,480,128,576,122.7C672,117,768,139,864,154.7C960,171,1056,181,1152,170.7C1248,160,1344,128,1392,112L1440,96L1440,320L1392,320C1344,320,1248,320,1152,320C1056,320,960,320,864,320C768,320,672,320,576,320C480,320,384,320,288,320C192,320,96,320,48,320L0,320Z"></path>
+        <!-- Wave divider -->
+        <div class="relative">
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1440 80" class="w-full fill-white">
+                <path d="M0,64L80,58.7C160,53,320,43,480,42.7C640,43,800,53,960,58.7C1120,64,1280,64,1360,64L1440,64L1440,80L1360,80C1280,80,1120,80,960,80C800,80,640,80,480,80C320,80,160,80,80,80L0,80Z"></path>
             </svg>
         </div>
     </div>
 
     <!-- Portals Section -->
     <div id="portals" class="container mx-auto px-6 py-16">
-        <div class="text-center mb-16">
-            <h2 class="text-4xl font-bold text-blue-900 mb-4">Choose Your Portal</h2>
-            <div class="w-24 h-1 bg-gradient-to-r from-yellow-400 to-yellow-600 mx-auto mb-6"></div>
-            <p class="text-xl text-gray-600 max-w-3xl mx-auto">
-                Goodluck applicants!
-            </p>
+        <div class="text-center mb-12">
+            <h2 class="text-3xl md:text-4xl font-bold text-[#000035] mb-3"></h2>
+           
+            <p class="text-gray-500 mt-4 text-sm"></p>
         </div>
 
-        <div class="max-w-6xl mx-auto grid md:grid-cols-2 gap-8">
+        <div class="max-w-5xl mx-auto grid md:grid-cols-2 gap-8">
             <!-- Admin Portal Card -->
-            <div class="group bg-white rounded-2xl shadow-xl overflow-hidden transform transition-all duration-300 hover:scale-105 hover:shadow-2xl">
-                <!-- Card Header -->
-                <div class="relative h-48 overflow-hidden">
-                    <div class="absolute inset-0 bg-gradient-to-br from-blue-800 to-blue-900"></div>
-                    <div class="absolute inset-0 opacity-20" style="background-image: url('data:image/svg+xml,%3Csvg width='40' height='40' viewBox='0 0 40 40' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='%23FFD700' fill-opacity='0.2' fill-rule='evenodd'%3E%3Cpath d='M0 40L40 0H20L0 20M40 40V20L20 40'/%3E%3C/g%3E%3C/svg%3E');"></div>
-                    <div class="absolute inset-0 flex items-center justify-center">
-                        <div class="w-32 h-32 bg-yellow-400 rounded-full flex items-center justify-center transform transition-transform group-hover:scale-110">
-                            <svg class="w-16 h-16 text-blue-900" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4.354a4 4 0 110 5.292M15 21H3v-1a6 6 0 0112 0v1zm0 0h6v-1a6 6 0 00-9-5.197M13 7a4 4 0 11-8 0 4 4 0 018 0z"></path>
-                            </svg>
-                        </div>
-                    </div>
-                </div>
-                
-                <!-- Card Body -->
+            <div id="admin-portal" class="bg-white rounded-xl shadow-md overflow-hidden card-simple border border-gray-100">
+                <div class="h-2 bg-[#000035]"></div>
                 <div class="p-8 text-center">
-                    <h3 class="text-3xl font-bold text-blue-900 mb-3">Admin Portal</h3>
-                    <p class="text-gray-600 mb-6">Comprehensive management system for administrators to handle applications, review submissions, and manage admission status.</p>
-                    
-                    <!-- Features List -->
-                    <div class="text-left mb-8 space-y-3">
-                        <div class="flex items-center">
-                            <svg class="w-5 h-5 text-yellow-500 mr-3" fill="currentColor" viewBox="0 0 20 20">
-                                <path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"/>
-                            </svg>
-                            <span>Dashboard with analytics</span>
-                        </div>
-                        <div class="flex items-center">
-                            <svg class="w-5 h-5 text-yellow-500 mr-3" fill="currentColor" viewBox="0 0 20 20">
-                                <path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"/>
-                            </svg>
-                            <span>Manage applications</span>
-                        </div>
-                        <div class="flex items-center">
-                            <svg class="w-5 h-5 text-yellow-500 mr-3" fill="currentColor" viewBox="0 0 20 20">
-                                <path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"/>
-                            </svg>
-                            <span>Approve/Reject applications</span>
-                        </div>
-                        <div class="flex items-center">
-                            <svg class="w-5 h-5 text-yellow-500 mr-3" fill="currentColor" viewBox="0 0 20 20">
-                                <path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"/>
-                            </svg>
-                            <span>Generate reports</span>
-                        </div>
+                    <div class="w-20 h-20 bg-[#000035]/10 rounded-full flex items-center justify-center mx-auto mb-5">
+                        <svg class="w-10 h-10 text-[#000035]" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.8" d="M12 4.354a4 4 0 110 5.292M15 21H3v-1a6 6 0 0112 0v1zm0 0h6v-1a6 6 0 00-9-5.197M13 7a4 4 0 11-8 0 4 4 0 018 0z"></path>
+                        </svg>
                     </div>
-
+                    <h3 class="text-2xl font-bold text-[#000035] mb-2">Admin</h3>
+                    <p class="text-gray-500 text-sm mb-6"></p>
                     <a href="{{ route('admin.login') }}" 
-                       class="inline-block w-full bg-gradient-to-r from-blue-700 to-blue-900 text-white px-8 py-4 rounded-xl font-bold text-lg hover:from-blue-800 hover:to-blue-950 transition transform hover:scale-105 shadow-lg group-hover:shadow-xl">
-                        Access Admin Portal
-                        <svg class="w-5 h-5 inline-block ml-2 group-hover:translate-x-2 transition" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                       class="inline-flex items-center justify-center gap-2 btn-navy w-full py-3 rounded-lg font-semibold">
+                        Access Admin
+                        <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"></path>
                         </svg>
                     </a>
@@ -175,59 +202,21 @@
             </div>
 
             <!-- Student Portal Card -->
-            <div class="group bg-white rounded-2xl shadow-xl overflow-hidden transform transition-all duration-300 hover:scale-105 hover:shadow-2xl">
-                <!-- Card Header -->
-                <div class="relative h-48 overflow-hidden">
-                    <div class="absolute inset-0 bg-gradient-to-br from-yellow-500 to-yellow-600"></div>
-                    <div class="absolute inset-0 opacity-20" style="background-image: url('data:image/svg+xml,%3Csvg width='40' height='40' viewBox='0 0 40 40' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='%23003366' fill-opacity='0.2' fill-rule='evenodd'%3E%3Cpath d='M0 40L40 0H20L0 20M40 40V20L20 40'/%3E%3C/g%3E%3C/svg%3E');"></div>
-                    <div class="absolute inset-0 flex items-center justify-center">
-                        <div class="w-32 h-32 bg-blue-800 rounded-full flex items-center justify-center transform transition-transform group-hover:scale-110">
-                            <svg class="w-16 h-16 text-yellow-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                <path d="M12 14l9-5-9-5-9 5 9 5z"></path>
-                                <path d="M12 14l6.16-3.422a12.083 12.083 0 01.665 6.479A11.952 11.952 0 0012 20.055a11.952 11.952 0 00-6.824-2.998 12.078 12.078 0 01.665-6.479L12 14z"></path>
-                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 14l9-5-9-5-9 5 9 5zm0 0l6.16-3.422a12.083 12.083 0 01.665 6.479A11.952 11.952 0 0012 20.055a11.952 11.952 0 00-6.824-2.998 12.078 12.078 0 01.665-6.479L12 14zm-4 6v-7.5l4-2.222"></path>
-                            </svg>
-                        </div>
-                    </div>
-                </div>
-                
-                <!-- Card Body -->
+            <div id="student-portal" class="bg-white rounded-xl shadow-md overflow-hidden card-simple border border-gray-100">
+                <div class="h-2 bg-[#FFD966]"></div>
                 <div class="p-8 text-center">
-                    <h3 class="text-3xl font-bold text-blue-900 mb-3">Student Portal</h3>
-                    <p class="text-gray-600 mb-6">Apply for admission, track your application status, and manage your academic journey with ease.</p>
-                    
-                    <!-- Features List -->
-                    <div class="text-left mb-8 space-y-3">
-                        <div class="flex items-center">
-                            <svg class="w-5 h-5 text-yellow-500 mr-3" fill="currentColor" viewBox="0 0 20 20">
-                                <path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"/>
-                            </svg>
-                            <span>Online application form</span>
-                        </div>
-                        <div class="flex items-center">
-                            <svg class="w-5 h-5 text-yellow-500 mr-3" fill="currentColor" viewBox="0 0 20 20">
-                                <path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"/>
-                            </svg>
-                            <span>Track application status</span>
-                        </div>
-                        <div class="flex items-center">
-                            <svg class="w-5 h-5 text-yellow-500 mr-3" fill="currentColor" viewBox="0 0 20 20">
-                                <path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"/>
-                            </svg>
-                            <span>Edit pending applications</span>
-                        </div>
-                        <div class="flex items-center">
-                            <svg class="w-5 h-5 text-yellow-500 mr-3" fill="currentColor" viewBox="0 0 20 20">
-                                <path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"/>
-                            </svg>
-                            <span>View application summary</span>
-                        </div>
+                    <div class="w-20 h-20 bg-[#FFD966]/20 rounded-full flex items-center justify-center mx-auto mb-5">
+                        <svg class="w-10 h-10 text-[#000035]" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path d="M12 14l9-5-9-5-9 5 9 5z"></path>
+                            <path d="M12 14l6.16-3.422a12.083 12.083 0 01.665 6.479A11.952 11.952 0 0012 20.055a11.952 11.952 0 00-6.824-2.998 12.078 12.078 0 01.665-6.479L12 14z"></path>
+                        </svg>
                     </div>
-
+                    <h3 class="text-2xl font-bold text-[#000035] mb-2">Student</h3>
+                    <p class="text-gray-500 text-sm mb-6"></p>
                     <a href="{{ route('student.apply') }}" 
-                       class="inline-block w-full bg-gradient-to-r from-yellow-400 to-yellow-500 text-blue-900 px-8 py-4 rounded-xl font-bold text-lg hover:from-yellow-500 hover:to-yellow-600 transition transform hover:scale-105 shadow-lg group-hover:shadow-xl">
-                        Start Your Application
-                        <svg class="w-5 h-5 inline-block ml-2 group-hover:translate-x-2 transition" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                       class="inline-flex items-center justify-center gap-2 btn-gold w-full py-3 rounded-lg font-semibold">
+                        Fill-up Form
+                        <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"></path>
                         </svg>
                     </a>
@@ -236,77 +225,94 @@
         </div>
     </div>
 
-    <!-- Statistics Section -->
-    <div class="psu-blue-bg py-16 mt-16">
+    <!-- Stats Section -->
+    <div class="bg-[#000035] py-12 mt-8">
         <div class="container mx-auto px-6">
-            <div class="grid md:grid-cols-4 gap-8 text-center">
-                <div class="bg-white bg-opacity-10 backdrop-blur-lg rounded-xl p-6">
-                    <div class="text-5xl font-bold text-yellow-400 mb-2">5K+</div>
-                    <div class="text-white text-lg">Active Students</div>
+            <div class="grid grid-cols-2 md:grid-cols-4 gap-6 text-center">
+                <div>
+                    <div class="text-3xl md:text-4xl font-bold text-[#FFD966]">5K+</div>
+                    <div class="text-white/70 text-sm">Students</div>
                 </div>
-                <div class="bg-white bg-opacity-10 backdrop-blur-lg rounded-xl p-6">
-                    <div class="text-5xl font-bold text-yellow-400 mb-2">50+</div>
-                    <div class="text-white text-lg">Academic Programs</div>
+                <div>
+                    <div class="text-3xl md:text-4xl font-bold text-[#FFD966]">50+</div>
+                    <div class="text-white/70 text-sm">Programs</div>
                 </div>
-                <div class="bg-white bg-opacity-10 backdrop-blur-lg rounded-xl p-6">
-                    <div class="text-5xl font-bold text-yellow-400 mb-2">95%</div>
-                    <div class="text-white text-lg">Graduate Employment</div>
+                <div>
+                    <div class="text-3xl md:text-4xl font-bold text-[#FFD966]">94%</div>
+                    <div class="text-white/70 text-sm">Success Rate</div>
                 </div>
-                <div class="bg-white bg-opacity-10 backdrop-blur-lg rounded-xl p-6">
-                    <div class="text-5xl font-bold text-yellow-400 mb-2">3</div>
-                    <div class="text-white text-lg">Campuses</div>
+                <div>
+                    <div class="text-3xl md:text-4xl font-bold text-[#FFD966]">3</div>
+                    <div class="text-white/70 text-sm">Campuses</div>
                 </div>
             </div>
         </div>
     </div>
 
-    <!-- Footer -->
-    <footer class="bg-blue-950 text-white py-12">
+    <!-- Footer with PSU Logo in Circle -->
+    <footer class="bg-[#000028] text-white py-10">
         <div class="container mx-auto px-6">
             <div class="grid md:grid-cols-4 gap-8">
                 <div>
-                    <div class="flex items-center space-x-2 mb-4">
-                        <div class="w-10 h-10 bg-yellow-400 rounded-lg flex items-center justify-center">
-                            <span class="text-xl font-bold text-blue-900">PSU</span>
+                    <div class="flex items-center gap-2 mb-3">
+                        <!-- PSU Logo Circular Container in Footer -->
+                        <div class="logo-circle-footer">
+                            <img src="{{ asset('images/PSU_LOGO.png') }}" 
+                                 alt="PSU Logo" 
+                                 class="w-full h-full object-cover"
+                                 onerror="this.onerror=null; this.parentElement.style.backgroundColor='#FFD966'; this.parentElement.innerHTML='<span class=\'text-sm font-bold text-[#000035]\' style=\'font-size: 14px;\'>PSU</span>';">
                         </div>
-                        <span class="text-xl font-bold">Partido State University</span>
+                        <span class="font-semibold">Partido State University</span>
                     </div>
-                    <p class="text-blue-200">Excellence, Service, and Leadership in Education</p>
+                    <p class="text-blue-200 text-sm">Excellence, Service, Leadership</p>
                 </div>
                 <div>
-                    <h4 class="text-lg font-bold text-yellow-400 mb-4">Quick Links</h4>
-                    <ul class="space-y-2 text-blue-200">
-                        <li><a href="#" class="hover:text-yellow-400 transition">About Us</a></li>
-                        <li><a href="#" class="hover:text-yellow-400 transition">Admission</a></li>
-                        <li><a href="#" class="hover:text-yellow-400 transition">Academics</a></li>
-                        <li><a href="#" class="hover:text-yellow-400 transition">Research</a></li>
+                    <h4 class="text-[#FFD966] font-semibold mb-3 text-sm">Quick Links</h4>
+                    <ul class="space-y-1 text-sm text-blue-200">
+                        <li><a href="#" class="hover:text-[#FFD966] transition">About</a></li>
+                        <li><a href="#" class="hover:text-[#FFD966] transition">Admission</a></li>
+                        <li><a href="#" class="hover:text-[#FFD966] transition">Academics</a></li>
+                        <li><a href="#" class="hover:text-[#FFD966] transition">Research</a></li>
                     </ul>
                 </div>
                 <div>
-                    <h4 class="text-lg font-bold text-yellow-400 mb-4">Campuses</h4>
-                    <ul class="space-y-2 text-blue-200">
-                        <li>Goa Campus</li>
+                    <h4 class="text-[#FFD966] font-semibold mb-3 text-sm">Campuses</h4>
+                    <ul class="space-y-1 text-sm text-blue-200">
+                        <li>Goa Campus (Main)</li>
                         <li>San Jose Campus</li>
                         <li>Lagonoy Campus</li>
+                        <li>Caramoan Campus</li>
                     </ul>
                 </div>
                 <div>
-                    <h4 class="text-lg font-bold text-yellow-400 mb-4">Contact Us</h4>
-                    <ul class="space-y-2 text-blue-200">
+                    <h4 class="text-[#FFD966] font-semibold mb-3 text-sm">Contact Us</h4>
+                    <ul class="space-y-1 text-sm text-blue-200">
                         <li>📞 (054) 123-4567</li>
                         <li>📧 admissions@psu.edu.ph</li>
                         <li>📍 Goa, Camarines Sur</li>
+                        <li>🌐 www.psu.edu.ph</li>
                     </ul>
                 </div>
             </div>
-            <div class="border-t border-blue-800 mt-8 pt-8 text-center text-blue-300">
-                <p>&copy; 2024 Partido State University. All rights reserved.</p>
+            <div class="border-t border-white/10 mt-8 pt-6 text-center text-blue-300 text-xs">
+                <p>&copy; 2025 Partido State University. All rights reserved.</p>
             </div>
         </div>
     </footer>
 
     <script>
         document.body.parentElement.classList.add('loaded');
+        
+        // Handle logo image loading errors gracefully
+        document.querySelectorAll('.logo-circle img, .logo-circle-footer img').forEach(img => {
+            img.addEventListener('error', function() {
+                const container = this.parentElement;
+                const text = container.classList.contains('logo-circle-footer') ? 'PSU' : 'PSU';
+                const textSize = container.classList.contains('logo-circle-footer') ? '14px' : '24px';
+                container.style.backgroundColor = '#FFD966';
+                container.innerHTML = `<span class="font-bold text-[#000035]" style="font-size: ${textSize};">${text}</span>`;
+            });
+        });
     </script>
 </body>
 </html>

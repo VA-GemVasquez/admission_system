@@ -7,7 +7,7 @@
     @vite(['resources/css/app.css'], ['resources/js/app.js'])
     <style>
         .psu-blue-bg {
-            background: linear-gradient(135deg, #003366 0%, #004080 100%);
+            background: linear-gradient(135deg, #000035 0%, #00004d 100%);
         }
         .psu-gold-bg {
             background: linear-gradient(135deg, #FFD700 0%, #FDB931 100%);
@@ -16,11 +16,11 @@
             color: #FFD700;
         }
         .psu-blue-text {
-            color: #003366;
+            color: #000035;
         }
         .sidebar-active {
             background: linear-gradient(90deg, #FFD700 0%, #FDB931 100%);
-            color: #003366;
+            color: #000035;
             font-weight: bold;
         }
         .stat-card {
@@ -33,17 +33,35 @@
         .progress-bar {
             background: linear-gradient(90deg, #FFD700 0%, #FDB931 100%);
         }
+        .logo-container {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            overflow: hidden;
+            background: linear-gradient(135deg, #FFD700 0%, #FDB931 100%);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        .logo-container img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
     </style>
 </head>
 <body class="bg-gray-100">
     <div class="min-h-screen flex">
         <!-- Sidebar - PSU Blue -->
-        <div class="w-64 psu-blue-bg text-white shadow-2xl">
+        <div class="w-64 psu-blue-bg text-white shadow-2xl flex flex-col">
             <!-- Logo -->
             <div class="p-6 border-b border-blue-700">
                 <div class="flex items-center space-x-3">
-                    <div class="w-10 h-10 bg-gradient-to-br from-yellow-400 to-yellow-600 rounded-lg flex items-center justify-center">
-                        <span class="text-xl font-bold text-blue-900">PSU</span>
+                    <!-- PSU Logo Image -->
+                    <div class="logo-container">
+                        <img src="{{ asset('images/PSU_LOGO.png') }}" 
+                             alt="PSU Logo" 
+                             onerror="this.onerror=null; this.parentElement.style.backgroundColor='#FFD700'; this.parentElement.innerHTML='<span class=\'text-xl font-bold text-[#000035]\'>PSU</span>';">
                     </div>
                     <div>
                         <h2 class="text-xl font-bold">Admin Panel</h2>
@@ -53,7 +71,7 @@
             </div>
             
             <!-- Navigation -->
-            <nav class="mt-6">
+            <nav class="mt-6 flex-1">
                 <a href="{{ route('admin.dashboard') }}" class="block px-6 py-3 sidebar-active flex items-center">
                     <svg class="w-5 h-5 mr-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6"></path>
@@ -66,20 +84,20 @@
                     </svg>
                     Applications
                 </a>
-                
-                <!-- Logout at bottom -->
-                <div class="absolute bottom-0 w-64 p-6">
-                    <form method="POST" action="{{ route('admin.logout') }}">
-                        @csrf
-                        <button type="submit" class="w-full flex items-center px-6 py-3 bg-blue-700 bg-opacity-50 rounded-lg hover:bg-blue-700 transition">
-                            <svg class="w-5 h-5 mr-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1"></path>
-                            </svg>
-                            Logout
-                        </button>
-                    </form>
-                </div>
             </nav>
+            
+            <!-- Logout at bottom -->
+            <div class="p-6 border-t border-blue-700">
+                <form method="POST" action="{{ route('admin.logout') }}">
+                    @csrf
+                    <button type="submit" class="w-full flex items-center px-6 py-3 bg-blue-700 bg-opacity-50 rounded-lg hover:bg-blue-700 transition">
+                        <svg class="w-5 h-5 mr-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1"></path>
+                        </svg>
+                        Logout
+                    </button>
+                </form>
+            </div>
         </div>
         
         <!-- Main Content -->
@@ -87,7 +105,7 @@
             <!-- Header with Welcome and Date -->
             <div class="mb-8 flex justify-between items-center">
                 <div>
-                    <h1 class="text-3xl font-bold text-blue-900">Dashboard</h1>
+                    <h1 class="text-3xl font-bold text-[#000035]">Dashboard</h1>
                     <p class="text-gray-600">Welcome back, Administrator</p>
                 </div>
                 <div class="bg-white px-6 py-3 rounded-lg shadow-md flex items-center">
@@ -101,11 +119,11 @@
             <!-- Statistics Cards -->
             <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-8">
                 <!-- Total Applicants -->
-                <div class="stat-card bg-white rounded-xl shadow-lg p-6 border-l-4 border-blue-900">
+                <div class="stat-card bg-white rounded-xl shadow-lg p-6 border-l-4 border-[#000035]">
                     <div class="flex items-center justify-between">
                         <div>
                             <p class="text-sm text-gray-500 font-medium">Total Applicants</p>
-                            <p class="text-3xl font-bold text-blue-900 mt-2">{{ $totalApplicants }}</p>
+                            <p class="text-3xl font-bold text-[#000035] mt-2">{{ $totalApplicants }}</p>
                             <p class="text-xs text-green-600 mt-2">
                                 <span class="flex items-center">
                                     <svg class="w-3 h-3 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -116,7 +134,7 @@
                             </p>
                         </div>
                         <div class="p-4 bg-blue-100 rounded-full">
-                            <svg class="w-8 h-8 text-blue-900" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <svg class="w-8 h-8 text-[#000035]" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4.354a4 4 0 110 5.292M15 21H3v-1a6 6 0 0112 0v1zm0 0h6v-1a6 6 0 00-9-5.197M13 7a4 4 0 11-8 0 4 4 0 018 0z"></path>
                             </svg>
                         </div>
@@ -210,13 +228,13 @@
                     </div>
                     <div class="flex items-center justify-between">
                         <div>
-                            <p class="text-4xl font-bold text-blue-900">
+                            <p class="text-4xl font-bold text-[#000035]">
                                 {{ \App\Models\StudentApplication::whereDate('created_at', today())->count() }}
                             </p>
                             <p class="text-sm text-gray-500 mt-2">submitted today</p>
                         </div>
                         <a href="{{ route('admin.applications') }}" 
-                           class="px-4 py-2 bg-blue-900 text-white rounded-lg hover:bg-blue-800 transition flex items-center">
+                           class="px-4 py-2 bg-[#000035] text-white rounded-lg hover:bg-opacity-90 transition flex items-center">
                             View All
                             <svg class="w-4 h-4 ml-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"></path>
@@ -229,7 +247,7 @@
             <!-- Applicants per Campus with Gold Progress Bars -->
             <div class="bg-white rounded-xl shadow-lg p-6 border-t-4 border-yellow-400">
                 <div class="flex items-center justify-between mb-6">
-                    <h2 class="text-xl font-bold text-blue-900 flex items-center">
+                    <h2 class="text-xl font-bold text-[#000035] flex items-center">
                         <svg class="w-6 h-6 mr-2 text-yellow-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5M9 7h1m-1 4h1m4-4h1m-1 4h1m-5 10v-5a1 1 0 011-1h2a1 1 0 011 1v5m-4 0h4"></path>
                         </svg>
@@ -242,10 +260,10 @@
                     <div>
                         <div class="flex justify-between mb-2">
                             <div>
-                                <span class="font-semibold text-gray-700">{{ $campus }} Campus</span>
+                                <span class="font-semibold text-gray-700">{{ $campus }}{{ str_contains(strtolower($campus), 'campus') ? '' : ' Campus' }}</span>
                                 <span class="ml-2 text-sm text-gray-500">{{ $count }} applicants</span>
                             </div>
-                            <span class="text-sm font-semibold text-blue-900">
+                            <span class="text-sm font-semibold text-[#000035]">
                                 {{ $totalApplicants > 0 ? round(($count / $totalApplicants) * 100) : 0 }}%
                             </span>
                         </div>
