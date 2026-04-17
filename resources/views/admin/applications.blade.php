@@ -24,28 +24,43 @@
             font-weight: bold;
         }
         .status-badge {
-            @apply px-3 py-1.5 rounded-full text-xs font-semibold inline-flex items-center;
+            @apply flex items-center px-3 py-1 rounded-full text-[10px] font-bold shadow-sm border transition-all duration-300;
         }
         .status-pending {
-            @apply bg-yellow-100 text-yellow-800 border border-yellow-200;
+            background-color: rgba(254, 240, 138, 0.4);
+            color: #854d0e;
+            border-color: rgba(254, 240, 138, 1);
         }
         .status-approved {
-            @apply bg-green-100 text-green-800 border border-green-200;
+            background-color: rgba(187, 247, 208, 0.4);
+            color: #166534;
+            border-color: rgba(187, 247, 208, 1);
         }
         .status-rejected {
-            @apply bg-red-100 text-red-800 border border-red-200;
+            background-color: rgba(254, 202, 202, 0.4);
+            color: #991b1b;
+            border-color: rgba(254, 202, 202, 1);
         }
         .status-waitlisted {
-            @apply bg-blue-100 text-blue-800 border border-blue-200;
+            background-color: rgba(191, 219, 254, 0.4);
+            color: #1e40af;
+            border-color: rgba(191, 219, 254, 1);
         }
-        .hover-scale {
-            transition: transform 0.2s;
+        .status-dot {
+            @apply w-1.5 h-1.5 rounded-full mr-1.5;
         }
-        .hover-scale:hover {
-            transform: scale(1.02);
+        .pulse {
+            animation: pulse-animation 2s infinite;
+        }
+        @keyframes pulse-animation {
+            0% { box-shadow: 0 0 0 0px rgba(234, 179, 8, 0.4); }
+            100% { box-shadow: 0 0 0 4px rgba(234, 179, 8, 0); }
+        }
+        .action-icon-btn {
+            @apply p-2 rounded-xl transition-all duration-300 transform hover:-translate-y-0.5 hover:shadow-md;
         }
         .table-header {
-            @apply px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider bg-gray-50;
+            @apply px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider bg-gray-50;
         }
         .export-btn {
             @apply px-4 py-2 bg-green-600 text-white rounded-lg hover:bg-green-700 transition flex items-center;
@@ -311,63 +326,66 @@
                         </thead>
                         <tbody class="bg-white divide-y divide-gray-200">
                             @forelse($applications as $application)
-                            <tr class="hover:bg-gray-50 transition hover-scale">
-                                <td class="px-6 py-4">
+                            <tr class="transition">
+                                <td class="px-4 py-4">
                                     <div class="flex items-center">
                                         <div class="w-8 h-8 bg-blue-100 rounded-full flex items-center justify-center mr-3">
                                             <span class="text-blue-800 font-semibold text-sm">
                                                 {{ substr($application->firstname, 0, 1) }}{{ substr($application->lastname, 0, 1) }}
                                             </span>
                                         </div>
-                                        <div>
-                                            <div class="text-sm font-medium text-gray-900">
+                                        <div class="max-w-[150px] overflow-hidden">
+                                            <div class="text-sm font-medium text-gray-900 truncate" title="{{ $application->firstname }} {{ $application->lastname }}">
                                                 {{ $application->firstname }} {{ $application->lastname }}
                                             </div>
-                                            <div class="text-xs text-gray-500">{{ $application->middlename ?: '' }}</div>
+                                            <div class="text-xs text-gray-500 truncate">{{ $application->middlename ?: '' }}</div>
                                         </div>
                                     </div>
                                 </td>
-                                <td class="px-6 py-4 whitespace-nowrap">
-                                    <span class="px-2 py-1 bg-blue-100 text-blue-800 rounded-lg text-xs font-semibold">
+                                <td class="px-4 py-4 whitespace-nowrap">
+                                    <span class="px-2 py-1 bg-blue-100 text-blue-800 rounded-lg text-[10px] font-semibold">
                                         {{ $application->campus }}
                                     </span>
                                 </td>
-                                <td class="px-6 py-4">
-                                    <div class="text-sm font-medium text-gray-900">{{ $application->course }}</div>
-                                    <div class="text-xs text-gray-500">{{ $application->college }}</div>
+                                <td class="px-4 py-4 max-w-[180px]">
+                                    <div class="text-sm font-medium text-gray-900 truncate" title="{{ $application->course }}">{{ $application->course }}</div>
+                                    <div class="text-xs text-gray-500 truncate" title="{{ $application->college }}">{{ $application->college }}</div>
                                 </td>
-                                <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
+                                <td class="px-4 py-4 whitespace-nowrap text-xs text-gray-500">
                                     {{ $application->student_type }}
                                 </td>
-                                <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
+                                <td class="px-4 py-4 whitespace-nowrap text-xs text-gray-500 font-mono">
                                     {{ $application->contact_number }}
                                 </td>
-                                <td class="px-6 py-4 whitespace-nowrap text-sm">
-                                    <span class="text-blue-600">{{ $application->gmail_account }}@gmail.com</span>
+                                <td class="px-4 py-4 whitespace-nowrap text-xs">
+                                    <div class="max-w-[160px] truncate text-blue-600" title="{{ $application->gmail_account }}{{ !str_contains($application->gmail_account, '@') ? '@gmail.com' : '' }}">
+                                        {{ $application->gmail_account }}{{ !str_contains($application->gmail_account, '@') ? '@gmail.com' : '' }}
+                                    </div>
                                 </td>
-                                <td class="px-6 py-4 whitespace-nowrap">
-                                    <span class="status-badge 
+                                <td class="px-4 py-4 whitespace-nowrap">
+                                    <span class="status-badge
                                         @if($application->status == 'Pending') status-pending
                                         @elseif($application->status == 'Approved') status-approved
                                         @elseif($application->status == 'Rejected') status-rejected
                                         @else status-waitlisted
                                         @endif">
-                                        @if($application->status == 'Pending') 🟡
-                                        @elseif($application->status == 'Approved') ✅
-                                        @elseif($application->status == 'Rejected') ❌
-                                        @else ⏳
-                                        @endif
+                                        <span class="status-dot 
+                                            @if($application->status == 'Pending') bg-yellow-500 pulse
+                                            @elseif($application->status == 'Approved') bg-green-500
+                                            @elseif($application->status == 'Rejected') bg-red-500
+                                            @else bg-blue-500
+                                            @endif"></span>
                                         {{ $application->status }}
                                     </span>
                                 </td>
-                                <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
-                                    {{ $application->created_at->format('M d, Y') }}
-                                    <div class="text-xs">{{ $application->created_at->format('h:i A') }}</div>
+                                <td class="px-4 py-4 whitespace-nowrap text-xs text-gray-500">
+                                    <div class="font-bold">{{ $application->created_at->format('M d, Y') }}</div>
+                                    <div class="text-[10px] opacity-75">{{ $application->created_at->format('h:i A') }}</div>
                                 </td>
-                                <td class="px-6 py-4 whitespace-nowrap text-sm font-medium">
+                                <td class="px-4 py-4 whitespace-nowrap text-sm font-medium">
                                     <div class="flex space-x-2">
                                         <a href="{{ route('admin.view', $application->id) }}" 
-                                           class="text-blue-600 hover:text-blue-900 bg-blue-50 p-2 rounded-lg hover:bg-blue-100 transition"
+                                           class="text-blue-600 hover:text-blue-900 bg-blue-50 action-icon-btn hover:bg-blue-100"
                                            title="View Details">
                                             <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"></path>
@@ -375,7 +393,7 @@
                                             </svg>
                                         </a>
                                         <a href="{{ route('admin.edit', $application->id) }}" 
-                                           class="text-green-600 hover:text-green-900 bg-green-50 p-2 rounded-lg hover:bg-green-100 transition"
+                                           class="text-green-600 hover:text-green-900 bg-green-50 action-icon-btn hover:bg-green-100"
                                            title="Edit Application">
                                             <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z"></path>
@@ -388,7 +406,7 @@
                                             @csrf
                                             @method('DELETE')
                                             <button type="submit" 
-                                                    class="text-red-600 hover:text-red-900 bg-red-50 p-2 rounded-lg hover:bg-red-100 transition"
+                                                    class="text-red-600 hover:text-red-900 bg-red-50 action-icon-btn hover:bg-red-100"
                                                     title="Delete Application">
                                                 <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"></path>

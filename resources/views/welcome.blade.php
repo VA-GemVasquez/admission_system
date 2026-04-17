@@ -24,22 +24,30 @@
             color: #000035;
         }
         .btn-gold {
-            background-color: #FFD966;
+            background: linear-gradient(135deg, #FFD966 0%, #F5C542 100%);
             color: #000035;
-            transition: all 0.2s ease;
+            border-radius: 0.75rem; /* rounded-xl */
+            font-weight: 700;
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
         }
         .btn-gold:hover {
-            background-color: #e6c456;
-            transform: translateY(-2px);
+            transform: translateY(-2px) scale(1.02);
+            box-shadow: 0 10px 15px -3px rgba(245, 197, 66, 0.3);
+            filter: brightness(110%);
         }
         .btn-navy {
-            background-color: #000035;
+            background: linear-gradient(135deg, #000035 0%, #000050 100%);
             color: white;
-            transition: all 0.2s ease;
+            border-radius: 0.75rem; /* rounded-xl */
+            font-weight: 700;
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
         }
         .btn-navy:hover {
-            background-color: #000045;
-            transform: translateY(-2px);
+            transform: translateY(-2px) scale(1.02);
+            box-shadow: 0 10px 15px -3px rgba(0, 0, 53, 0.3);
+            filter: brightness(120%);
         }
         .card-simple {
             transition: transform 0.2s ease, box-shadow 0.2s ease;
@@ -157,8 +165,15 @@
                     Your journey to excellence starts here. Join Partido State University.
                 </p>
                 <div class="flex justify-center gap-4">
-                    <a href="#student-portal" class="btn-gold px-6 py-3 rounded-lg font-semibold shadow-md">Apply Now</a>
-                    <a href="#admin-portal" class="border-2 border-[#FFD966] text-[#FFD966] px-6 py-3 rounded-lg font-semibold hover:bg-[#FFD966] hover:text-[#000035] transition">Admin</a>
+                    <a href="#student-portal" class="btn-gold px-8 py-4 shadow-lg flex items-center">
+                        Apply Now
+                        <svg class="w-5 h-5 ml-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14 5l7 7m0 0l-7 7m7-7H3"/>
+                        </svg>
+                    </a>
+                    <a href="#admin-portal" class="border-2 border-[#FFD966] text-[#FFD966] px-8 py-4 rounded-xl font-bold hover:bg-[#FFD966] hover:text-[#000035] transition-all duration-300 transform hover:-translate-y-1">
+                        Admin Login
+                    </a>
                 </div>
             </div>
         </div>
@@ -192,9 +207,9 @@
                     <h3 class="text-2xl font-bold text-[#000035] mb-2">Admin</h3>
                     <p class="text-gray-500 text-sm mb-6"></p>
                     <a href="{{ route('admin.login') }}" 
-                       class="inline-flex items-center justify-center gap-2 btn-navy w-full py-3 rounded-lg font-semibold">
+                       class="inline-flex items-center justify-center gap-2 btn-navy w-full py-4 shadow-lg group">
                         Access Admin
-                        <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <svg class="w-5 h-5 transition-transform duration-300 group-hover:translate-x-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"></path>
                         </svg>
                     </a>
@@ -214,9 +229,9 @@
                     <h3 class="text-2xl font-bold text-[#000035] mb-2">Student</h3>
                     <p class="text-gray-500 text-sm mb-6"></p>
                     <a href="{{ route('student.apply') }}" 
-                       class="inline-flex items-center justify-center gap-2 btn-gold w-full py-3 rounded-lg font-semibold">
+                       class="inline-flex items-center justify-center gap-2 btn-gold w-full py-4 shadow-lg group">
                         Fill-up Form
-                        <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <svg class="w-5 h-5 transition-transform duration-300 group-hover:translate-x-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"></path>
                         </svg>
                     </a>

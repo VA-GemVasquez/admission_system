@@ -30,6 +30,9 @@ class StudentApplication extends Model
         'campus',
         'college',
         'course',
+        'photo_path',
+        'birth_certificate_path',
+        'report_card_path',
         'status'
     ];
 }

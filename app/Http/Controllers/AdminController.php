@@ -159,7 +159,7 @@ class AdminController extends Controller
             'firstname' => 'required|string|max:255',
             'middlename' => 'nullable|string|max:255',
             'lastname' => 'required|string|max:255',
-            'years_old' => 'required|integer|min:15|max:100',
+            'age' => 'required|integer|min:15|max:100',
             'contact_number' => 'required|string|max:20',
             'temporary_address' => 'required|string',
             'permanent_address' => 'required|string',
@@ -170,9 +170,24 @@ class AdminController extends Controller
             'college' => 'required|string',
             'course' => 'required|string',
             'status' => 'required|in:Pending,Approved,Rejected,Waitlisted',
+            'photo' => 'nullable|image|mimes:jpeg,png,jpg|max:2048',
+            'birth_certificate' => 'nullable|mimes:pdf,jpeg,png,jpg|max:2048',
+            'report_card' => 'nullable|mimes:pdf,jpeg,png,jpg|max:2048',
         ]);
 
-        $application->update($request->all());
+        $data = $request->except(['photo', 'birth_certificate', 'report_card']);
+
+        if ($request->hasFile('photo')) {
+            $data['photo_path'] = $request->file('photo')->store('documents/photos', 'public');
+        }
+        if ($request->hasFile('birth_certificate')) {
+            $data['birth_certificate_path'] = $request->file('birth_certificate')->store('documents/birth_certificates', 'public');
+        }
+        if ($request->hasFile('report_card')) {
+            $data['report_card_path'] = $request->file('report_card')->store('documents/report_cards', 'public');
+        }
+
+        $application->update($data);
 
         return redirect()->route('admin.applications')->with('success', 'Application updated successfully!');
     }
