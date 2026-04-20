@@ -6,7 +6,10 @@
     <title>PSU - Student Admission Form</title>
     @vite(['resources/css/app.css'], ['resources/js/app.js'])
     <style>
-        .psu-blue-bg {
+        
+
+
+        
             background: linear-gradient(135deg, #000035 0%, #00004d 100%);
         }
         .psu-gold-bg {
@@ -71,38 +74,7 @@
 
     <div class="container mx-auto px-4 py-8">
         <div class="max-w-5xl mx-auto">
-            <!-- Track Your Application Banner -->
-            <div class="mb-6 track-card">
-                <div class="flex items-center justify-between flex-wrap gap-4">
-                    <div class="flex items-center">
-                        <div class="w-12 h-12 bg-[#000035] rounded-full flex items-center justify-center mr-4">
-                            <svg class="w-6 h-6 text-yellow-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"></path>
-                            </svg>
-                        </div>
-                        <div>
-                            <h3 class="text-lg font-bold text-[#000035]">Already Submitted an Application?</h3>
-                            <p class="text-sm text-gray-600">Track your application status and check your admission progress</p>
-                        </div>
-                    </div>
-                    <div class="flex space-x-3">
-                        <a href="{{ route('student.track') }}" 
-                           class="px-6 py-3 bg-[#000035] text-white rounded-lg font-semibold hover:bg-opacity-90 transition transform hover:scale-105 flex items-center">
-                            <svg class="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"></path>
-                            </svg>
-                            Track Your Application
-                        </a>
-                        <a href="{{ route('student.lookup') }}" 
-                           class="px-6 py-3 bg-yellow-500 text-[#000035] rounded-lg font-semibold hover:bg-yellow-400 transition transform hover:scale-105 flex items-center">
-                            <svg class="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"></path>
-                            </svg>
-                            Find My Application
-                        </a>
-                    </div>
-                </div>
-            </div>
+          
 
             <!-- Progress Steps -->
             <div class="mb-8">
@@ -147,7 +119,7 @@
                 
                 <!-- Form Body -->
                 <div class="p-8">
-                    <form action="{{ route('student.submit') }}" method="POST" id="admissionForm">
+                    <form action="{{ route('student.submit') }}" method="POST" enctype="multipart/form-data" id="admissionForm">
                         @csrf
                         
                         @if(session('success'))
@@ -420,6 +392,49 @@
                                     </select>
                                 </div>
                             </div>
+                            <!-- Document Uploads -->
+                            <div class="col-span-full mt-8">
+                                <h3 class="text-xl font-bold text-[#000035] mb-4 border-b pb-2">Required Documents</h3>
+                                <p class="text-sm text-gray-500 mb-6">Please upload clear copies of the following documents (Max 2MB per file. Formats: JPG, PNG, PDF).</p>
+                                
+                                <div class="grid md:grid-cols-3 gap-6">
+                                    <!-- 2x2 Photo -->
+                                    <div>
+                                        <label class="block text-sm font-medium text-gray-700 mb-2">
+                                            2x2 Photo <span class="text-red-500">*</span>
+                                        </label>
+                                        <div class="relative">
+                                            <input type="file" name="photo" required accept="image/*"
+                                                   class="w-full text-sm text-gray-500 file:mr-4 file:py-2 file:px-4 file:rounded-full file:border-0 file:text-sm file:font-semibold file:bg-yellow-50 file:text-yellow-700 hover:file:bg-yellow-100 border border-gray-300 rounded-lg p-2 focus:ring-2 focus:ring-yellow-400">
+                                        </div>
+                                        @error('photo') <p class="text-red-500 text-xs mt-1">{{ $message }}</p> @enderror
+                                    </div>
+
+                                    <!-- Birth Certificate -->
+                                    <div>
+                                        <label class="block text-sm font-medium text-gray-700 mb-2">
+                                            Birth Certificate (PSA) <span class="text-red-500">*</span>
+                                        </label>
+                                        <div class="relative">
+                                            <input type="file" name="birth_certificate" required accept=".pdf,image/*"
+                                                   class="w-full text-sm text-gray-500 file:mr-4 file:py-2 file:px-4 file:rounded-full file:border-0 file:text-sm file:font-semibold file:bg-yellow-50 file:text-yellow-700 hover:file:bg-yellow-100 border border-gray-300 rounded-lg p-2 focus:ring-2 focus:ring-yellow-400">
+                                        </div>
+                                        @error('birth_certificate') <p class="text-red-500 text-xs mt-1">{{ $message }}</p> @enderror
+                                    </div>
+
+                                    <!-- Report Card -->
+                                    <div>
+                                        <label class="block text-sm font-medium text-gray-700 mb-2">
+                                            Report Card (Form 137) <span class="text-red-500">*</span>
+                                        </label>
+                                        <div class="relative">
+                                            <input type="file" name="report_card" required accept=".pdf,image/*"
+                                                   class="w-full text-sm text-gray-500 file:mr-4 file:py-2 file:px-4 file:rounded-full file:border-0 file:text-sm file:font-semibold file:bg-yellow-50 file:text-yellow-700 hover:file:bg-yellow-100 border border-gray-300 rounded-lg p-2 focus:ring-2 focus:ring-yellow-400">
+                                        </div>
+                                        @error('report_card') <p class="text-red-500 text-xs mt-1">{{ $message }}</p> @enderror
+                                    </div>
+                                </div>
+                            </div>
                         </div>
 
                         <!-- Terms and Conditions -->
@@ -470,14 +485,12 @@
                         </svg>
                         Already Applied?
                     </h3>
-                    <p class="text-sm text-gray-600 mb-4">Enter your Application ID or Gmail to check your application status</p>
+                    <p class="text-sm text-gray-600 mb-4">Enter your Application ID to check your application status</p>
                     <form action="{{ route('student.lookup') }}" method="GET" class="space-y-3">
                         <div class="flex gap-2">
                             <input type="text" name="application_id" placeholder="Application ID" 
                                    class="flex-1 px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-yellow-400 focus:border-yellow-400 transition">
-                            <span class="text-gray-500 self-center">or</span>
-                            <input type="email" name="email" placeholder="Gmail" 
-                                   class="flex-1 px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-yellow-400 focus:border-yellow-400 transition">
+                            
                         </div>
                         <button type="submit" 
                                 class="w-full bg-[#000035] text-white px-4 py-2 rounded-lg hover:bg-opacity-90 transition flex items-center justify-center">

@@ -19,19 +19,37 @@
             color: #000035;
         }
         .status-badge {
-            @apply px-4 py-2 rounded-full text-sm font-semibold;
+            @apply flex items-center px-4 py-2 rounded-full text-sm font-bold shadow-sm border transition-all duration-300;
         }
         .status-pending {
-            @apply bg-yellow-100 text-yellow-800 border border-yellow-200;
+            background-color: rgba(254, 240, 138, 0.4);
+            color: #854d0e;
+            border-color: rgba(254, 240, 138, 1);
         }
         .status-approved {
-            @apply bg-green-100 text-green-800 border border-green-200;
+            background-color: rgba(187, 247, 208, 0.4);
+            color: #166534;
+            border-color: rgba(187, 247, 208, 1);
         }
         .status-rejected {
-            @apply bg-red-100 text-red-800 border border-red-200;
+            background-color: rgba(254, 202, 202, 0.4);
+            color: #991b1b;
+            border-color: rgba(254, 202, 202, 1);
         }
         .status-waitlisted {
-            @apply bg-blue-100 text-blue-800 border border-blue-200;
+            background-color: rgba(191, 219, 254, 0.4);
+            color: #1e40af;
+            border-color: rgba(191, 219, 254, 1);
+        }
+        .status-dot {
+            @apply w-2.5 h-2.5 rounded-full mr-2;
+        }
+        .pulse {
+            animation: pulse-animation 2s infinite;
+        }
+        @keyframes pulse-animation {
+            0% { box-shadow: 0 0 0 0px rgba(234, 179, 8, 0.4); }
+            100% { box-shadow: 0 0 0 10px rgba(234, 179, 8, 0); }
         }
         .info-card {
             @apply bg-gray-50 rounded-xl p-6 border border-gray-200 hover:shadow-md transition;
@@ -43,7 +61,7 @@
             @apply text-base font-semibold text-gray-800;
         }
         .action-btn {
-            @apply px-6 py-3 rounded-lg font-semibold transition transform hover:scale-105 flex items-center;
+            @apply px-8 py-4 rounded-xl font-bold transition-all duration-300 flex items-center shadow-md transform hover:-translate-y-1 hover:shadow-xl;
         }
         .logo-container {
             width: 50px;
@@ -162,11 +180,12 @@
                                 @elseif($application->status == 'Rejected') status-rejected
                                 @else status-waitlisted
                                 @endif">
-                                @if($application->status == 'Pending') 🟡
-                                @elseif($application->status == 'Approved') ✅
-                                @elseif($application->status == 'Rejected') ❌
-                                @else ⏳
-                                @endif
+                                <span class="status-dot 
+                                    @if($application->status == 'Pending') bg-yellow-500 pulse
+                                    @elseif($application->status == 'Approved') bg-green-500
+                                    @elseif($application->status == 'Rejected') bg-red-500
+                                    @else bg-blue-500
+                                    @endif"></span>
                                 {{ $application->status }}
                             </span>
                         </div>

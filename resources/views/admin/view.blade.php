@@ -24,19 +24,37 @@
             font-weight: bold;
         }
         .status-badge {
-            @apply px-4 py-2 rounded-full text-sm font-semibold;
+            @apply flex items-center px-4 py-2 rounded-full text-sm font-bold shadow-sm border transition-all duration-300;
         }
         .status-pending {
-            @apply bg-yellow-100 text-yellow-800 border border-yellow-200;
+            background-color: rgba(254, 240, 138, 0.4);
+            color: #854d0e;
+            border-color: rgba(254, 240, 138, 1);
         }
         .status-approved {
-            @apply bg-green-100 text-green-800 border border-green-200;
+            background-color: rgba(187, 247, 208, 0.4);
+            color: #166534;
+            border-color: rgba(187, 247, 208, 1);
         }
         .status-rejected {
-            @apply bg-red-100 text-red-800 border border-red-200;
+            background-color: rgba(254, 202, 202, 0.4);
+            color: #991b1b;
+            border-color: rgba(254, 202, 202, 1);
         }
         .status-waitlisted {
-            @apply bg-blue-100 text-blue-800 border border-blue-200;
+            background-color: rgba(191, 219, 254, 0.4);
+            color: #1e40af;
+            border-color: rgba(191, 219, 254, 1);
+        }
+        .status-dot {
+            @apply w-2.5 h-2.5 rounded-full mr-2;
+        }
+        .pulse {
+            animation: pulse-animation 2s infinite;
+        }
+        @keyframes pulse-animation {
+            0% { box-shadow: 0 0 0 0px rgba(234, 179, 8, 0.4); }
+            100% { box-shadow: 0 0 0 10px rgba(234, 179, 8, 0); }
         }
         .info-card {
             @apply bg-gray-50 rounded-xl p-6 border border-gray-200 hover:shadow-md transition;
@@ -48,7 +66,7 @@
             @apply text-base font-semibold text-gray-800;
         }
         .action-btn {
-            @apply px-6 py-3 rounded-lg font-semibold transition transform hover:scale-105 flex items-center;
+            @apply px-6 py-3 rounded-xl font-bold transition-all duration-300 flex items-center shadow-md transform hover:-translate-y-1 hover:shadow-xl;
         }
         .logo-container {
             width: 40px;
@@ -134,7 +152,7 @@
                 </div>
                 <div class="flex space-x-3">
                     <a href="{{ route('admin.edit', $application->id) }}" 
-                       class="bg-[#000035] text-white px-6 py-3 rounded-lg hover:bg-opacity-90 transition flex items-center">
+                       class="bg-[#000035] text-white px-6 py-3 rounded-xl hover:bg-opacity-90 transition-all duration-300 transform hover:-translate-y-1 flex items-center font-bold shadow-md hover:shadow-xl">
                         <svg class="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z"></path>
                         </svg>
@@ -172,11 +190,12 @@
                                         @elseif($application->status == 'Rejected') status-rejected
                                         @else status-waitlisted
                                         @endif">
-                                        @if($application->status == 'Pending') 🟡
-                                        @elseif($application->status == 'Approved') ✅
-                                        @elseif($application->status == 'Rejected') ❌
-                                        @else ⏳
-                                        @endif
+                                        <span class="status-dot 
+                                            @if($application->status == 'Pending') bg-yellow-500 pulse
+                                            @elseif($application->status == 'Approved') bg-green-500
+                                            @elseif($application->status == 'Rejected') bg-red-500
+                                            @else bg-blue-500
+                                            @endif"></span>
                                         {{ $application->status }}
                                     </span>
                                 </div>
@@ -187,7 +206,7 @@
                         <div class="flex space-x-3">
                             <form action="{{ route('admin.approve', $application->id) }}" method="POST" class="inline">
                                 @csrf
-                                <button type="submit" class="bg-green-600 text-white px-5 py-2.5 rounded-lg hover:bg-green-700 transition transform hover:scale-105 flex items-center text-sm font-semibold shadow-md">
+                                <button type="submit" class="bg-green-600 text-white px-5 py-2.5 rounded-xl hover:bg-green-700 transition-all duration-300 transform hover:-translate-y-1 flex items-center text-sm font-bold shadow-md hover:shadow-xl">
                                     <svg class="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path>
                                     </svg>
@@ -196,7 +215,7 @@
                             </form>
                             <form action="{{ route('admin.waitlist', $application->id) }}" method="POST" class="inline">
                                 @csrf
-                                <button type="submit" class="bg-blue-600 text-white px-5 py-2.5 rounded-lg hover:bg-blue-700 transition transform hover:scale-105 flex items-center text-sm font-semibold shadow-md">
+                                <button type="submit" class="bg-blue-600 text-white px-5 py-2.5 rounded-xl hover:bg-blue-700 transition-all duration-300 transform hover:-translate-y-1 flex items-center text-sm font-bold shadow-md hover:shadow-xl">
                                     <svg class="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"></path>
                                     </svg>
@@ -205,7 +224,7 @@
                             </form>
                             <form action="{{ route('admin.reject', $application->id) }}" method="POST" class="inline">
                                 @csrf
-                                <button type="submit" class="bg-red-600 text-white px-5 py-2.5 rounded-lg hover:bg-red-700 transition transform hover:scale-105 flex items-center text-sm font-semibold shadow-md">
+                                <button type="submit" class="bg-red-600 text-white px-5 py-2.5 rounded-xl hover:bg-red-700 transition-all duration-300 transform hover:-translate-y-1 flex items-center text-sm font-bold shadow-md hover:shadow-xl">
                                     <svg class="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path>
                                     </svg>
@@ -402,6 +421,75 @@
                                         </div>
                                     </div>
                                 </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Documents Section -->
+                    <div class="mt-12 bg-gray-50 rounded-xl p-8 border border-gray-200">
+                        <h3 class="text-xl font-bold text-[#000035] mb-6 flex items-center border-b pb-4">
+                            <svg class="w-6 h-6 mr-2 text-yellow-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"></path>
+                            </svg>
+                            Submitted Documents
+                        </h3>
+                        
+                        <div class="grid md:grid-cols-3 gap-8">
+                            <!-- Photo -->
+                            <div class="bg-white p-6 rounded-xl shadow-sm border border-gray-100 flex flex-col items-center">
+                                <p class="text-xs font-bold uppercase tracking-wider text-gray-400 mb-4">Applicant Photo</p>
+                                @if($application->photo_path)
+                                    <div class="w-40 h-40 mb-4 rounded-xl overflow-hidden shadow-lg border-4 border-white">
+                                        <img src="{{ asset('storage/' . $application->photo_path) }}" class="w-full h-full object-cover">
+                                    </div>
+                                    <a href="{{ asset('storage/' . $application->photo_path) }}" target="_blank" 
+                                       class="inline-flex items-center text-[#000035] hover:text-yellow-600 font-bold text-sm transition">
+                                        <svg class="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14"></path>
+                                        </svg>
+                                        View Full Size
+                                    </a>
+                                @else
+                                    <div class="w-40 h-40 mb-4 rounded-xl bg-gray-100 flex items-center justify-center border-2 border-dashed border-gray-300">
+                                        <span class="text-gray-400 italic text-sm">No Photo Uploaded</span>
+                                    </div>
+                                @endif
+                            </div>
+
+                            <!-- Birth Certificate -->
+                            <div class="bg-white p-6 rounded-xl shadow-sm border border-gray-100 flex flex-col items-center justify-center">
+                                <p class="text-xs font-bold uppercase tracking-wider text-gray-400 mb-4">Birth Certificate (PSA)</p>
+                                @if($application->birth_certificate_path)
+                                    <div class="w-20 h-20 mb-6 bg-red-50 rounded-2xl flex items-center justify-center text-red-500">
+                                        <svg class="w-10 h-10" fill="currentColor" viewBox="0 0 20 20">
+                                            <path d="M9 2a2 2 0 00-2 2v8a2 2 0 002 2h6a2 2 0 002-2V6.414A2 2 0 0016.414 5L14 2.586A2 2 0 0012.586 2H9z"/>
+                                        </svg>
+                                    </div>
+                                    <a href="{{ asset('storage/' . $application->birth_certificate_path) }}" target="_blank" 
+                                       class="w-full bg-[#000035] text-white py-3 rounded-lg text-sm font-bold hover:bg-opacity-90 transition text-center shadow-lg">
+                                        View PSA Certificate
+                                    </a>
+                                @else
+                                    <p class="text-gray-400 italic text-sm">Not provided</p>
+                                @endif
+                            </div>
+
+                            <!-- Report Card -->
+                            <div class="bg-white p-6 rounded-xl shadow-sm border border-gray-100 flex flex-col items-center justify-center">
+                                <p class="text-xs font-bold uppercase tracking-wider text-gray-400 mb-4">Report Card (Form 137)</p>
+                                @if($application->report_card_path)
+                                    <div class="w-20 h-20 mb-6 bg-blue-50 rounded-2xl flex items-center justify-center text-blue-500">
+                                        <svg class="w-10 h-10" fill="currentColor" viewBox="0 0 20 20">
+                                            <path d="M9 2a2 2 0 00-2 2v8a2 2 0 002 2h6a2 2 0 002-2V6.414A2 2 0 0016.414 5L14 2.586A2 2 0 0012.586 2H9z"/>
+                                        </svg>
+                                    </div>
+                                    <a href="{{ asset('storage/' . $application->report_card_path) }}" target="_blank" 
+                                       class="w-full bg-[#000035] text-white py-3 rounded-lg text-sm font-bold hover:bg-opacity-90 transition text-center shadow-lg">
+                                        View Report Card
+                                    </a>
+                                @else
+                                    <p class="text-gray-400 italic text-sm">Not provided</p>
+                                @endif
                             </div>
                         </div>
                     </div>

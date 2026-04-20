@@ -191,7 +191,7 @@
                 </div>
                 
                 <div class="p-8">
-                    <form action="{{ route('admin.update', $application->id) }}" method="POST">
+                    <form action="{{ route('admin.update', $application->id) }}" method="POST" enctype="multipart/form-data">
                         @csrf
                         @method('PUT')
                         
@@ -434,7 +434,64 @@
                                     <select name="course" required id="course"
                                             class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-yellow-400 focus:border-yellow-400 transition">
                                         <option value="">Select Course</option>
-                                    </select>
+                                </select>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <!-- Documents Upload -->
+                        <div class="form-section mb-8 p-6 border border-gray-200 rounded-xl hover:shadow-md">
+                            <h3 class="text-lg font-bold text-[#000035] mb-4 flex items-center">
+                                <svg class="w-5 h-5 mr-2 text-yellow-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"></path>
+                                </svg>
+                                Documents
+                            </h3>
+                            <div class="grid md:grid-cols-3 gap-6">
+                                <div>
+                                    <label class="block text-sm font-medium text-gray-700 mb-2">
+                                        Applicant Photo
+                                    </label>
+                                    @if($application->photo_path)
+                                        <div class="mb-2 text-xs text-green-600 flex items-center">
+                                            <svg class="w-4 h-4 mr-1" fill="currentColor" viewBox="0 0 20 20">
+                                                <path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"/>
+                                            </svg>
+                                            Existing photo on file
+                                        </div>
+                                    @endif
+                                    <input type="file" name="photo" accept="image/*"
+                                           class="w-full text-sm text-gray-500 file:mr-4 file:py-2 file:px-4 file:rounded-full file:border-0 file:text-sm file:font-semibold file:bg-blue-50 file:text-blue-700 hover:file:bg-blue-100">
+                                </div>
+                                <div>
+                                    <label class="block text-sm font-medium text-gray-700 mb-2">
+                                        Birth Certificate (PSA)
+                                    </label>
+                                    @if($application->birth_certificate_path)
+                                        <div class="mb-2 text-xs text-green-600 flex items-center">
+                                            <svg class="w-4 h-4 mr-1" fill="currentColor" viewBox="0 0 20 20">
+                                                <path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"/>
+                                            </svg>
+                                            Existing certificate on file
+                                        </div>
+                                    @endif
+                                    <input type="file" name="birth_certificate" accept=".pdf,image/*"
+                                           class="w-full text-sm text-gray-500 file:mr-4 file:py-2 file:px-4 file:rounded-full file:border-0 file:text-sm file:font-semibold file:bg-red-50 file:text-red-700 hover:file:bg-red-100">
+                                </div>
+                                <div>
+                                    <label class="block text-sm font-medium text-gray-700 mb-2">
+                                        Report Card (Form 137)
+                                    </label>
+                                    @if($application->report_card_path)
+                                        <div class="mb-2 text-xs text-green-600 flex items-center">
+                                            <svg class="w-4 h-4 mr-1" fill="currentColor" viewBox="0 0 20 20">
+                                                <path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"/>
+                                            </svg>
+                                            Existing report card on file
+                                        </div>
+                                    @endif
+                                    <input type="file" name="report_card" accept=".pdf,image/*"
+                                           class="w-full text-sm text-gray-500 file:mr-4 file:py-2 file:px-4 file:rounded-full file:border-0 file:text-sm file:font-semibold file:bg-green-50 file:text-green-700 hover:file:bg-green-100">
                                 </div>
                             </div>
                         </div>
