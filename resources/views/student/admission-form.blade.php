@@ -6,7 +6,10 @@
     <title>PSU - Student Admission Form</title>
     @vite(['resources/css/app.css'], ['resources/js/app.js'])
     <style>
-        .psu-blue-bg {
+        
+
+
+        
             background: linear-gradient(135deg, #000035 0%, #00004d 100%);
         }
         .psu-gold-bg {
