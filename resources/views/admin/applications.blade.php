@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>PSU - Applications Management</title>
-    @vite(['resources/css/app.css'], ['resources/js/app.js'])
+    @vite(['resources/css/app.css', 'resources/js/app.js'])
     <style>
         .psu-blue-bg {
             background: linear-gradient(135deg, #000035 0%, #00004d 100%);
@@ -358,8 +358,8 @@
                                     {{ $application->contact_number }}
                                 </td>
                                 <td class="px-4 py-4 whitespace-nowrap text-xs">
-                                    <div class="max-w-[160px] truncate text-blue-600" title="{{ $application->gmail_account }}{{ !str_contains($application->gmail_account, '@') ? '@gmail.com' : '' }}">
-                                        {{ $application->gmail_account }}{{ !str_contains($application->gmail_account, '@') ? '@gmail.com' : '' }}
+                                    <div class="max-w-[160px] truncate text-blue-600" title="{{ $application->gmail_account }}">
+                                        {{ $application->gmail_account }}
                                     </div>
                                 </td>
                                 <td class="px-4 py-4 whitespace-nowrap">
