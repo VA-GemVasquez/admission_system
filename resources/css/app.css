@@ -64,3 +64,31 @@
     0%, 100% { background: rgba(255, 215, 0, 0.2); transform: scale(0.85); }
     50%       { background: #FFD700;                transform: scale(1.15); }
 }
+
+/* ── PSU Brand ── */
+.psu-blue-bg  { background: linear-gradient(135deg, #000035 0%, #00004d 100%); }
+.psu-gold-bg  { background: linear-gradient(135deg, #FFD700 0%, #FDB931 100%); }
+.sidebar-active {
+    background: linear-gradient(90deg, #FFD700 0%, #FDB931 100%);
+    color: #000035;
+    font-weight: bold;
+}
+.psu-scrollbar::-webkit-scrollbar        { width: 4px; }
+.psu-scrollbar::-webkit-scrollbar-track  { background: rgba(255,255,255,.05); }
+.psu-scrollbar::-webkit-scrollbar-thumb  { background: rgba(255,215,0,.3); border-radius: 2px; }
+.psu-scrollbar::-webkit-scrollbar-thumb:hover { background: rgba(255,215,0,.6); }
+
+/* ── Shared Logo Container (admin mobile header + student standalone pages) ── */
+.logo-container {
+    width: 44px; height: 44px;
+    border-radius: 50%;
+    background: linear-gradient(135deg, #FFD700, #FDB931);
+    display: flex; align-items: center; justify-content: center;
+    overflow: hidden;
+    flex-shrink: 0;
+    border: 2px solid rgba(255,255,255,0.25);
+}
+.logo-container img {
+    width: 100%; height: 100%;
+    object-fit: cover; border-radius: 50%;
+}

@@ -33,38 +33,24 @@
         .status-pending {
             @apply bg-yellow-100 text-yellow-800;
         }
-        .logo-container {
-            width: 50px;
-            height: 50px;
-            border-radius: 50%;
-            overflow: hidden;
-            background: linear-gradient(135deg, #FFD700 0%, #FDB931 100%);
-            display: flex;
-            align-items: center;
-            justify-content: center;
-        }
-        .logo-container img {
-            width: 100%;
-            height: 100%;
-            object-fit: cover;
-        }
+        .logo-container { width: 44px; height: 44px; }
     </style>
 </head>
 <body class="bg-gray-100">
     <!-- Header with PSU Branding -->
     <div class="psu-blue-bg shadow-lg">
         <div class="container mx-auto px-4 py-4">
-            <div class="flex items-center justify-between">
+            <div class="flex flex-wrap items-center justify-between gap-3">
                 <div class="flex items-center space-x-3">
                     <!-- PSU Logo Image -->
-                    <div class="logo-container">
-                        <img src="{{ asset('images/PSU_LOGO.png') }}" 
-                             alt="PSU Logo" 
+                    <div class="logo-container flex-shrink-0">
+                        <img src="{{ asset('images/PSU_LOGO.png') }}"
+                             alt="PSU Logo"
                              onerror="this.onerror=null; this.parentElement.style.backgroundColor='#FFD700'; this.parentElement.innerHTML='<span class=\'text-2xl font-bold text-[#000035]\'>PSU</span>';">
                     </div>
                     <div>
-                        <h1 class="text-2xl font-bold text-white">Partido State University</h1>
-                        <p class="text-yellow-300 text-sm">Edit Your Application</p>
+                        <h1 class="text-lg md:text-2xl font-bold text-white">Partido State University</h1>
+                        <p class="text-yellow-300 text-xs md:text-sm">Edit Your Application</p>
                     </div>
                 </div>
                 <div class="text-right">
@@ -107,8 +93,8 @@
             <!-- Main Form Card -->
             <div class="bg-white rounded-2xl shadow-xl overflow-hidden border-t-4 border-yellow-400">
                 <!-- Form Header -->
-                <div class="psu-blue-bg px-8 py-4">
-                    <h2 class="text-2xl font-bold text-white flex items-center">
+                <div class="psu-blue-bg px-4 md:px-8 py-4">
+                    <h2 class="text-lg md:text-2xl font-bold text-white flex items-center">
                         <svg class="w-6 h-6 mr-2 text-yellow-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z"></path>
                         </svg>
@@ -117,7 +103,7 @@
                     <p class="text-yellow-300 text-sm ml-8">Update your information below. All fields marked with * are required.</p>
                 </div>
                 
-                <div class="p-8">
+                <div class="p-4 md:p-8">
                     <form action="{{ route('student.update', $application->id) }}" method="POST">
                         @csrf
                         @method('PUT')
@@ -147,7 +133,7 @@
                                 Personal Information
                             </h3>
                             
-                            <div class="grid md:grid-cols-3 gap-6">
+                            <div class="grid sm:grid-cols-2 md:grid-cols-3 gap-4 md:gap-6">
                                 <div>
                                     <label class="block text-sm font-medium text-gray-700 mb-2">
                                         Last Name <span class="text-red-500">*</span>
@@ -281,7 +267,7 @@
                                 Guardian Information
                             </h3>
                             
-                            <div class="grid md:grid-cols-3 gap-6">
+                            <div class="grid sm:grid-cols-2 md:grid-cols-3 gap-4 md:gap-6">
                                 <div>
                                     <label class="block text-sm font-medium text-gray-700 mb-2">
                                         Guardian Complete Name <span class="text-red-500">*</span>
@@ -370,11 +356,11 @@
                         </div>
 
                         <!-- Form Footer with Actions -->
-                        <div class="flex justify-between items-center pt-6 border-t border-gray-200">
+                        <div class="flex flex-wrap justify-between items-center gap-3 pt-6 border-t border-gray-200">
                             <div class="text-sm text-gray-500">
                                 <span class="text-red-500">*</span> Required fields
                             </div>
-                            <div class="flex space-x-4">
+                            <div class="flex flex-wrap gap-3">
                                 <a href="{{ route('student.review', $application->id) }}" 
                                    class="px-8 py-3 bg-gray-500 text-white rounded-lg font-semibold hover:bg-gray-600 transition flex items-center">
                                     <svg class="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">

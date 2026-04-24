@@ -5,32 +5,34 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>PSU - Student Portal | @yield('title', 'Admission')</title>
     
+    <script defer src="https://unpkg.com/alpinejs@3.x.x/dist/cdn.min.js"></script>
     @vite(['resources/css/app.css', 'resources/js/app.js'])
-    
+
     @yield('extra_css')
 </head>
 <body class="bg-gray-50 font-sans antialiased text-gray-900">
     <!-- Student Header -->
     <header class="psu-blue-bg shadow-xl sticky top-0 z-50">
-        <div class="container mx-auto px-6 py-4">
-            <div class="flex items-center justify-between">
-                <a href="{{ route('home') }}" class="flex items-center space-x-4 group">
-                    <div class="w-14 h-14 bg-gradient-to-tr from-yellow-300 to-yellow-500 rounded-2xl p-0.5 shadow-lg group-hover:rotate-6 transition-transform">
+        <div class="container mx-auto px-4 md:px-6 py-3 md:py-4">
+            <div class="flex flex-wrap items-center justify-between gap-x-4 gap-y-2">
+                <a href="{{ route('home') }}" class="flex items-center space-x-3 group flex-shrink-0">
+                    <div class="w-10 h-10 md:w-14 md:h-14 bg-gradient-to-tr from-yellow-300 to-yellow-500 rounded-2xl p-0.5 shadow-lg group-hover:rotate-6 transition-transform">
                         <div class="w-full h-full bg-white rounded-[14px] flex items-center justify-center border-2 border-[#000035] overflow-hidden">
-                            <img src="{{ asset('images/PSU_LOGO.png') }}" class="w-[85%] h-[85%] object-contain" alt="PSU Logo" 
+                            <img src="{{ asset('images/PSU_LOGO.png') }}" class="w-[85%] h-[85%] object-contain" alt="PSU Logo"
                                  onerror="this.onerror=null; this.parentElement.innerHTML='<span class=\'text-xl font-bold text-[#000035]\'>PSU</span>';">
                         </div>
                     </div>
                     <div>
-                        <h1 class="text-xl md:text-2xl font-black text-white leading-tight">Partido State University</h1>
-                        <p class="text-yellow-400 text-[10px] md:text-xs font-black uppercase tracking-[0.2em]">Admissions Portal</p>
+                        <h1 class="text-base md:text-2xl font-black text-white leading-tight">Partido State University</h1>
+                        <p class="text-yellow-400 text-[9px] md:text-xs font-black uppercase tracking-[0.2em]">Admissions Portal</p>
                     </div>
                 </a>
-                
-                <nav class="hidden md:flex items-center space-x-6">
-                    <a href="{{ route('home') }}" class="text-xs font-black uppercase tracking-widest {{ request()->routeIs('home') ? 'text-yellow-400' : 'text-blue-100 hover:text-yellow-300 transition' }}">Home</a>
-                    <a href="{{ route('student.apply') }}" class="text-xs font-black uppercase tracking-widest {{ request()->routeIs('student.apply') ? 'text-yellow-400' : 'text-blue-100 hover:text-yellow-300 transition' }}">New Application</a>
-                    <a href="{{ route('student.track') }}" class="text-xs font-black uppercase tracking-widest {{ request()->is('student/track*') ? 'text-yellow-400' : 'text-blue-100 hover:text-yellow-300 transition' }}">Track Status</a>
+
+                <!-- Nav — always visible, wraps on small screens -->
+                <nav class="flex flex-wrap items-center gap-x-4 gap-y-1">
+                    <a href="{{ route('home') }}" class="text-[11px] md:text-xs font-black uppercase tracking-widest {{ request()->routeIs('home') ? 'text-yellow-400' : 'text-blue-100 hover:text-yellow-300 transition' }}">Home</a>
+                    <a href="{{ route('student.apply') }}" class="text-[11px] md:text-xs font-black uppercase tracking-widest {{ request()->routeIs('student.apply') ? 'text-yellow-400' : 'text-blue-100 hover:text-yellow-300 transition' }}">New Application</a>
+                    <a href="{{ route('student.track') }}" class="text-[11px] md:text-xs font-black uppercase tracking-widest {{ request()->is('student/track*') ? 'text-yellow-400' : 'text-blue-100 hover:text-yellow-300 transition' }}">Track Status</a>
                 </nav>
             </div>
         </div>
@@ -42,7 +44,7 @@
     </main>
 
     <!-- Student Footer -->
-    <footer class="bg-white border-t border-gray-100 p-8">
+    <footer class="bg-white border-t border-gray-100 p-4 md:p-8">
         <div class="container mx-auto px-6">
             <div class="flex flex-col md:flex-row justify-between items-center gap-6">
                 <div class="text-center md:text-left">

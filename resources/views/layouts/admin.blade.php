@@ -13,14 +13,27 @@
     @yield('extra_css')
 </head>
 <body class="bg-gray-50 font-sans antialiased text-gray-900">
-    <div class="min-h-screen flex">
+    <div class="min-h-screen">
+        <!-- Mobile Header -->
+        <div class="lg:hidden fixed top-0 inset-x-0 z-50 h-14 bg-[#000035] flex items-center px-4 shadow-lg">
+            <button id="sidebar-open" type="button" class="text-white p-1.5 mr-3 rounded-lg hover:bg-white/10 transition">
+                <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"/>
+                </svg>
+            </button>
+            <span class="text-white font-bold text-sm">PSU Admin Panel</span>
+        </div>
+
+        <!-- Sidebar Overlay -->
+        <div id="sidebar-overlay" class="hidden fixed inset-0 z-30 bg-black/50 lg:hidden"></div>
+
         <!-- Sidebar Navigation -->
         @include('partials.admin-sidebar')
-        
+
         <!-- Main Content Area -->
-        <div class="flex-1 ml-64 flex flex-col min-h-screen overflow-x-hidden">
+        <div class="lg:ml-64 pt-14 lg:pt-0 flex flex-col min-h-screen overflow-x-hidden">
             <!-- Top Navbar (Standardized) -->
-            <header class="bg-white border-b border-gray-200 h-16 flex items-center justify-between px-8 sticky top-0 z-10 shadow-sm">
+            <header class="bg-white border-b border-gray-200 h-16 flex items-center justify-between px-4 md:px-8 sticky top-0 z-10 shadow-sm">
                 <div class="flex items-center space-x-4">
                     <h2 class="text-sm font-black text-gray-400 uppercase tracking-widest">
                         Admin / <span class="text-[#000035]">@yield('breadcrumb', 'Dashboard')</span>
@@ -38,7 +51,7 @@
             </header>
 
             <!-- Page Content -->
-            <main class="flex-1 p-8">
+            <main class="flex-1 p-4 md:p-8">
                 @if(session('success'))
                     <div class="mb-6 p-4 bg-green-50 border-l-4 border-green-500 text-green-700 rounded-xl flex items-center shadow-sm animate-pulse">
                         <svg class="w-5 h-5 mr-3" fill="currentColor" viewBox="0 0 20 20">
@@ -68,5 +81,22 @@
     </div>
 
     @yield('extra_js')
+    <script>
+    (function() {
+        var sidebar = document.getElementById('admin-sidebar');
+        var overlay = document.getElementById('sidebar-overlay');
+        var openBtn = document.getElementById('sidebar-open');
+        function openSidebar() {
+            sidebar.classList.remove('-translate-x-full');
+            overlay.classList.remove('hidden');
+        }
+        function closeSidebar() {
+            sidebar.classList.add('-translate-x-full');
+            overlay.classList.add('hidden');
+        }
+        if (openBtn) openBtn.addEventListener('click', openSidebar);
+        if (overlay) overlay.addEventListener('click', closeSidebar);
+    })();
+    </script>
 </body>
 </html>

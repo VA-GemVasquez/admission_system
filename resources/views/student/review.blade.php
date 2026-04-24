@@ -61,39 +61,26 @@
             @apply text-base font-semibold text-gray-800;
         }
         .action-btn {
-            @apply px-8 py-4 rounded-xl font-bold transition-all duration-300 flex items-center shadow-md transform hover:-translate-y-1 hover:shadow-xl;
+            @apply px-5 py-3 rounded-xl font-bold transition-all duration-300 flex items-center shadow-md transform hover:-translate-y-1 hover:shadow-xl text-sm;
         }
-        .logo-container {
-            width: 50px;
-            height: 50px;
-            border-radius: 50%;
-            overflow: hidden;
-            background: linear-gradient(135deg, #FFD700 0%, #FDB931 100%);
-            display: flex;
-            align-items: center;
-            justify-content: center;
-        }
-        .logo-container img {
-            width: 100%;
-            height: 100%;
-            object-fit: cover;
-        }
+        .logo-container { width: 44px; height: 44px; }
         .id-reminder {
             background: linear-gradient(135deg, #FFD700 15%, #FDB931 100%);
             border-radius: 12px;
-            padding: 12px 20px;
+            padding: 10px 14px;
             display: inline-flex;
             align-items: center;
-            gap: 12px;
+            gap: 10px;
             box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+            flex-shrink: 0;
         }
         .id-number {
             font-family: monospace;
-            font-size: 20px;
+            font-size: clamp(14px, 3vw, 20px);
             font-weight: bold;
             letter-spacing: 2px;
             background: #000035;
-            padding: 6px 16px;
+            padding: 4px 12px;
             border-radius: 8px;
             color: #FFD700;
         }
@@ -103,20 +90,20 @@
     <!-- Header with PSU Branding -->
     <div class="psu-blue-bg shadow-lg">
         <div class="container mx-auto px-4 py-4">
-            <div class="flex items-center justify-between">
+            <div class="flex items-center justify-between gap-3">
                 <div class="flex items-center space-x-3">
                     <!-- PSU Logo Image -->
-                    <div class="logo-container">
-                        <img src="{{ asset('images/PSU_LOGO.png') }}" 
-                             alt="PSU Logo" 
+                    <div class="logo-container flex-shrink-0">
+                        <img src="{{ asset('images/PSU_LOGO.png') }}"
+                             alt="PSU Logo"
                              onerror="this.onerror=null; this.parentElement.style.backgroundColor='#FFD700'; this.parentElement.innerHTML='<span class=\'text-2xl font-bold text-[#000035]\'>PSU</span>';">
                     </div>
                     <div>
-                        <h1 class="text-2xl font-bold text-white">Partido State University</h1>
-                        <p class="text-yellow-300 text-sm">Application Review</p>
+                        <h1 class="text-lg md:text-2xl font-bold text-white">Partido State University</h1>
+                        <p class="text-yellow-300 text-xs md:text-sm">Application Review</p>
                     </div>
                 </div>
-                <div class="text-right">
+                <div class="hidden sm:block text-right">
                     <p class="text-yellow-300 text-sm">Academic Year 2024-2025</p>
                 </div>
             </div>
@@ -159,20 +146,20 @@
             <!-- Main Content Card -->
             <div class="bg-white rounded-2xl shadow-xl overflow-hidden border-t-4 border-yellow-400">
                 <!-- Card Header with Status -->
-                <div class="psu-gold-bg px-8 py-4">
-                    <div class="flex justify-between items-center">
+                <div class="psu-gold-bg px-4 md:px-8 py-4">
+                    <div class="flex flex-wrap justify-between items-start gap-3">
                         <div class="flex items-center">
-                            <div class="bg-[#000035] p-2 rounded-lg mr-4">
-                                <svg class="w-6 h-6 text-yellow-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <div class="bg-[#000035] p-2 rounded-lg mr-3">
+                                <svg class="w-5 h-5 text-yellow-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"></path>
                                 </svg>
                             </div>
                             <div>
-                                <h2 class="text-2xl font-bold text-[#000035]">Application Review</h2>
-                                <p class="text-[#000035] text-sm">Please review your information carefully</p>
+                                <h2 class="text-lg md:text-2xl font-bold text-[#000035]">Application Review</h2>
+                                <p class="text-[#000035] text-xs md:text-sm">Please review your information carefully</p>
                             </div>
                         </div>
-                        <div class="flex items-center space-x-3">
+                        <div class="flex flex-wrap items-center gap-2">
                             <span class="text-sm font-medium text-[#000035]">Status:</span>
                             <span class="status-badge 
                                 @if($application->status == 'Pending') status-pending
@@ -193,16 +180,16 @@
                 </div>
                 
                 <!-- Applicant Summary with Application ID -->
-                <div class="p-8 border-b border-gray-200 bg-gradient-to-r from-blue-50 to-yellow-50">
-                    <div class="flex items-center justify-between flex-wrap gap-4">
-                        <div class="flex items-center">
-                            <div class="w-20 h-20 bg-[#000035] rounded-full flex items-center justify-center">
-                                <span class="text-3xl font-bold text-yellow-400">
+                <div class="p-4 md:p-8 border-b border-gray-200 bg-gradient-to-r from-blue-50 to-yellow-50">
+                    <div class="flex items-start justify-between flex-wrap gap-4">
+                        <div class="flex items-center min-w-0">
+                            <div class="w-12 h-12 md:w-20 md:h-20 bg-[#000035] rounded-full flex items-center justify-center flex-shrink-0">
+                                <span class="text-lg md:text-3xl font-bold text-yellow-400">
                                     {{ substr($application->firstname, 0, 1) }}{{ substr($application->lastname, 0, 1) }}
                                 </span>
                             </div>
-                            <div class="ml-6">
-                                <h3 class="text-2xl font-bold text-[#000035]">{{ $application->firstname }} {{ $application->middlename }} {{ $application->lastname }}</h3>
+                            <div class="ml-3 md:ml-6 min-w-0">
+                                <h3 class="text-base md:text-2xl font-bold text-[#000035] leading-tight">{{ $application->firstname }} {{ $application->middlename }} {{ $application->lastname }}</h3>
                                 <p class="text-gray-600 flex items-center mt-1">
                                     <svg class="w-4 h-4 mr-1 text-yellow-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"></path>
@@ -241,8 +228,8 @@
                     </div>
                 </div>
                 
-                <div class="p-8">
-                    <div class="grid md:grid-cols-2 gap-8">
+                <div class="p-4 md:p-8">
+                    <div class="grid md:grid-cols-2 gap-6 md:gap-8">
                         <!-- Left Column -->
                         <div>
                             <!-- Personal Information -->
@@ -374,7 +361,7 @@
                             </svg>
                             Back to Home
                         </a>
-                        <div class="flex space-x-4 flex-wrap gap-3">
+                        <div class="flex flex-wrap gap-3">
                             @if($application->status == 'Pending')
                                 <a href="{{ route('student.edit', $application->id) }}" 
                                    class="action-btn bg-[#000035] text-white hover:bg-opacity-90">

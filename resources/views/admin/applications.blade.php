@@ -4,25 +4,9 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>PSU - Applications Management</title>
+    <script defer src="https://unpkg.com/alpinejs@3.x.x/dist/cdn.min.js"></script>
     @vite(['resources/css/app.css', 'resources/js/app.js'])
     <style>
-        .psu-blue-bg {
-            background: linear-gradient(135deg, #000035 0%, #00004d 100%);
-        }
-        .psu-gold-bg {
-            background: linear-gradient(135deg, #FFD700 0%, #FDB931 100%);
-        }
-        .psu-gold-text {
-            color: #FFD700;
-        }
-        .psu-blue-text {
-            color: #000035;
-        }
-        .sidebar-active {
-            background: linear-gradient(90deg, #FFD700 0%, #FDB931 100%);
-            color: #000035;
-            font-weight: bold;
-        }
         .status-badge {
             @apply flex items-center px-3 py-1 rounded-full text-[10px] font-bold shadow-sm border transition-all duration-300;
         }
@@ -68,93 +52,50 @@
         .quick-stat-card {
             @apply bg-white rounded-lg shadow p-4 border-l-4 hover:shadow-md transition;
         }
-        .logo-container {
-            width: 40px;
-            height: 40px;
-            border-radius: 50%;
-            overflow: hidden;
-            background: linear-gradient(135deg, #FFD700 0%, #FDB931 100%);
-            display: flex;
-            align-items: center;
-            justify-content: center;
-        }
-        .logo-container img {
-            width: 100%;
-            height: 100%;
-            object-fit: cover;
-        }
     </style>
 </head>
 <body class="bg-gray-100">
-    <div class="min-h-screen flex">
-        <!-- Sidebar - PSU Blue -->
-        <div class="w-64 psu-blue-bg text-white shadow-2xl flex flex-col">
-            <!-- Logo -->
-            <div class="p-6 border-b border-blue-700">
-                <div class="flex items-center space-x-3">
-                    <!-- PSU Logo Image -->
-                    <div class="logo-container">
-                        <img src="{{ asset('images/PSU_LOGO.png') }}" 
-                             alt="PSU Logo" 
-                             onerror="this.onerror=null; this.parentElement.style.backgroundColor='#FFD700'; this.parentElement.innerHTML='<span class=\'text-xl font-bold text-[#000035]\'>PSU</span>';">
-                    </div>
-                    <div>
-                        <h2 class="text-xl font-bold">Admin Panel</h2>
-                        <p class="text-yellow-300 text-xs">Partido State University</p>
-                    </div>
-                </div>
+    <div class="min-h-screen">
+
+        <!-- Mobile Header -->
+        <div class="lg:hidden fixed top-0 inset-x-0 z-40 h-14 psu-blue-bg flex items-center px-4 shadow-lg">
+            <button id="sidebar-open" type="button" class="text-white p-1.5 mr-3 rounded-lg hover:bg-white/10 transition">
+                <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"/>
+                </svg>
+            </button>
+            <div class="logo-container">
+                <img src="{{ asset('images/PSU_LOGO.png') }}" alt="PSU Logo" onerror="this.onerror=null;this.parentElement.innerHTML='<span class=\'font-bold text-[#000035]\'>PSU</span>';">
             </div>
-            
-            <!-- Navigation -->
-            <nav class="mt-6 flex-1">
-                <a href="{{ route('admin.dashboard') }}" class="block px-6 py-3 hover:bg-blue-700 hover:bg-opacity-50 transition flex items-center">
-                    <svg class="w-5 h-5 mr-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6"></path>
-                    </svg>
-                    Dashboard
-                </a>
-                <a href="{{ route('admin.applications') }}" class="block px-6 py-3 sidebar-active flex items-center">
-                    <svg class="w-5 h-5 mr-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2"></path>
-                    </svg>
-                    Applications
-                </a>
-            </nav>
-            
-            <!-- Logout at bottom -->
-            <div class="p-6 border-t border-blue-700">
-                <form method="POST" action="{{ route('admin.logout') }}">
-                    @csrf
-                    <button type="submit" class="w-full flex items-center px-6 py-3 bg-blue-700 bg-opacity-50 rounded-lg hover:bg-blue-700 transition">
-                        <svg class="w-5 h-5 mr-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1"></path>
-                        </svg>
-                        Logout
-                    </button>
-                </form>
-            </div>
+            <span class="text-white font-bold text-sm ml-2">PSU Admin Panel</span>
         </div>
+
+        <!-- Sidebar Overlay -->
+        <div id="sidebar-overlay" class="hidden fixed inset-0 z-30 bg-black/50 lg:hidden"></div>
+
+        <!-- Sidebar Navigation -->
+        @include('partials.admin-sidebar')
         
         <!-- Main Content -->
-        <div class="flex-1 p-8 overflow-y-auto">
+        <div class="lg:ml-64 pt-14 lg:pt-0 p-4 md:p-8 overflow-y-auto min-h-screen">
             <!-- Header with Quick Stats -->
             <div class="mb-8">
-                <div class="flex justify-between items-center mb-4">
+                <div class="flex flex-wrap justify-between items-center mb-4 gap-3">
                     <div>
-                        <h1 class="text-3xl font-bold text-[#000035]">Applications Management</h1>
-                        <p class="text-gray-600">View and manage all student applications</p>
+                        <h1 class="text-2xl md:text-3xl font-bold text-[#000035]">Applications Management</h1>
+                        <p class="text-gray-600 text-sm md:text-base">View and manage all student applications</p>
                     </div>
-                    <div class="flex space-x-3">
+                    <div class="flex flex-wrap gap-2">
                         <!-- Export Button -->
-                        <button onclick="exportTableToCSV()" class="export-btn">
-                            <svg class="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <button onclick="exportTableToCSV()" class="export-btn text-sm">
+                            <svg class="w-4 h-4 mr-1.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 10v6m0 0l-3-3m3 3l3-3m2 8H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"></path>
                             </svg>
-                            Export to CSV
+                            Export CSV
                         </button>
                         <!-- Print Button -->
-                        <button onclick="window.print()" class="px-4 py-2 bg-gray-600 text-white rounded-lg hover:bg-gray-700 transition flex items-center">
-                            <svg class="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <button onclick="window.print()" class="px-3 py-2 bg-gray-600 text-white rounded-lg hover:bg-gray-700 transition flex items-center text-sm">
+                            <svg class="w-4 h-4 mr-1.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 17h2a2 2 0 002-2v-4a2 2 0 00-2-2H5a2 2 0 00-2 2v4a2 2 0 002 2h2m2 4h6a2 2 0 002-2v-4a2 2 0 00-2-2H9a2 2 0 00-2 2v4a2 2 0 002 2zm8-12V5a2 2 0 00-2-2H9a2 2 0 00-2 2v4h10z"></path>
                             </svg>
                             Print
@@ -163,7 +104,7 @@
                 </div>
 
                 <!-- Quick Statistics Cards -->
-                <div class="grid grid-cols-1 md:grid-cols-5 gap-4 mb-6">
+                <div class="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-5 gap-3 md:gap-4 mb-6">
                     <div class="quick-stat-card border-l-yellow-400">
                         <p class="text-sm text-gray-500">Total Applicants</p>
                         <p class="text-2xl font-bold text-[#000035]">{{ $totalApplicants ?? $applications->total() }}</p>
@@ -214,7 +155,7 @@
                     Filter Applications
                 </h2>
                 <form method="GET" action="{{ route('admin.applications') }}" class="space-y-4" id="filterForm">
-                    <div class="grid grid-cols-1 md:grid-cols-4 gap-4">
+                    <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-4">
                         <div>
                             <label class="block text-sm font-medium text-gray-700 mb-2">Search</label>
                             <div class="relative">
@@ -259,7 +200,7 @@
                         </div>
                     </div>
                     
-                    <div class="flex justify-end space-x-2">
+                    <div class="flex flex-wrap justify-end gap-2">
                         <a href="{{ route('admin.applications') }}" class="px-4 py-2 bg-gray-500 text-white rounded-lg hover:bg-gray-600 transition flex items-center">
                             <svg class="w-4 h-4 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15"></path>
@@ -314,13 +255,13 @@
                         <thead class="bg-gray-50">
                             <tr>
                                 <th class="table-header">Student Name</th>
-                                <th class="table-header">Campus</th>
-                                <th class="table-header">Course</th>
-                                <th class="table-header">Type</th>
-                                <th class="table-header">Contact</th>
-                                <th class="table-header">Gmail</th>
+                                <th class="table-header hidden sm:table-cell">Campus</th>
+                                <th class="table-header hidden md:table-cell">Course</th>
+                                <th class="table-header hidden lg:table-cell">Type</th>
+                                <th class="table-header hidden lg:table-cell">Contact</th>
+                                <th class="table-header hidden xl:table-cell">Gmail</th>
                                 <th class="table-header">Status</th>
-                                <th class="table-header">Date</th>
+                                <th class="table-header hidden sm:table-cell">Date</th>
                                 <th class="table-header">Actions</th>
                             </tr>
                         </thead>
@@ -329,35 +270,35 @@
                             <tr class="transition">
                                 <td class="px-4 py-4">
                                     <div class="flex items-center">
-                                        <div class="w-8 h-8 bg-blue-100 rounded-full flex items-center justify-center mr-3">
+                                        <div class="w-8 h-8 bg-blue-100 rounded-full flex items-center justify-center mr-3 flex-shrink-0">
                                             <span class="text-blue-800 font-semibold text-sm">
                                                 {{ substr($application->firstname, 0, 1) }}{{ substr($application->lastname, 0, 1) }}
                                             </span>
                                         </div>
-                                        <div class="max-w-[150px] overflow-hidden">
-                                            <div class="text-sm font-medium text-gray-900 truncate" title="{{ $application->firstname }} {{ $application->lastname }}">
+                                        <div class="min-w-0">
+                                            <div class="text-sm font-medium text-gray-900 truncate max-w-[130px]" title="{{ $application->firstname }} {{ $application->lastname }}">
                                                 {{ $application->firstname }} {{ $application->lastname }}
                                             </div>
                                             <div class="text-xs text-gray-500 truncate">{{ $application->middlename ?: '' }}</div>
                                         </div>
                                     </div>
                                 </td>
-                                <td class="px-4 py-4 whitespace-nowrap">
+                                <td class="px-4 py-4 whitespace-nowrap hidden sm:table-cell">
                                     <span class="px-2 py-1 bg-blue-100 text-blue-800 rounded-lg text-[10px] font-semibold">
                                         {{ $application->campus }}
                                     </span>
                                 </td>
-                                <td class="px-4 py-4 max-w-[180px]">
+                                <td class="px-4 py-4 max-w-[180px] hidden md:table-cell">
                                     <div class="text-sm font-medium text-gray-900 truncate" title="{{ $application->course }}">{{ $application->course }}</div>
                                     <div class="text-xs text-gray-500 truncate" title="{{ $application->college }}">{{ $application->college }}</div>
                                 </td>
-                                <td class="px-4 py-4 whitespace-nowrap text-xs text-gray-500">
+                                <td class="px-4 py-4 whitespace-nowrap text-xs text-gray-500 hidden lg:table-cell">
                                     {{ $application->student_type }}
                                 </td>
-                                <td class="px-4 py-4 whitespace-nowrap text-xs text-gray-500 font-mono">
+                                <td class="px-4 py-4 whitespace-nowrap text-xs text-gray-500 font-mono hidden lg:table-cell">
                                     {{ $application->contact_number }}
                                 </td>
-                                <td class="px-4 py-4 whitespace-nowrap text-xs">
+                                <td class="px-4 py-4 whitespace-nowrap text-xs hidden xl:table-cell">
                                     <div class="max-w-[160px] truncate text-blue-600" title="{{ $application->gmail_account }}">
                                         {{ $application->gmail_account }}
                                     </div>
@@ -378,7 +319,7 @@
                                         {{ $application->status }}
                                     </span>
                                 </td>
-                                <td class="px-4 py-4 whitespace-nowrap text-xs text-gray-500">
+                                <td class="px-4 py-4 whitespace-nowrap text-xs text-gray-500 hidden sm:table-cell">
                                     <div class="font-bold">{{ $application->created_at->format('M d, Y') }}</div>
                                     <div class="text-[10px] opacity-75">{{ $application->created_at->format('h:i A') }}</div>
                                 </td>
@@ -432,7 +373,7 @@
                 </div>
                 
                 <!-- Pagination and Info -->
-                <div class="px-6 py-4 border-t bg-gray-50 flex justify-between items-center">
+                <div class="px-6 py-4 border-t bg-gray-50 flex flex-wrap justify-between items-center gap-3">
                     <div class="text-sm text-gray-500">
                         Showing {{ $applications->firstItem() ?? 0 }} to {{ $applications->lastItem() ?? 0 }} of {{ $applications->total() }} entries
                     </div>
@@ -489,6 +430,24 @@
                 document.getElementById('filterForm').submit();
             });
         });
+    </script>
+
+    <script>
+    (function() {
+        var sidebar = document.getElementById('admin-sidebar');
+        var overlay = document.getElementById('sidebar-overlay');
+        var openBtn = document.getElementById('sidebar-open');
+        function openSidebar() {
+            sidebar.classList.remove('-translate-x-full');
+            overlay.classList.remove('hidden');
+        }
+        function closeSidebar() {
+            sidebar.classList.add('-translate-x-full');
+            overlay.classList.add('hidden');
+        }
+        if (openBtn) openBtn.addEventListener('click', openSidebar);
+        if (overlay) overlay.addEventListener('click', closeSidebar);
+    })();
     </script>
 </body>
 </html>

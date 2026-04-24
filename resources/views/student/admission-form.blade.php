@@ -20,6 +20,8 @@
         .step-circle.current  { background: #000035; color: #FFD700; box-shadow: 0 0 0 4px rgba(0,0,53,.15); }
         .step-circle.upcoming { background: #e5e7eb; color: #9ca3af; }
         .step-circle:hover    { opacity: .8; transform: scale(1.08); }
+        .step-label { font-size: .75rem; line-height: 1.375; }
+        @media (min-width: 640px) { .step-label { font-size: .875rem; } }
         .step-label.done     { color: #16a34a; }
         .step-label.current  { color: #000035; font-weight: 700; }
         .step-label.upcoming { color: #9ca3af; }
@@ -166,32 +168,41 @@
             @endif
 
             <!-- Progress Steps -->
-            <div class="bg-white rounded-2xl shadow-sm border border-gray-100 px-6 py-5 mb-6">
+            <div class="bg-white rounded-2xl shadow-sm border border-gray-100 px-4 sm:px-6 py-4 sm:py-5 mb-6">
                 <div class="flex items-center">
                     <!-- Step 1 -->
-                    <div class="flex items-center gap-2.5 flex-shrink-0">
+                    <div class="flex items-center gap-1.5 sm:gap-2.5 flex-shrink-0">
                         <div id="circle-1" class="step-circle current">1</div>
                         <div>
-                            <p class="text-xs text-gray-400 leading-none">Step 1</p>
-                            <p id="label-1" class="text-sm step-label current leading-snug">Personal Info</p>
+                            <p class="text-[10px] sm:text-xs text-gray-400 leading-none">Step 1</p>
+                            <p id="label-1" class="step-label current">
+                                <span class="hidden sm:inline">Personal Info</span>
+                                <span class="sm:hidden">Personal</span>
+                            </p>
                         </div>
                     </div>
                     <div id="line-1" class="step-line upcoming"></div>
                     <!-- Step 2 -->
-                    <div class="flex items-center gap-2.5 flex-shrink-0">
+                    <div class="flex items-center gap-1.5 sm:gap-2.5 flex-shrink-0">
                         <div id="circle-2" class="step-circle upcoming">2</div>
                         <div>
-                            <p class="text-xs text-gray-400 leading-none">Step 2</p>
-                            <p id="label-2" class="text-sm step-label upcoming leading-snug">Guardian Info</p>
+                            <p class="text-[10px] sm:text-xs text-gray-400 leading-none">Step 2</p>
+                            <p id="label-2" class="step-label upcoming">
+                                <span class="hidden sm:inline">Guardian Info</span>
+                                <span class="sm:hidden">Guardian</span>
+                            </p>
                         </div>
                     </div>
                     <div id="line-2" class="step-line upcoming"></div>
                     <!-- Step 3 -->
-                    <div class="flex items-center gap-2.5 flex-shrink-0">
+                    <div class="flex items-center gap-1.5 sm:gap-2.5 flex-shrink-0">
                         <div id="circle-3" class="step-circle upcoming">3</div>
                         <div>
-                            <p class="text-xs text-gray-400 leading-none">Step 3</p>
-                            <p id="label-3" class="text-sm step-label upcoming leading-snug">Academic &amp; Docs</p>
+                            <p class="text-[10px] sm:text-xs text-gray-400 leading-none">Step 3</p>
+                            <p id="label-3" class="step-label upcoming">
+                                <span class="hidden sm:inline">Academic &amp; Docs</span>
+                                <span class="sm:hidden">Academic</span>
+                            </p>
                         </div>
                     </div>
                 </div>
@@ -725,15 +736,18 @@
                 if (i < n) {
                     circle.className = 'step-circle done';
                     circle.innerHTML = '<svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="3" d="M5 13l4 4L19 7"/></svg>';
-                    label.className  = 'text-sm step-label done leading-snug';
+                    label.classList.remove('current', 'upcoming');
+                    label.classList.add('step-label', 'done');
                 } else if (i === n) {
                     circle.className = 'step-circle current';
                     circle.textContent = i;
-                    label.className  = 'text-sm step-label current leading-snug';
+                    label.classList.remove('done', 'upcoming');
+                    label.classList.add('step-label', 'current');
                 } else {
                     circle.className = 'step-circle upcoming';
                     circle.textContent = i;
-                    label.className  = 'text-sm step-label upcoming leading-snug';
+                    label.classList.remove('done', 'current');
+                    label.classList.add('step-label', 'upcoming');
                 }
                 if (i < 3) {
                     var line = document.getElementById('line-' + i);

@@ -1,5 +1,5 @@
 <!-- Sidebar - PSU Blue -->
-<div class="w-64 psu-blue-bg text-white shadow-2xl flex flex-col h-screen fixed overflow-y-auto psu-scrollbar z-20">
+<div id="admin-sidebar" class="w-64 psu-blue-bg text-white shadow-2xl flex flex-col h-screen fixed overflow-y-auto psu-scrollbar z-40 transform -translate-x-full lg:translate-x-0 transition-transform duration-300 ease-in-out">
     <!-- Logo Section -->
     <div class="p-8 border-b border-blue-800 border-opacity-30">
         <div class="flex flex-col items-center text-center space-y-4">
