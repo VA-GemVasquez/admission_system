@@ -224,4 +224,28 @@ class AdminController extends Controller
         $application->delete();
         return redirect()->back()->with('success', 'Application deleted successfully!');
     }
+
+    public function getNotifications()
+    {
+        $admin = Auth::guard('admin')->user();
+        $unread = $admin->unreadNotifications()->latest()->take(10)->get();
+
+        return response()->json([
+            'count' => $unread->count(),
+            'notifications' => $unread->map(fn($n) => [
+                'id'             => $n->id,
+                'application_id' => $n->data['application_id'],
+                'applicant_name' => $n->data['applicant_name'],
+                'campus'         => $n->data['campus'],
+                'course'         => $n->data['course'],
+                'time'           => $n->created_at->diffForHumans(),
+            ]),
+        ]);
+    }
+
+    public function markNotificationsRead()
+    {
+        Auth::guard('admin')->user()->unreadNotifications->markAsRead();
+        return response()->json(['success' => true]);
+    }
 }

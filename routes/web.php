@@ -22,6 +22,7 @@ Route::prefix('student')->name('student.')->group(function () {
     Route::get('/edit/{id}', [StudentController::class, 'editApplication'])->name('edit');
     Route::put('/update/{id}', [StudentController::class, 'updateApplication'])->name('update');
     Route::get('/status/{id}', [StudentController::class, 'checkStatus'])->name('status');
+    Route::get('/enrollment-slip/{id}', [StudentController::class, 'enrollmentSlip'])->name('enrollment-slip');
 });
 
 // Admin Routes
@@ -41,6 +42,8 @@ Route::prefix('admin')->name('admin.')->group(function () {
         Route::get('/application/{id}/edit', [AdminController::class, 'editApplication'])->name('edit');
         Route::put('/application/{id}/update', [AdminController::class, 'updateApplication'])->name('update');
         Route::delete('/application/{id}/delete', [AdminController::class, 'deleteApplication'])->name('delete');
+        Route::get('/notifications', [AdminController::class, 'getNotifications'])->name('notifications');
+        Route::post('/notifications/mark-read', [AdminController::class, 'markNotificationsRead'])->name('notifications.read');
     });
 });
 
