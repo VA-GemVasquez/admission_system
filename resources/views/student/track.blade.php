@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>PSU - Track Application</title>
-    @vite(['resources/css/app.css'], ['resources/js/app.js'])
+    @vite(['resources/css/app.css', 'resources/js/app.js'])
     <style>
         .psu-blue-bg {
             background: linear-gradient(135deg, #000035 0%, #00004d 100%);
@@ -22,41 +22,27 @@
         .method-badge {
             @apply px-3 py-1 bg-blue-100 text-blue-800 rounded-full text-xs font-semibold;
         }
-        .logo-container {
-            width: 50px;
-            height: 50px;
-            border-radius: 50%;
-            overflow: hidden;
-            background: linear-gradient(135deg, #FFD700 0%, #FDB931 100%);
-            display: flex;
-            align-items: center;
-            justify-content: center;
-        }
-        .logo-container img {
-            width: 100%;
-            height: 100%;
-            object-fit: cover;
-        }
+        .logo-container { width: 44px; height: 44px; }
     </style>
 </head>
 <body class="bg-gray-100">
     <!-- Header -->
     <div class="psu-blue-bg shadow-lg">
         <div class="container mx-auto px-4 py-4">
-            <div class="flex items-center justify-between">
+            <div class="flex items-center justify-between gap-3">
                 <div class="flex items-center space-x-3">
                     <!-- PSU Logo Image -->
-                    <div class="logo-container">
-                        <img src="{{ asset('images/PSU_LOGO.png') }}" 
-                             alt="PSU Logo" 
+                    <div class="logo-container flex-shrink-0">
+                        <img src="{{ asset('images/PSU_LOGO.png') }}"
+                             alt="PSU Logo"
                              onerror="this.onerror=null; this.parentElement.style.backgroundColor='#FFD700'; this.parentElement.innerHTML='<span class=\'text-2xl font-bold text-[#000035]\'>PSU</span>';">
                     </div>
                     <div>
-                        <h1 class="text-2xl font-bold text-white">Partido State University</h1>
-                        <p class="text-yellow-300 text-sm">Office of Admissions</p>
+                        <h1 class="text-lg md:text-2xl font-bold text-white">Partido State University</h1>
+                        <p class="text-yellow-300 text-xs md:text-sm">Office of Admissions</p>
                     </div>
                 </div>
-                <div class="text-right">
+                <div class="hidden sm:block text-right">
                     <p class="text-yellow-300 text-sm">Track Your Application Status</p>
                 </div>
             </div>
@@ -96,9 +82,9 @@
 
             <!-- Main Card -->
             <div class="bg-white rounded-2xl shadow-xl overflow-hidden border-t-4 border-yellow-400 track-card">
-                <div class="psu-gold-bg px-8 py-6">
-                    <div class="flex items-center justify-between">
-                        <h2 class="text-2xl font-bold text-[#000035] flex items-center">
+                <div class="psu-gold-bg px-4 md:px-8 py-4 md:py-6">
+                    <div class="flex flex-wrap items-center justify-between gap-3">
+                        <h2 class="text-xl md:text-2xl font-bold text-[#000035] flex items-center">
                             <svg class="w-8 h-8 mr-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"></path>
                             </svg>
@@ -109,7 +95,7 @@
                     <p class="text-[#000035] mt-2 ml-11">Enter your Application ID to check your admission progress</p>
                 </div>
 
-                <div class="p-8">
+                <div class="p-4 md:p-8">
                     @if(session('error'))
                         <div class="mb-6 p-4 bg-red-50 border-l-4 border-red-500 text-red-700 rounded-lg flex items-start">
                             <svg class="w-5 h-5 mr-3 mt-0.5 flex-shrink-0" fill="currentColor" viewBox="0 0 20 20">

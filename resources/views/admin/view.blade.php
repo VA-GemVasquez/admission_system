@@ -4,25 +4,9 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>PSU - View Application</title>
-    @vite(['resources/css/app.css'], ['resources/js/app.js'])
+    <script defer src="https://unpkg.com/alpinejs@3.x.x/dist/cdn.min.js"></script>
+    @vite(['resources/css/app.css', 'resources/js/app.js'])
     <style>
-        .psu-blue-bg {
-            background: linear-gradient(135deg, #000035 0%, #00004d 100%);
-        }
-        .psu-gold-bg {
-            background: linear-gradient(135deg, #FFD700 0%, #FDB931 100%);
-        }
-        .psu-gold-text {
-            color: #FFD700;
-        }
-        .psu-blue-text {
-            color: #000035;
-        }
-        .sidebar-active {
-            background: linear-gradient(90deg, #FFD700 0%, #FDB931 100%);
-            color: #000035;
-            font-weight: bold;
-        }
         .status-badge {
             @apply flex items-center px-4 py-2 rounded-full text-sm font-bold shadow-sm border transition-all duration-300;
         }
@@ -68,77 +52,34 @@
         .action-btn {
             @apply px-6 py-3 rounded-xl font-bold transition-all duration-300 flex items-center shadow-md transform hover:-translate-y-1 hover:shadow-xl;
         }
-        .logo-container {
-            width: 40px;
-            height: 40px;
-            border-radius: 50%;
-            overflow: hidden;
-            background: linear-gradient(135deg, #FFD700 0%, #FDB931 100%);
-            display: flex;
-            align-items: center;
-            justify-content: center;
-        }
-        .logo-container img {
-            width: 100%;
-            height: 100%;
-            object-fit: cover;
-        }
     </style>
 </head>
 <body class="bg-gray-100">
-    <div class="min-h-screen flex">
-        <!-- Sidebar - PSU Blue -->
-        <div class="w-64 psu-blue-bg text-white shadow-2xl flex flex-col">
-            <!-- Logo -->
-            <div class="p-6 border-b border-blue-700">
-                <div class="flex items-center space-x-3">
-                    <!-- PSU Logo Image -->
-                    <div class="logo-container">
-                        <img src="{{ asset('images/PSU_LOGO.png') }}" 
-                             alt="PSU Logo" 
-                             onerror="this.onerror=null; this.parentElement.style.backgroundColor='#FFD700'; this.parentElement.innerHTML='<span class=\'text-xl font-bold text-[#000035]\'>PSU</span>';">
-                    </div>
-                    <div>
-                        <h2 class="text-xl font-bold">Admin Panel</h2>
-                        <p class="text-yellow-300 text-xs">Partido State University</p>
-                    </div>
-                </div>
+    <div class="min-h-screen">
+
+        <!-- Mobile Header -->
+        <div class="lg:hidden fixed top-0 inset-x-0 z-40 h-14 psu-blue-bg flex items-center px-4 shadow-lg">
+            <button id="sidebar-open" type="button" class="text-white p-1.5 mr-3 rounded-lg hover:bg-white/10 transition">
+                <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"/>
+                </svg>
+            </button>
+            <div class="logo-container">
+                <img src="{{ asset('images/PSU_LOGO.png') }}" alt="PSU Logo" onerror="this.onerror=null;this.parentElement.innerHTML='<span class=\'font-bold text-[#000035]\'>PSU</span>';">
             </div>
-            
-            <!-- Navigation -->
-            <nav class="mt-6 flex-1">
-                <a href="{{ route('admin.dashboard') }}" class="block px-6 py-3 hover:bg-blue-700 hover:bg-opacity-50 transition flex items-center">
-                    <svg class="w-5 h-5 mr-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6"></path>
-                    </svg>
-                    Dashboard
-                </a>
-                <a href="{{ route('admin.applications') }}" class="block px-6 py-3 hover:bg-blue-700 hover:bg-opacity-50 transition flex items-center">
-                    <svg class="w-5 h-5 mr-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2"></path>
-                    </svg>
-                    Applications
-                </a>
-            </nav>
-            
-            <!-- Logout at bottom -->
-            <div class="p-6 border-t border-blue-700">
-                <form method="POST" action="{{ route('admin.logout') }}">
-                    @csrf
-                    <button type="submit" class="w-full flex items-center px-6 py-3 bg-blue-700 bg-opacity-50 rounded-lg hover:bg-blue-700 transition">
-                        <svg class="w-5 h-5 mr-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1"></path>
-                        </svg>
-                        Logout
-                    </button>
-                </form>
-            </div>
+            <span class="text-white font-bold text-sm ml-2">PSU Admin Panel</span>
         </div>
+
+        <!-- Sidebar Overlay -->
+        <div id="sidebar-overlay" class="hidden fixed inset-0 z-30 bg-black/50 lg:hidden"></div>
+
+        <!-- Sidebar Navigation -->
+        @include('partials.admin-sidebar')
         
         <!-- Main Content -->
-        <div class="flex-1 p-8 overflow-y-auto">
+        <div class="lg:ml-64 pt-14 lg:pt-0 p-4 md:p-8 overflow-y-auto min-h-screen">
             <!-- Header with Navigation -->
-            <div class="mb-8 flex justify-between items-start">
+            <div class="mb-8 flex flex-wrap justify-between items-start gap-4">
                 <div>
                     <div class="flex items-center mb-2">
                         <a href="{{ route('admin.applications') }}" class="text-gray-500 hover:text-[#000035] transition mr-3">
@@ -146,13 +87,13 @@
                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 19l-7-7m0 0l7-7m-7 7h18"></path>
                             </svg>
                         </a>
-                        <h1 class="text-3xl font-bold text-[#000035]">Application Details</h1>
+                        <h1 class="text-xl md:text-3xl font-bold text-[#000035]">Application Details</h1>
                     </div>
                     <p class="text-gray-600 ml-9">Viewing application #{{ str_pad($application->id, 5, '0', STR_PAD_LEFT) }}</p>
                 </div>
-                <div class="flex space-x-3">
-                    <a href="{{ route('admin.edit', $application->id) }}" 
-                       class="bg-[#000035] text-white px-6 py-3 rounded-xl hover:bg-opacity-90 transition-all duration-300 transform hover:-translate-y-1 flex items-center font-bold shadow-md hover:shadow-xl">
+                <div class="flex flex-wrap gap-2">
+                    <a href="{{ route('admin.edit', $application->id) }}"
+                       class="bg-[#000035] text-white px-5 py-2.5 rounded-xl hover:bg-opacity-90 transition-all duration-300 transform hover:-translate-y-1 flex items-center font-bold shadow-md hover:shadow-xl text-sm md:text-base">
                         <svg class="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z"></path>
                         </svg>
@@ -169,12 +110,20 @@
                     {{ session('success') }}
                 </div>
             @endif
+            @if(session('info'))
+                <div class="mb-6 p-4 bg-blue-100 border-l-4 border-blue-500 text-blue-700 rounded-lg flex items-center">
+                    <svg class="w-5 h-5 mr-2" fill="currentColor" viewBox="0 0 20 20">
+                        <path fill-rule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7-4a1 1 0 11-2 0 1 1 0 012 0zM9 9a1 1 0 000 2v3a1 1 0 001 1h1a1 1 0 100-2v-3a1 1 0 00-1-1H9z" clip-rule="evenodd"/>
+                    </svg>
+                    {{ session('info') }}
+                </div>
+            @endif
             
             <!-- Main Content Card -->
             <div class="bg-white rounded-xl shadow-lg overflow-hidden border-t-4 border-yellow-400">
                 <!-- Status Header with Gold Background -->
-                <div class="psu-gold-bg px-8 py-4">
-                    <div class="flex justify-between items-center">
+                <div class="psu-gold-bg px-4 md:px-8 py-4">
+                    <div class="flex flex-wrap justify-between items-start gap-3">
                         <div class="flex items-center space-x-4">
                             <div class="bg-[#000035] p-2 rounded-lg">
                                 <svg class="w-6 h-6 text-yellow-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -203,8 +152,9 @@
                         </div>
                         
                         <!-- Status Action Buttons -->
-                        <div class="flex space-x-3">
-                            <form action="{{ route('admin.approve', $application->id) }}" method="POST" class="inline">
+                        <div class="flex flex-wrap gap-2">
+                            <form action="{{ route('admin.approve', $application->id) }}" method="POST" class="inline"
+                                  onsubmit="return confirm('Approve this application for {{ $application->firstname }} {{ $application->lastname }}?')">
                                 @csrf
                                 <button type="submit" class="bg-green-600 text-white px-5 py-2.5 rounded-xl hover:bg-green-700 transition-all duration-300 transform hover:-translate-y-1 flex items-center text-sm font-bold shadow-md hover:shadow-xl">
                                     <svg class="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -213,7 +163,8 @@
                                     Approve
                                 </button>
                             </form>
-                            <form action="{{ route('admin.waitlist', $application->id) }}" method="POST" class="inline">
+                            <form action="{{ route('admin.waitlist', $application->id) }}" method="POST" class="inline"
+                                  onsubmit="return confirm('Waitlist this application for {{ $application->firstname }} {{ $application->lastname }}?')">
                                 @csrf
                                 <button type="submit" class="bg-blue-600 text-white px-5 py-2.5 rounded-xl hover:bg-blue-700 transition-all duration-300 transform hover:-translate-y-1 flex items-center text-sm font-bold shadow-md hover:shadow-xl">
                                     <svg class="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -222,7 +173,8 @@
                                     Waitlist
                                 </button>
                             </form>
-                            <form action="{{ route('admin.reject', $application->id) }}" method="POST" class="inline">
+                            <form action="{{ route('admin.reject', $application->id) }}" method="POST" class="inline"
+                                  onsubmit="return confirm('Reject this application for {{ $application->firstname }} {{ $application->lastname }}? This will notify the applicant.')">
                                 @csrf
                                 <button type="submit" class="bg-red-600 text-white px-5 py-2.5 rounded-xl hover:bg-red-700 transition-all duration-300 transform hover:-translate-y-1 flex items-center text-sm font-bold shadow-md hover:shadow-xl">
                                     <svg class="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -236,21 +188,21 @@
                 </div>
                 
                 <!-- Applicant Summary Card -->
-                <div class="p-8 border-b border-gray-200 bg-gradient-to-r from-blue-50 to-yellow-50">
-                    <div class="flex items-center justify-between">
+                <div class="p-4 md:p-8 border-b border-gray-200 bg-gradient-to-r from-blue-50 to-yellow-50">
+                    <div class="flex flex-wrap items-center justify-between gap-4">
                         <div class="flex items-center space-x-4">
-                            <div class="w-20 h-20 bg-[#000035] rounded-full flex items-center justify-center">
-                                <span class="text-3xl font-bold text-yellow-400">
+                            <div class="w-14 h-14 md:w-20 md:h-20 bg-[#000035] rounded-full flex items-center justify-center flex-shrink-0">
+                                <span class="text-xl md:text-3xl font-bold text-yellow-400">
                                     {{ substr($application->firstname, 0, 1) }}{{ substr($application->lastname, 0, 1) }}
                                 </span>
                             </div>
                             <div>
-                                <h2 class="text-2xl font-bold text-[#000035]">{{ $application->firstname }} {{ $application->middlename }} {{ $application->lastname }}</h2>
+                                <h2 class="text-base md:text-2xl font-bold text-[#000035] leading-tight">{{ $application->firstname }} {{ $application->middlename }} {{ $application->lastname }}</h2>
                                 <p class="text-gray-600 flex items-center mt-1">
                                     <svg class="w-4 h-4 mr-1 text-yellow-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"></path>
                                     </svg>
-                                    {{ $application->gmail_account }}@gmail.com
+                                    {{ $application->gmail_account }}
                                 </p>
                                 <p class="text-gray-600 flex items-center mt-1 text-sm">
                                     <svg class="w-4 h-4 mr-1 text-yellow-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -261,15 +213,15 @@
                             </div>
                         </div>
                         <div class="text-right">
-                            <p class="text-sm text-gray-500">Application ID</p>
-                            <p class="text-2xl font-mono font-bold text-[#000035]">#{{ str_pad($application->id, 5, '0', STR_PAD_LEFT) }}</p>
+                            <p class="text-xs md:text-sm text-gray-500">Application ID</p>
+                            <p class="text-lg md:text-2xl font-mono font-bold text-[#000035]">#{{ str_pad($application->id, 5, '0', STR_PAD_LEFT) }}</p>
                         </div>
                     </div>
                 </div>
                 
                 <!-- Details Grid -->
-                <div class="p-8">
-                    <div class="grid md:grid-cols-2 gap-8">
+                <div class="p-4 md:p-8">
+                    <div class="grid md:grid-cols-2 gap-6 md:gap-8">
                         <!-- Left Column -->
                         <div>
                             <!-- Personal Information -->
@@ -426,20 +378,20 @@
                     </div>
 
                     <!-- Documents Section -->
-                    <div class="mt-12 bg-gray-50 rounded-xl p-8 border border-gray-200">
-                        <h3 class="text-xl font-bold text-[#000035] mb-6 flex items-center border-b pb-4">
+                    <div class="mt-8 md:mt-12 bg-gray-50 rounded-xl p-4 md:p-8 border border-gray-200">
+                        <h3 class="text-lg md:text-xl font-bold text-[#000035] mb-4 md:mb-6 flex items-center border-b pb-4">
                             <svg class="w-6 h-6 mr-2 text-yellow-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"></path>
                             </svg>
                             Submitted Documents
                         </h3>
                         
-                        <div class="grid md:grid-cols-3 gap-8">
+                        <div class="grid sm:grid-cols-2 md:grid-cols-3 gap-4 md:gap-8">
                             <!-- Photo -->
                             <div class="bg-white p-6 rounded-xl shadow-sm border border-gray-100 flex flex-col items-center">
                                 <p class="text-xs font-bold uppercase tracking-wider text-gray-400 mb-4">Applicant Photo</p>
                                 @if($application->photo_path)
-                                    <div class="w-40 h-40 mb-4 rounded-xl overflow-hidden shadow-lg border-4 border-white">
+                                    <div class="w-28 h-28 md:w-40 md:h-40 mb-4 rounded-xl overflow-hidden shadow-lg border-4 border-white">
                                         <img src="{{ asset('storage/' . $application->photo_path) }}" class="w-full h-full object-cover">
                                     </div>
                                     <a href="{{ asset('storage/' . $application->photo_path) }}" target="_blank" 
@@ -495,23 +447,21 @@
                     </div>
 
                     <!-- Action Buttons -->
-                    <div class="mt-8 pt-6 border-t border-gray-200 flex justify-between items-center">
-                        <a href="{{ route('admin.applications') }}" 
-                           class="text-gray-500 hover:text-[#000035] transition flex items-center">
-                            <svg class="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <div class="mt-8 pt-6 border-t border-gray-200 flex flex-wrap justify-between items-center gap-3">
+                        <a href="{{ route('admin.applications') }}"
+                           class="text-gray-500 hover:text-[#000035] transition flex items-center text-sm">
+                            <svg class="w-5 h-5 mr-2 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 19l-7-7m0 0l7-7m-7 7h18"></path>
                             </svg>
                             Back to Applications List
                         </a>
-                        <div class="flex space-x-3">
-                            <a href="{{ route('admin.edit', $application->id) }}" 
-                               class="bg-[#000035] text-white px-6 py-3 rounded-lg hover:bg-opacity-90 transition flex items-center">
-                                <svg class="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z"></path>
-                                </svg>
-                                Edit Application
-                            </a>
-                        </div>
+                        <a href="{{ route('admin.edit', $application->id) }}"
+                           class="bg-[#000035] text-white px-5 py-2.5 rounded-lg hover:bg-opacity-90 transition flex items-center text-sm">
+                            <svg class="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z"></path>
+                            </svg>
+                            Edit Application
+                        </a>
                     </div>
                 </div>
             </div>
@@ -528,5 +478,23 @@
             </div>
         </div>
     </div>
+
+    <script>
+    (function() {
+        var sidebar = document.getElementById('admin-sidebar');
+        var overlay = document.getElementById('sidebar-overlay');
+        var openBtn = document.getElementById('sidebar-open');
+        function openSidebar() {
+            sidebar.classList.remove('-translate-x-full');
+            overlay.classList.remove('hidden');
+        }
+        function closeSidebar() {
+            sidebar.classList.add('-translate-x-full');
+            overlay.classList.add('hidden');
+        }
+        if (openBtn) openBtn.addEventListener('click', openSidebar);
+        if (overlay) overlay.addEventListener('click', closeSidebar);
+    })();
+    </script>
 </body>
 </html>

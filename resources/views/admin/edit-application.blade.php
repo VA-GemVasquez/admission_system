@@ -4,25 +4,9 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>PSU - Edit Application</title>
-    @vite(['resources/css/app.css'], ['resources/js/app.js'])
+    <script defer src="https://unpkg.com/alpinejs@3.x.x/dist/cdn.min.js"></script>
+    @vite(['resources/css/app.css', 'resources/js/app.js'])
     <style>
-        .psu-blue-bg {
-            background: linear-gradient(135deg, #000035 0%, #00004d 100%);
-        }
-        .psu-gold-bg {
-            background: linear-gradient(135deg, #FFD700 0%, #FDB931 100%);
-        }
-        .psu-gold-text {
-            color: #FFD700;
-        }
-        .psu-blue-text {
-            color: #000035;
-        }
-        .sidebar-active {
-            background: linear-gradient(90deg, #FFD700 0%, #FDB931 100%);
-            color: #000035;
-            font-weight: bold;
-        }
         .form-section {
             transition: all 0.3s ease;
         }
@@ -61,77 +45,34 @@
             color: #1E40AF;
             border: 1px solid #3B82F6;
         }
-        .logo-container {
-            width: 40px;
-            height: 40px;
-            border-radius: 50%;
-            overflow: hidden;
-            background: linear-gradient(135deg, #FFD700 0%, #FDB931 100%);
-            display: flex;
-            align-items: center;
-            justify-content: center;
-        }
-        .logo-container img {
-            width: 100%;
-            height: 100%;
-            object-fit: cover;
-        }
     </style>
 </head>
 <body class="bg-gray-100">
-    <div class="min-h-screen flex">
-        <!-- Sidebar - PSU Blue -->
-        <div class="w-64 psu-blue-bg text-white shadow-2xl flex flex-col">
-            <!-- Logo -->
-            <div class="p-6 border-b border-blue-700">
-                <div class="flex items-center space-x-3">
-                    <!-- PSU Logo Image -->
-                    <div class="logo-container">
-                        <img src="{{ asset('images/PSU_LOGO.png') }}" 
-                             alt="PSU Logo" 
-                             onerror="this.onerror=null; this.parentElement.style.backgroundColor='#FFD700'; this.parentElement.innerHTML='<span class=\'text-xl font-bold text-[#000035]\'>PSU</span>';">
-                    </div>
-                    <div>
-                        <h2 class="text-xl font-bold">Admin Panel</h2>
-                        <p class="text-yellow-300 text-xs">Partido State University</p>
-                    </div>
-                </div>
+    <div class="min-h-screen">
+
+        <!-- Mobile Header -->
+        <div class="lg:hidden fixed top-0 inset-x-0 z-40 h-14 psu-blue-bg flex items-center px-4 shadow-lg">
+            <button id="sidebar-open" type="button" class="text-white p-1.5 mr-3 rounded-lg hover:bg-white/10 transition">
+                <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"/>
+                </svg>
+            </button>
+            <div class="logo-container">
+                <img src="{{ asset('images/PSU_LOGO.png') }}" alt="PSU Logo" onerror="this.onerror=null;this.parentElement.innerHTML='<span class=\'font-bold text-[#000035]\'>PSU</span>';">
             </div>
-            
-            <!-- Navigation -->
-            <nav class="mt-6 flex-1">
-                <a href="{{ route('admin.dashboard') }}" class="block px-6 py-3 hover:bg-blue-700 hover:bg-opacity-50 transition flex items-center">
-                    <svg class="w-5 h-5 mr-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6"></path>
-                    </svg>
-                    Dashboard
-                </a>
-                <a href="{{ route('admin.applications') }}" class="block px-6 py-3 hover:bg-blue-700 hover:bg-opacity-50 transition flex items-center">
-                    <svg class="w-5 h-5 mr-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2"></path>
-                    </svg>
-                    Applications
-                </a>
-            </nav>
-            
-            <!-- Logout at bottom -->
-            <div class="p-6 border-t border-blue-700">
-                <form method="POST" action="{{ route('admin.logout') }}">
-                    @csrf
-                    <button type="submit" class="w-full flex items-center px-6 py-3 bg-blue-700 bg-opacity-50 rounded-lg hover:bg-blue-700 transition">
-                        <svg class="w-5 h-5 mr-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1"></path>
-                        </svg>
-                        Logout
-                    </button>
-                </form>
-            </div>
+            <span class="text-white font-bold text-sm ml-2">PSU Admin Panel</span>
         </div>
+
+        <!-- Sidebar Overlay -->
+        <div id="sidebar-overlay" class="hidden fixed inset-0 z-30 bg-black/50 lg:hidden"></div>
+
+        <!-- Sidebar Navigation -->
+        @include('partials.admin-sidebar')
         
         <!-- Main Content -->
-        <div class="flex-1 p-8 overflow-y-auto">
+        <div class="lg:ml-64 pt-14 lg:pt-0 p-4 md:p-8 overflow-y-auto min-h-screen">
             <!-- Header with Application Info -->
-            <div class="mb-8 flex justify-between items-start">
+            <div class="mb-8 flex flex-wrap justify-between items-start gap-4">
                 <div>
                     <div class="flex items-center mb-2">
                         <a href="{{ route('admin.view', $application->id) }}" class="text-gray-500 hover:text-[#000035] transition mr-3">
@@ -139,7 +80,7 @@
                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 19l-7-7m0 0l7-7m-7 7h18"></path>
                             </svg>
                         </a>
-                        <h1 class="text-3xl font-bold text-[#000035]">Edit Application</h1>
+                        <h1 class="text-xl md:text-3xl font-bold text-[#000035]">Edit Application</h1>
                     </div>
                     <p class="text-gray-600 ml-9">Update information for application #{{ str_pad($application->id, 5, '0', STR_PAD_LEFT) }}</p>
                 </div>
@@ -181,8 +122,8 @@
             
             <div class="bg-white rounded-xl shadow-lg overflow-hidden border-t-4 border-yellow-400">
                 <!-- Form Header -->
-                <div class="psu-blue-bg px-8 py-4">
-                    <h2 class="text-xl font-bold text-white flex items-center">
+                <div class="psu-blue-bg px-4 md:px-8 py-4">
+                    <h2 class="text-lg md:text-xl font-bold text-white flex items-center">
                         <svg class="w-6 h-6 mr-2 text-yellow-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z"></path>
                         </svg>
@@ -190,7 +131,7 @@
                     </h2>
                 </div>
                 
-                <div class="p-8">
+                <div class="p-4 md:p-8">
                     <form action="{{ route('admin.update', $application->id) }}" method="POST" enctype="multipart/form-data">
                         @csrf
                         @method('PUT')
@@ -203,7 +144,7 @@
                                 </svg>
                                 Personal Information
                             </h3>
-                            <div class="grid md:grid-cols-3 gap-6">
+                            <div class="grid sm:grid-cols-2 md:grid-cols-3 gap-4 md:gap-6">
                                 <div>
                                     <label class="block text-sm font-medium text-gray-700 mb-2">
                                         Last Name <span class="text-red-500">*</span>
@@ -347,7 +288,7 @@
                                 </svg>
                                 Guardian Information
                             </h3>
-                            <div class="grid md:grid-cols-3 gap-6">
+                            <div class="grid sm:grid-cols-2 md:grid-cols-3 gap-4 md:gap-6">
                                 <div>
                                     <label class="block text-sm font-medium text-gray-700 mb-2">
                                         Guardian Complete Name <span class="text-red-500">*</span>
@@ -447,7 +388,7 @@
                                 </svg>
                                 Documents
                             </h3>
-                            <div class="grid md:grid-cols-3 gap-6">
+                            <div class="grid sm:grid-cols-2 md:grid-cols-3 gap-4 md:gap-6">
                                 <div>
                                     <label class="block text-sm font-medium text-gray-700 mb-2">
                                         Applicant Photo
@@ -528,7 +469,7 @@
                         </div>
                         
                         <!-- Form Actions -->
-                        <div class="flex justify-end space-x-4 pt-6 border-t border-gray-200">
+                        <div class="flex flex-wrap justify-end gap-3 pt-6 border-t border-gray-200">
                             <a href="{{ route('admin.view', $application->id) }}" 
                                class="px-8 py-3 bg-gray-500 text-white rounded-lg font-semibold hover:bg-gray-600 transition flex items-center">
                                 <svg class="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -630,6 +571,24 @@
             const event = new Event('change');
             campusSelect.dispatchEvent(event);
         });
+    </script>
+
+    <script>
+    (function() {
+        var sidebar = document.getElementById('admin-sidebar');
+        var overlay = document.getElementById('sidebar-overlay');
+        var openBtn = document.getElementById('sidebar-open');
+        function openSidebar() {
+            sidebar.classList.remove('-translate-x-full');
+            overlay.classList.remove('hidden');
+        }
+        function closeSidebar() {
+            sidebar.classList.add('-translate-x-full');
+            overlay.classList.add('hidden');
+        }
+        if (openBtn) openBtn.addEventListener('click', openSidebar);
+        if (overlay) overlay.addEventListener('click', closeSidebar);
+    })();
     </script>
 </body>
 </html>

@@ -43,23 +43,47 @@ class AdminController extends Controller
 
     public function dashboard()
     {
-        $totalApplicants = StudentApplication::count();
-        $regularStudents = StudentApplication::where('student_type', 'Regular')->count();
+        $totalApplicants   = StudentApplication::count();
+        $regularStudents   = StudentApplication::where('student_type', 'Regular')->count();
         $irregularStudents = StudentApplication::where('student_type', 'Irregular')->count();
-        $transferees = StudentApplication::where('student_type', 'Transferee')->count();
-        
+        $transferees       = StudentApplication::where('student_type', 'Transferee')->count();
+
+        $pendingCount    = StudentApplication::where('status', 'Pending')->count();
+        $approvedCount   = StudentApplication::where('status', 'Approved')->count();
+        $rejectedCount   = StudentApplication::where('status', 'Rejected')->count();
+        $waitlistedCount = StudentApplication::where('status', 'Waitlisted')->count();
+
+        $todayCount     = StudentApplication::whereDate('created_at', today())->count();
+        $thisMonthCount = StudentApplication::whereMonth('created_at', now()->month)
+                            ->whereYear('created_at', now()->year)->count();
+        $lastMonthCount = StudentApplication::whereMonth('created_at', now()->subMonth()->month)
+                            ->whereYear('created_at', now()->subMonth()->year)->count();
+        $monthChange = $lastMonthCount > 0
+            ? round((($thisMonthCount - $lastMonthCount) / $lastMonthCount) * 100)
+            : ($thisMonthCount > 0 ? 100 : 0);
+
         $campusCounts = [];
         $campuses = Campus::all();
         foreach ($campuses as $campus) {
             $campusCounts[$campus->name] = StudentApplication::where('campus', $campus->name)->count();
         }
 
+        $recentApplications = StudentApplication::latest()->take(5)->get();
+
         return view('admin.dashboard', compact(
-            'totalApplicants', 
-            'regularStudents', 
-            'irregularStudents', 
+            'totalApplicants',
+            'regularStudents',
+            'irregularStudents',
             'transferees',
-            'campusCounts'
+            'pendingCount',
+            'approvedCount',
+            'rejectedCount',
+            'waitlistedCount',
+            'todayCount',
+            'thisMonthCount',
+            'monthChange',
+            'campusCounts',
+            'recentApplications'
         ));
     }
 
@@ -108,30 +132,42 @@ class AdminController extends Controller
     public function approveApplication($id)
     {
         $application = StudentApplication::findOrFail($id);
+
+        if ($application->status === 'Approved') {
+            return redirect()->back()->with('info', 'Application is already approved.');
+        }
+
         $application->update(['status' => 'Approved']);
-        
         $this->sendStatusEmail($application);
-        
+
         return redirect()->back()->with('success', 'Application approved successfully!');
     }
 
     public function rejectApplication($id)
     {
         $application = StudentApplication::findOrFail($id);
+
+        if ($application->status === 'Rejected') {
+            return redirect()->back()->with('info', 'Application is already rejected.');
+        }
+
         $application->update(['status' => 'Rejected']);
-        
         $this->sendStatusEmail($application);
-        
+
         return redirect()->back()->with('success', 'Application rejected successfully!');
     }
 
     public function waitlistApplication($id)
     {
         $application = StudentApplication::findOrFail($id);
+
+        if ($application->status === 'Waitlisted') {
+            return redirect()->back()->with('info', 'Application is already waitlisted.');
+        }
+
         $application->update(['status' => 'Waitlisted']);
-        
         $this->sendStatusEmail($application);
-        
+
         return redirect()->back()->with('success', 'Application waitlisted successfully!');
     }
 

@@ -27,7 +27,7 @@ Route::prefix('student')->name('student.')->group(function () {
 // Admin Routes
 Route::prefix('admin')->name('admin.')->group(function () {
     Route::get('/login', [AdminController::class, 'showLogin'])->name('login');
-    Route::post('/login', [AdminController::class, 'login']);
+    Route::post('/login', [AdminController::class, 'login'])->middleware('throttle:5,1');
     Route::post('/logout', [AdminController::class, 'logout'])->name('logout');
     
     // Protected admin routes

@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>PSU - Admin Login</title>
-    @vite(['resources/css/app.css'], ['resources/js/app.js'])
+    @vite(['resources/css/app.css', 'resources/js/app.js'])
     <style>
         .psu-blue-bg {
             background: linear-gradient(135deg, #000035 0%, #00004d 100%);
@@ -77,13 +77,13 @@
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4.354a4 4 0 110 5.292M15 21H3v-1a6 6 0 0112 0v1zm0 0h6v-1a6 6 0 00-9-5.197M13 7a4 4 0 11-8 0 4 4 0 018 0z"></path>
                         </svg>
                     </div>
-                    <h1 class="text-3xl font-bold text-white mb-2">Admin Login</h1>
+                    <h1 class="text-2xl md:text-3xl font-bold text-white mb-2">Admin Login</h1>
                     <p class="text-yellow-300">Access the administration panel</p>
                 </div>
             </div>
             
             <!-- Form -->
-            <div class="p-8">
+            <div class="p-5 md:p-8">
                 <form method="POST" action="{{ route('admin.login') }}">
                     @csrf
                     

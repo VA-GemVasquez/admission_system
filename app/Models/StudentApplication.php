@@ -4,10 +4,16 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\SoftDeletes;
 
 class StudentApplication extends Model
 {
-    use HasFactory;
+    use HasFactory, SoftDeletes;
+
+    public function getFullNameAttribute(): string
+    {
+        return trim($this->firstname . ' ' . ($this->middlename ? $this->middlename . ' ' : '') . $this->lastname . ($this->name_extender ? ' ' . $this->name_extender : ''));
+    }
 
     protected $fillable = [
         'firstname',

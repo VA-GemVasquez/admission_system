@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>PSU - Application Status</title>
-    @vite(['resources/css/app.css'], ['resources/js/app.js'])
+    @vite(['resources/css/app.css', 'resources/js/app.js'])
     <style>
         .psu-blue-bg {
             background: linear-gradient(135deg, #000035 0%, #00004d 100%);
@@ -61,41 +61,25 @@
             @apply p-4 bg-gray-50 rounded-xl border border-gray-200 hover:shadow-md transition;
         }
         .action-btn {
-            @apply px-8 py-4 rounded-xl font-bold transition-all duration-300 flex items-center shadow-md transform hover:-translate-y-1 hover:shadow-xl;
+            @apply px-5 py-3 rounded-xl font-bold transition-all duration-300 flex items-center shadow-md transform hover:-translate-y-1 hover:shadow-xl text-sm;
         }
-        .logo-container {
-            width: 50px;
-            height: 50px;
-            border-radius: 50%;
-            overflow: hidden;
-            background: linear-gradient(135deg, #FFD700 0%, #FDB931 100%);
-            display: flex;
-            align-items: center;
-            justify-content: center;
-        }
-        .logo-container img {
-            width: 100%;
-            height: 100%;
-            object-fit: cover;
-        }
+        .logo-container { width: 44px; height: 44px; }
     </style>
 </head>
 <body class="bg-gray-100">
     <!-- Header with PSU Branding -->
     <div class="psu-blue-bg shadow-lg">
         <div class="container mx-auto px-4 py-4">
-            <div class="flex items-center justify-between">
-                <div class="flex items-center space-x-3">
-                    <!-- PSU Logo Image -->
-                    <div class="logo-container">
-                        <img src="{{ asset('images/PSU_LOGO.png') }}" 
-                             alt="PSU Logo" 
-                             onerror="this.onerror=null; this.parentElement.style.backgroundColor='#FFD700'; this.parentElement.innerHTML='<span class=\'text-2xl font-bold text-[#000035]\'>PSU</span>';">
-                    </div>
-                    <div>
-                        <h1 class="text-2xl font-bold text-white">Partido State University</h1>
-                        <p class="text-yellow-300 text-sm">Application Status Tracker</p>
-                    </div>
+            <div class="flex items-center space-x-3">
+                <!-- PSU Logo Image -->
+                <div class="logo-container flex-shrink-0">
+                    <img src="{{ asset('images/PSU_LOGO.png') }}"
+                         alt="PSU Logo"
+                         onerror="this.onerror=null; this.parentElement.style.backgroundColor='#FFD700'; this.parentElement.innerHTML='<span class=\'text-2xl font-bold text-[#000035]\'>PSU</span>';">
+                </div>
+                <div>
+                    <h1 class="text-lg md:text-2xl font-bold text-white">Partido State University</h1>
+                    <p class="text-yellow-300 text-xs md:text-sm">Application Status Tracker</p>
                 </div>
             </div>
         </div>
@@ -133,17 +117,17 @@
             <!-- Main Content Card -->
             <div class="bg-white rounded-2xl shadow-xl overflow-hidden border-t-4 border-yellow-400">
                 <!-- Card Header with Status -->
-                <div class="psu-gold-bg px-8 py-4">
-                    <div class="flex justify-between items-center">
+                <div class="psu-gold-bg px-4 md:px-8 py-4">
+                    <div class="flex flex-wrap justify-between items-start gap-3">
                         <div class="flex items-center">
-                            <div class="bg-[#000035] p-2 rounded-lg mr-4">
-                                <svg class="w-6 h-6 text-yellow-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <div class="bg-[#000035] p-2 rounded-lg mr-3">
+                                <svg class="w-5 h-5 text-yellow-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"></path>
                                 </svg>
                             </div>
                             <div>
-                                <h1 class="text-2xl font-bold text-[#000035]">Application Status</h1>
-                                <p class="text-[#000035] text-sm">Track your application progress</p>
+                                <h1 class="text-lg md:text-2xl font-bold text-[#000035]">Application Status</h1>
+                                <p class="text-[#000035] text-xs md:text-sm">Track your application progress</p>
                             </div>
                         </div>
                         <div class="flex items-center">
@@ -165,21 +149,21 @@
                     </div>
                 </div>
                 
-                <div class="p-8">
+                <div class="p-4 md:p-8">
                     <!-- Applicant Information -->
-                    <div class="text-center mb-8">
-                        <div class="w-24 h-24 bg-[#000035] rounded-full flex items-center justify-center mx-auto mb-4">
-                            <span class="text-4xl font-bold text-yellow-400">
+                    <div class="text-center mb-6 md:mb-8">
+                        <div class="w-16 h-16 md:w-24 md:h-24 bg-[#000035] rounded-full flex items-center justify-center mx-auto mb-4">
+                            <span class="text-2xl md:text-4xl font-bold text-yellow-400">
                                 {{ substr($application->firstname, 0, 1) }}{{ substr($application->lastname, 0, 1) }}
                             </span>
                         </div>
-                        <h2 class="text-3xl font-bold text-[#000035]">{{ $application->full_name }}</h2>
+                        <h2 class="text-xl md:text-3xl font-bold text-[#000035]">{{ $application->full_name }}</h2>
                         <div class="flex items-center justify-center mt-2 space-x-4 flex-wrap gap-2">
                             <p class="text-gray-600 flex items-center">
                                 <svg class="w-4 h-4 mr-1 text-yellow-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"></path>
                                 </svg>
-                                {{ $application->gmail_account }}@gmail.com
+                                {{ $application->gmail_account }}
                             </p>
                             <p class="text-gray-600 flex items-center">
                                 <svg class="w-4 h-4 mr-1 text-yellow-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -302,7 +286,7 @@
                                 </svg>
                                 <p class="text-sm font-medium text-gray-500">Campus</p>
                             </div>
-                            <p class="text-lg font-bold text-[#000035]">{{ $application->campus }} Campus</p>
+                            <p class="text-base md:text-lg font-bold text-[#000035]">{{ $application->campus }} Campus</p>
                         </div>
                         <div class="summary-card">
                             <div class="flex items-center mb-2">
@@ -312,7 +296,7 @@
                                 </svg>
                                 <p class="text-sm font-medium text-gray-500">Course</p>
                             </div>
-                            <p class="text-lg font-bold text-[#000035]">{{ $application->course }}</p>
+                            <p class="text-base md:text-lg font-bold text-[#000035]">{{ $application->course }}</p>
                             <p class="text-xs text-gray-500">{{ $application->college }}</p>
                         </div>
                     </div>
@@ -326,7 +310,7 @@
                                 </svg>
                                 <p class="text-sm font-medium text-gray-500">Student Type</p>
                             </div>
-                            <p class="text-lg font-bold text-[#000035]">{{ $application->student_type }}</p>
+                            <p class="text-base md:text-lg font-bold text-[#000035]">{{ $application->student_type }}</p>
                         </div>
                         <div class="summary-card">
                             <div class="flex items-center mb-2">
@@ -335,7 +319,7 @@
                                 </svg>
                                 <p class="text-sm font-medium text-gray-500">Last Updated</p>
                             </div>
-                            <p class="text-lg font-bold text-[#000035]">{{ $application->updated_at->format('M d, Y') }}</p>
+                            <p class="text-base md:text-lg font-bold text-[#000035]">{{ $application->updated_at->format('M d, Y') }}</p>
                             <p class="text-xs text-gray-500">{{ $application->updated_at->format('h:i A') }}</p>
                         </div>
                     </div>

@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Partido State University - Admission System</title>
-    @vite(['resources/css/app.css'], ['resources/js/app.js'])
+    @vite(['resources/css/app.css', 'resources/js/app.js'])
     <style>
         /* Fallback while loading */
         body { visibility: hidden; }
@@ -144,7 +144,7 @@
                         <p class="text-[#FFD966] text-xs">Excellence | Service | Leadership</p>
                     </div>
                 </div>
-                <div class="flex space-x-3 text-sm">
+                <div class="flex flex-wrap gap-2 text-sm">
                     <a href="#" class="text-white/80 hover:text-[#FFD966] transition px-3 py-1">About</a>
                     <a href="#" class="text-white/80 hover:text-[#FFD966] transition px-3 py-1">Contact</a>
                     <a href="#" class="bg-[#FFD966]/20 text-[#FFD966] px-4 py-1.5 rounded-lg text-sm hover:bg-[#FFD966] hover:text-[#000035] transition">Help</a>
@@ -158,13 +158,13 @@
                 <div class="inline-block bg-[#FFD966]/10 border border-[#FFD966]/30 text-[#FFD966] px-4 py-1.5 rounded-full text-sm font-medium mb-5">
                     🎓 AY 2025-2026 Now Open
                 </div>
-                <h1 class="text-4xl md:text-5xl font-bold text-white mb-4">
+                <h1 class="text-2xl sm:text-4xl md:text-5xl font-bold text-white mb-4">
                     Welcome to <span class="text-[#FFD966]">Admission</span>
                 </h1>
                 <p class="text-blue-100/90 text-base md:text-lg mb-8">
                     Your journey to excellence starts here. Join Partido State University.
                 </p>
-                <div class="flex justify-center gap-4">
+                <div class="flex flex-wrap justify-center gap-4">
                     <a href="#student-portal" class="btn-gold px-8 py-4 shadow-lg flex items-center">
                         Apply Now
                         <svg class="w-5 h-5 ml-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -245,19 +245,19 @@
         <div class="container mx-auto px-6">
             <div class="grid grid-cols-2 md:grid-cols-4 gap-6 text-center">
                 <div>
-                    <div class="text-3xl md:text-4xl font-bold text-[#FFD966]">5K+</div>
+                    <div class="text-2xl md:text-4xl font-bold text-[#FFD966]">5K+</div>
                     <div class="text-white/70 text-sm">Students</div>
                 </div>
                 <div>
-                    <div class="text-3xl md:text-4xl font-bold text-[#FFD966]">50+</div>
+                    <div class="text-2xl md:text-4xl font-bold text-[#FFD966]">50+</div>
                     <div class="text-white/70 text-sm">Programs</div>
                 </div>
                 <div>
-                    <div class="text-3xl md:text-4xl font-bold text-[#FFD966]">94%</div>
+                    <div class="text-2xl md:text-4xl font-bold text-[#FFD966]">94%</div>
                     <div class="text-white/70 text-sm">Success Rate</div>
                 </div>
                 <div>
-                    <div class="text-3xl md:text-4xl font-bold text-[#FFD966]">3</div>
+                    <div class="text-2xl md:text-4xl font-bold text-[#FFD966]">3</div>
                     <div class="text-white/70 text-sm">Campuses</div>
                 </div>
             </div>
@@ -267,7 +267,7 @@
     <!-- Footer with PSU Logo in Circle -->
     <footer class="bg-[#000028] text-white py-10">
         <div class="container mx-auto px-6">
-            <div class="grid md:grid-cols-4 gap-8">
+            <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-8">
                 <div>
                     <div class="flex items-center gap-2 mb-3">
                         <!-- PSU Logo Circular Container in Footer -->

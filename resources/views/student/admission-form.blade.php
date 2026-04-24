@@ -4,618 +4,825 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>PSU - Student Admission Form</title>
-    @vite(['resources/css/app.css'], ['resources/js/app.js'])
+    @vite(['resources/css/app.css', 'resources/js/app.js'])
     <style>
-        
+        .psu-blue-bg { background: linear-gradient(135deg, #000035 0%, #00004d 100%); }
+        .psu-gold-bg { background: linear-gradient(135deg, #FFD700 0%, #FDB931 100%); }
 
+        /* Progress */
+        .step-circle {
+            width: 2.5rem; height: 2.5rem; border-radius: 50%;
+            display: flex; align-items: center; justify-content: center;
+            font-weight: 700; font-size: 0.875rem;
+            transition: all .2s ease; flex-shrink: 0; user-select: none;
+        }
+        .step-circle.done     { background: #16a34a; color: #fff; }
+        .step-circle.current  { background: #000035; color: #FFD700; box-shadow: 0 0 0 4px rgba(0,0,53,.15); }
+        .step-circle.upcoming { background: #e5e7eb; color: #9ca3af; }
+        .step-circle:hover    { opacity: .8; transform: scale(1.08); }
+        .step-label { font-size: .75rem; line-height: 1.375; }
+        @media (min-width: 640px) { .step-label { font-size: .875rem; } }
+        .step-label.done     { color: #16a34a; }
+        .step-label.current  { color: #000035; font-weight: 700; }
+        .step-label.upcoming { color: #9ca3af; }
+        .step-line { flex: 1; height: 3px; border-radius: 2px; margin: 0 .5rem; transition: background .3s; }
+        .step-line.done { background: #16a34a; }
+        .step-line.upcoming { background: #e5e7eb; }
 
-        
-            background: linear-gradient(135deg, #000035 0%, #00004d 100%);
+        /* Form steps */
+        .form-step { display: none; animation: fadeIn .25s ease; }
+        .form-step.active { display: block; }
+        @keyframes fadeIn { from { opacity: 0; transform: translateY(6px); } to { opacity: 1; transform: none; } }
+
+        /* Section cards */
+        .section-card {
+            background: #f9fafb; border: 1px solid #e5e7eb;
+            border-radius: .75rem; padding: 1.25rem 1.5rem; margin-bottom: 1.25rem;
         }
-        .psu-gold-bg {
-            background: linear-gradient(135deg, #FFD700 0%, #FDB931 100%);
+        .section-title {
+            font-size: .9375rem; font-weight: 700; color: #000035;
+            display: flex; align-items: center; gap: .5rem; margin-bottom: 1rem;
         }
-        .psu-gold-text {
-            color: #FFD700;
+        .section-title svg { color: #d97706; flex-shrink: 0; }
+
+        /* Inputs */
+        .field-label {
+            display: block; font-size: .8125rem; font-weight: 600;
+            color: #374151; margin-bottom: .375rem;
         }
-        .psu-blue-text {
-            color: #000035;
+        .field-input {
+            width: 100%; padding: .625rem .875rem;
+            border: 1.5px solid #d1d5db; border-radius: .5rem;
+            font-size: .875rem; background: #fff;
+            transition: border-color .2s, box-shadow .2s;
         }
-        .border-gold {
-            border-color: #FFD700;
+        .field-input:focus {
+            outline: none; border-color: #FFD700;
+            box-shadow: 0 0 0 3px rgba(255,215,0,.2);
         }
-        .focus-ring-gold:focus {
-            ring-color: #FFD700;
+        .field-input.is-error { border-color: #ef4444; box-shadow: 0 0 0 3px rgba(239,68,68,.1); }
+
+        /* File upload */
+        .upload-zone {
+            position: relative; border: 2px dashed #d1d5db; border-radius: .75rem;
+            padding: 1.25rem; text-align: center; cursor: pointer;
+            background: #fff; transition: border-color .2s, background .2s;
         }
-        .track-card {
-            @apply bg-gradient-to-r from-blue-50 to-yellow-50 border border-yellow-200 rounded-xl p-4 hover:shadow-md transition;
+        .upload-zone:hover  { border-color: #FFD700; background: #fffbeb; }
+        .upload-zone.has-file { border-color: #16a34a; border-style: solid; background: #f0fdf4; }
+        .upload-zone.is-error { border-color: #ef4444; background: #fff5f5; }
+        .upload-zone input[type="file"] {
+            position: absolute; inset: 0; opacity: 0; width: 100%; height: 100%; cursor: pointer;
         }
+
+        /* Logo */
         .logo-container {
-            width: 50px;
-            height: 50px;
-            border-radius: 50%;
-            overflow: hidden;
+            width: 50px; height: 50px; border-radius: 50%; overflow: hidden;
             background: linear-gradient(135deg, #FFD700 0%, #FDB931 100%);
-            display: flex;
-            align-items: center;
-            justify-content: center;
+            display: flex; align-items: center; justify-content: center; flex-shrink: 0;
         }
-        .logo-container img {
-            width: 100%;
-            height: 100%;
-            object-fit: cover;
+        .logo-container img { width: 100%; height: 100%; object-fit: cover; }
+
+        /* Buttons */
+        .btn-primary {
+            background: linear-gradient(135deg, #000035 0%, #00004d 100%);
+            color: #FFD700; font-weight: 700; padding: .75rem 2rem;
+            border-radius: .625rem; display: inline-flex; align-items: center; gap: .5rem;
+            transition: opacity .2s, transform .15s; border: none; cursor: pointer;
         }
+        .btn-primary:hover { opacity: .9; transform: translateY(-1px); }
+        .btn-secondary {
+            background: #f3f4f6; color: #374151; font-weight: 600;
+            padding: .75rem 1.5rem; border-radius: .625rem; border: 1.5px solid #d1d5db;
+            display: inline-flex; align-items: center; gap: .5rem;
+            transition: background .2s; cursor: pointer;
+        }
+        .btn-secondary:hover { background: #e5e7eb; }
+        .btn-submit {
+            background: linear-gradient(135deg, #000035 0%, #00004d 100%);
+            color: #FFD700; font-weight: 700; font-size: 1rem;
+            padding: .875rem 2.5rem; border-radius: .75rem;
+            display: inline-flex; align-items: center; gap: .625rem;
+            transition: opacity .2s, transform .15s, box-shadow .2s;
+            border: none; cursor: pointer; box-shadow: 0 4px 14px rgba(0,0,53,.3);
+        }
+        .btn-submit:hover { opacity: .92; transform: translateY(-2px); box-shadow: 0 6px 20px rgba(0,0,53,.35); }
     </style>
 </head>
-<body class="bg-gray-50">
-    <!-- Header with PSU Branding -->
-    <div class="psu-blue-bg shadow-lg">
-        <div class="container mx-auto px-4 py-4">
+<body class="bg-gray-50 min-h-screen">
+
+    <!-- Header -->
+    <div class="psu-blue-bg shadow-lg sticky top-0 z-10">
+        <div class="container mx-auto px-4 py-3.5">
             <div class="flex items-center justify-between">
-                <div class="flex items-center space-x-3">
-                    <!-- PSU Logo Image -->
+                <div class="flex items-center gap-3">
                     <div class="logo-container">
-                        <img src="{{ asset('images/PSU_LOGO.png') }}" 
-                             alt="PSU Logo" 
-                             onerror="this.onerror=null; this.parentElement.style.backgroundColor='#FFD700'; this.parentElement.innerHTML='<span class=\'text-2xl font-bold text-[#000035]\'>PSU</span>';">
+                        <img src="{{ asset('images/PSU_LOGO.png') }}" alt="PSU Logo"
+                             onerror="this.onerror=null;this.parentElement.innerHTML='<span class=\'font-bold text-[#000035] text-lg\'>PSU</span>'">
                     </div>
                     <div>
-                        <h1 class="text-2xl font-bold text-white">Partido State University</h1>
-                        <p class="text-yellow-300 text-sm">Admission Application Form</p>
+                        <h1 class="text-xl font-bold text-white leading-tight">Partido State University</h1>
+                        <p class="text-yellow-300 text-xs">Online Admission Application</p>
                     </div>
                 </div>
-                <div class="text-right">
-                    <p class="text-yellow-300 text-sm">Academic Year 2024-2025</p>
-                    <p class="text-white text-sm">Application #: <span class="text-yellow-300 font-semibold">NEW</span></p>
+                <div class="hidden sm:flex items-center gap-4 text-sm">
+                    <a href="{{ route('student.track') }}"
+                       class="text-yellow-300 hover:text-white transition flex items-center gap-1.5">
+                        <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                  d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"/>
+                        </svg>
+                        Track Application
+                    </a>
+                    <a href="{{ route('home') }}"
+                       class="text-gray-300 hover:text-white transition flex items-center gap-1.5">
+                        <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                  d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6"/>
+                        </svg>
+                        Home
+                    </a>
                 </div>
             </div>
         </div>
     </div>
 
     <div class="container mx-auto px-4 py-8">
-        <div class="max-w-5xl mx-auto">
-          
+        <div class="max-w-4xl mx-auto">
+
+            <!-- Alerts -->
+            @if($errors->any())
+                <div class="mb-6 p-4 bg-red-50 border border-red-200 rounded-xl text-red-700">
+                    <div class="flex items-center gap-2 font-semibold mb-2">
+                        <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 20 20">
+                            <path fill-rule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7 4a1 1 0 11-2 0 1 1 0 012 0zm-1-9a1 1 0 00-1 1v4a1 1 0 102 0V6a1 1 0 00-1-1z" clip-rule="evenodd"/>
+                        </svg>
+                        Please fix the following errors:
+                    </div>
+                    <ul class="list-disc list-inside space-y-1 text-sm ml-1">
+                        @foreach($errors->all() as $error)
+                            <li>{{ $error }}</li>
+                        @endforeach
+                    </ul>
+                </div>
+            @endif
 
             <!-- Progress Steps -->
-            <div class="mb-8">
-                <div class="flex items-center justify-between">
-                    <div class="flex items-center">
-                        <div class="w-10 h-10 bg-[#000035] rounded-full flex items-center justify-center text-white font-bold">1</div>
-                        <div class="ml-3">
-                            <p class="text-sm text-gray-500">Step 1</p>
-                            <p class="font-semibold text-[#000035]">Personal Info</p>
+            <div class="bg-white rounded-2xl shadow-sm border border-gray-100 px-4 sm:px-6 py-4 sm:py-5 mb-6">
+                <div class="flex items-center">
+                    <!-- Step 1 -->
+                    <div class="flex items-center gap-1.5 sm:gap-2.5 flex-shrink-0">
+                        <div id="circle-1" class="step-circle current">1</div>
+                        <div>
+                            <p class="text-[10px] sm:text-xs text-gray-400 leading-none">Step 1</p>
+                            <p id="label-1" class="step-label current">
+                                <span class="hidden sm:inline">Personal Info</span>
+                                <span class="sm:hidden">Personal</span>
+                            </p>
                         </div>
                     </div>
-                    <div class="flex-1 mx-4 h-1 bg-gray-300"></div>
-                    <div class="flex items-center">
-                        <div class="w-10 h-10 bg-gray-300 rounded-full flex items-center justify-center text-gray-600 font-bold">2</div>
-                        <div class="ml-3">
-                            <p class="text-sm text-gray-500">Step 2</p>
-                            <p class="font-semibold text-gray-500">Guardian Info</p>
+                    <div id="line-1" class="step-line upcoming"></div>
+                    <!-- Step 2 -->
+                    <div class="flex items-center gap-1.5 sm:gap-2.5 flex-shrink-0">
+                        <div id="circle-2" class="step-circle upcoming">2</div>
+                        <div>
+                            <p class="text-[10px] sm:text-xs text-gray-400 leading-none">Step 2</p>
+                            <p id="label-2" class="step-label upcoming">
+                                <span class="hidden sm:inline">Guardian Info</span>
+                                <span class="sm:hidden">Guardian</span>
+                            </p>
                         </div>
                     </div>
-                    <div class="flex-1 mx-4 h-1 bg-gray-300"></div>
-                    <div class="flex items-center">
-                        <div class="w-10 h-10 bg-gray-300 rounded-full flex items-center justify-center text-gray-600 font-bold">3</div>
-                        <div class="ml-3">
-                            <p class="text-sm text-gray-500">Step 3</p>
-                            <p class="font-semibold text-gray-500">Academic Info</p>
+                    <div id="line-2" class="step-line upcoming"></div>
+                    <!-- Step 3 -->
+                    <div class="flex items-center gap-1.5 sm:gap-2.5 flex-shrink-0">
+                        <div id="circle-3" class="step-circle upcoming">3</div>
+                        <div>
+                            <p class="text-[10px] sm:text-xs text-gray-400 leading-none">Step 3</p>
+                            <p id="label-3" class="step-label upcoming">
+                                <span class="hidden sm:inline">Academic &amp; Docs</span>
+                                <span class="sm:hidden">Academic</span>
+                            </p>
                         </div>
                     </div>
                 </div>
             </div>
 
-            <!-- Form -->
-            <div class="bg-white rounded-2xl shadow-xl overflow-hidden">
-                <!-- Form Header -->
-                <div class="psu-gold-bg px-8 py-4">
-                    <div class="flex items-center justify-between">
-                        <h2 class="text-2xl font-bold text-[#000035]">Application Form</h2>
-                        <div class="bg-[#000035] text-yellow-400 px-4 py-2 rounded-lg">
-                            <span class="text-sm">* Required Fields</span>
-                        </div>
-                    </div>
+            <!-- Form Card -->
+            <div class="bg-white rounded-2xl shadow-lg border border-gray-100 overflow-hidden">
+                <!-- Card header bar -->
+                <div class="psu-gold-bg px-6 py-3 flex items-center justify-between">
+                    <h2 id="step-title" class="text-lg font-bold text-[#000035]">Personal Information</h2>
+                    <span class="text-xs font-semibold bg-[#000035] text-yellow-400 px-3 py-1 rounded-full">
+                        <span id="step-indicator">1</span> / 3
+                    </span>
                 </div>
-                
-                <!-- Form Body -->
-                <div class="p-8">
-                    <form action="{{ route('student.submit') }}" method="POST" enctype="multipart/form-data" id="admissionForm">
-                        @csrf
-                        
-                        @if(session('success'))
-                            <div class="mb-6 p-4 bg-green-100 border-l-4 border-green-500 text-green-700 rounded-lg flex items-center">
-                                <svg class="w-6 h-6 mr-3" fill="currentColor" viewBox="0 0 20 20">
-                                    <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd"/>
-                                </svg>
-                                {{ session('success') }}
-                            </div>
-                        @endif
-                        
-                        @if($errors->any())
-                            <div class="mb-6 p-4 bg-red-100 border-l-4 border-red-500 text-red-700 rounded-lg">
-                                <div class="flex items-center mb-2">
-                                    <svg class="w-6 h-6 mr-3" fill="currentColor" viewBox="0 0 20 20">
-                                        <path fill-rule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7 4a1 1 0 11-2 0 1 1 0 012 0zm-1-9a1 1 0 00-1 1v4a1 1 0 102 0V6a1 1 0 00-1-1z" clip-rule="evenodd"/>
+
+                <form action="{{ route('student.submit') }}" method="POST"
+                      enctype="multipart/form-data" id="admissionForm" novalidate>
+                    @csrf
+                    <div class="p-6 md:p-8">
+
+                        <!-- ─── STEP 1 : Personal Information ─── -->
+                        <div id="step-1" class="form-step active">
+
+                            <!-- Full Name -->
+                            <div class="section-card">
+                                <h3 class="section-title">
+                                    <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 20 20">
+                                        <path fill-rule="evenodd" d="M10 9a3 3 0 100-6 3 3 0 000 6zm-7 9a7 7 0 1114 0H3z" clip-rule="evenodd"/>
                                     </svg>
-                                    <span class="font-semibold">Please fix the following errors:</span>
-                                </div>
-                                <ul class="list-disc list-inside ml-6">
-                                    @foreach($errors->all() as $error)
-                                        <li>{{ $error }}</li>
-                                    @endforeach
-                                </ul>
-                            </div>
-                        @endif
-                        
-                        <!-- Personal Information Section -->
-                        <div class="mb-8">
-                            <h3 class="text-xl font-bold text-[#000035] mb-4 flex items-center">
-                                <svg class="w-6 h-6 mr-2 text-yellow-500" fill="currentColor" viewBox="0 0 20 20">
-                                    <path fill-rule="evenodd" d="M10 9a3 3 0 100-6 3 3 0 000 6zm-7 9a7 7 0 1114 0H3z" clip-rule="evenodd"/>
-                                </svg>
-                                Personal Information
-                            </h3>
-                            
-                            <!-- Name Fields -->
-                            <div class="grid md:grid-cols-3 gap-6">
-                                <div>
-                                    <label class="block text-sm font-medium text-gray-700 mb-2">
-                                        Last Name <span class="text-red-500">*</span>
-                                    </label>
-                                    <input type="text" name="lastname" value="{{ old('lastname') }}" required
-                                           class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-yellow-400 focus:border-yellow-400 transition">
-                                </div>
-                                <div>
-                                    <label class="block text-sm font-medium text-gray-700 mb-2">
-                                        First Name <span class="text-red-500">*</span>
-                                    </label>
-                                    <input type="text" name="firstname" value="{{ old('firstname') }}" required
-                                           class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-yellow-400 focus:border-yellow-400 transition">
-                                </div>
-                                <div>
-                                    <label class="block text-sm font-medium text-gray-700 mb-2">Middle Name</label>
-                                    <input type="text" name="middlename" value="{{ old('middlename') }}"
-                                           class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-yellow-400 focus:border-yellow-400 transition">
-                                </div>
-                            </div>
-
-                            <!-- Name Extender -->
-                            <div class="mt-4">
-                                <label class="block text-sm font-medium text-gray-700 mb-2">Name Extender</label>
-                                <select name="name_extender" 
-                                        class="w-full md:w-64 px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-yellow-400 focus:border-yellow-400 transition">
-                                    <option value="">None</option>
-                                    <option value="Jr." {{ old('name_extender') == 'Jr.' ? 'selected' : '' }}>Jr.</option>
-                                    <option value="Sr." {{ old('name_extender') == 'Sr.' ? 'selected' : '' }}>Sr.</option>
-                                    <option value="I" {{ old('name_extender') == 'I' ? 'selected' : '' }}>I</option>
-                                    <option value="II" {{ old('name_extender') == 'II' ? 'selected' : '' }}>II</option>
-                                    <option value="III" {{ old('name_extender') == 'III' ? 'selected' : '' }}>III</option>
-                                </select>
-                            </div>
-
-                            <!-- Age, Sex and Civil Status -->
-                            <div class="grid md:grid-cols-3 gap-6 mt-4">
-                                <div>
-                                    <label class="block text-sm font-medium text-gray-700 mb-2">
-                                        Age <span class="text-red-500">*</span>
-                                    </label>
-                                    <input type="number" name="age" value="{{ old('age') }}" required min="15" max="100"
-                                           class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-yellow-400 focus:border-yellow-400 transition">
-                                </div>
-                                <div>
-                                    <label class="block text-sm font-medium text-gray-700 mb-2">
-                                        Sex <span class="text-red-500">*</span>
-                                    </label>
-                                    <select name="sex" required
-                                            class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-yellow-400 focus:border-yellow-400 transition">
-                                        <option value="">Select Sex</option>
-                                        <option value="Male" {{ old('sex') == 'Male' ? 'selected' : '' }}>Male</option>
-                                        <option value="Female" {{ old('sex') == 'Female' ? 'selected' : '' }}>Female</option>
-                                    </select>
-                                </div>
-                                <div>
-                                    <label class="block text-sm font-medium text-gray-700 mb-2">
-                                        Civil Status <span class="text-red-500">*</span>
-                                    </label>
-                                    <select name="civil_status" required
-                                            class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-yellow-400 focus:border-yellow-400 transition">
-                                        <option value="">Select Civil Status</option>
-                                        <option value="Single" {{ old('civil_status') == 'Single' ? 'selected' : '' }}>Single</option>
-                                        <option value="Married" {{ old('civil_status') == 'Married' ? 'selected' : '' }}>Married</option>
-                                        <option value="Widowed" {{ old('civil_status') == 'Widowed' ? 'selected' : '' }}>Widowed</option>
-                                        <option value="Divorced" {{ old('civil_status') == 'Divorced' ? 'selected' : '' }}>Divorced</option>
-                                        <option value="Separated" {{ old('civil_status') == 'Separated' ? 'selected' : '' }}>Separated</option>
-                                    </select>
-                                </div>
-                            </div>
-
-                            <!-- Date of Birth and Birth Place -->
-                            <div class="grid md:grid-cols-2 gap-6 mt-4">
-                                <div>
-                                    <label class="block text-sm font-medium text-gray-700 mb-2">
-                                        Date of Birth <span class="text-red-500">*</span>
-                                    </label>
-                                    <input type="date" name="date_of_birth" value="{{ old('date_of_birth') }}" required
-                                           class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-yellow-400 focus:border-yellow-400 transition">
-                                </div>
-                                <div>
-                                    <label class="block text-sm font-medium text-gray-700 mb-2">
-                                        Place of Birth <span class="text-red-500">*</span>
-                                    </label>
-                                    <input type="text" name="birth_place" value="{{ old('birth_place') }}" required
-                                           placeholder="City, Province"
-                                           class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-yellow-400 focus:border-yellow-400 transition">
-                                </div>
-                            </div>
-
-                            <!-- Addresses -->
-                            <div class="mt-4">
-                                <label class="block text-sm font-medium text-gray-700 mb-2">
-                                    Temporary Address <span class="text-red-500">*</span>
-                                </label>
-                                <textarea name="temporary_address" rows="2" required
-                                          class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-yellow-400 focus:border-yellow-400 transition">{{ old('temporary_address') }}</textarea>
-                            </div>
-                            
-                            <div class="mt-4">
-                                <label class="block text-sm font-medium text-gray-700 mb-2">
-                                    Permanent Address <span class="text-red-500">*</span>
-                                </label>
-                                <textarea name="permanent_address" rows="2" required
-                                          class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-yellow-400 focus:border-yellow-400 transition">{{ old('permanent_address') }}</textarea>
-                            </div>
-
-                            <!-- Contact Info -->
-                            <div class="grid md:grid-cols-2 gap-6 mt-4">
-                                <div>
-                                    <label class="block text-sm font-medium text-gray-700 mb-2">
-                                        Cellphone Number <span class="text-red-500">*</span>
-                                    </label>
-                                    <input type="text" name="contact_number" value="{{ old('contact_number') }}" required
-                                           placeholder="09XXXXXXXXX"
-                                           class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-yellow-400 focus:border-yellow-400 transition">
-                                </div>
-                                <div>
-                                    <label class="block text-sm font-medium text-gray-700 mb-2">
-                                        Gmail Account <span class="text-red-500">*</span>
-                                    </label>
-                                    <div class="flex">
-                                        <input type="email" name="gmail_account" value="{{ old('gmail_account') }}" required
-                                               placeholder="your.email"
-                                               class="flex-1 px-4 py-3 border border-gray-300 rounded-l-lg focus:ring-2 focus:ring-yellow-400 focus:border-yellow-400 transition">
-                                        <span class="inline-flex items-center px-3 py-3 bg-gray-100 border border-l-0 border-gray-300 rounded-r-lg text-gray-600">
-                                            @gmail.com
-                                        </span>
+                                    Full Name
+                                </h3>
+                                <div class="grid sm:grid-cols-3 gap-4 mb-4">
+                                    <div>
+                                        <label class="field-label">Last Name <span class="text-red-500">*</span></label>
+                                        <input type="text" name="lastname" value="{{ old('lastname') }}" required
+                                               placeholder="e.g. Dela Cruz"
+                                               class="field-input @error('lastname') is-error @enderror">
+                                        @error('lastname')<p class="text-red-500 text-xs mt-1">{{ $message }}</p>@enderror
                                     </div>
-                                    <p class="text-xs text-gray-500 mt-1">We'll send admission updates to this email</p>
+                                    <div>
+                                        <label class="field-label">First Name <span class="text-red-500">*</span></label>
+                                        <input type="text" name="firstname" value="{{ old('firstname') }}" required
+                                               placeholder="e.g. Juan"
+                                               class="field-input @error('firstname') is-error @enderror">
+                                        @error('firstname')<p class="text-red-500 text-xs mt-1">{{ $message }}</p>@enderror
+                                    </div>
+                                    <div>
+                                        <label class="field-label">Middle Name</label>
+                                        <input type="text" name="middlename" value="{{ old('middlename') }}"
+                                               placeholder="e.g. Santos"
+                                               class="field-input @error('middlename') is-error @enderror">
+                                    </div>
                                 </div>
-                            </div>
-                        </div>
-                        
-                        <!-- Guardian Information Section -->
-                        <div class="mb-8">
-                            <h3 class="text-xl font-bold text-[#000035] mb-4 flex items-center">
-                                <svg class="w-6 h-6 mr-2 text-yellow-500" fill="currentColor" viewBox="0 0 20 20">
-                                    <path d="M13 6a3 3 0 11-6 0 3 3 0 016 0zM18 8a2 2 0 11-4 0 2 2 0 014 0zM14 15a4 4 0 00-8 0v3h8v-3zM6 8a2 2 0 11-4 0 2 2 0 014 0zM16 18v-3a5.972 5.972 0 00-.75-2.906A3.005 3.005 0 0119 15v3h-3zM4.75 12.094A5.973 5.973 0 004 15v3H1v-3a3 3 0 013.75-2.906z"/>
-                                </svg>
-                                Guardian Information
-                            </h3>
-                            <div class="grid md:grid-cols-3 gap-6">
-                                <div>
-                                    <label class="block text-sm font-medium text-gray-700 mb-2">
-                                        Guardian Complete Name <span class="text-red-500">*</span>
-                                    </label>
-                                    <input type="text" name="guardian_name" value="{{ old('guardian_name') }}" required
-                                           class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-yellow-400 focus:border-yellow-400 transition">
-                                </div>
-                                <div>
-                                    <label class="block text-sm font-medium text-gray-700 mb-2">
-                                        Relationship <span class="text-red-500">*</span>
-                                    </label>
-                                    <select name="guardian_relationship" required
-                                            class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-yellow-400 focus:border-yellow-400 transition">
-                                        <option value="">Select Relationship</option>
-                                        <option value="Mother" {{ old('guardian_relationship') == 'Mother' ? 'selected' : '' }}>Mother</option>
-                                        <option value="Father" {{ old('guardian_relationship') == 'Father' ? 'selected' : '' }}>Father</option>
-                                        <option value="Brother" {{ old('guardian_relationship') == 'Brother' ? 'selected' : '' }}>Brother</option>
-                                        <option value="Sister" {{ old('guardian_relationship') == 'Sister' ? 'selected' : '' }}>Sister</option>
-                                        <option value="Grandmother" {{ old('guardian_relationship') == 'Grandmother' ? 'selected' : '' }}>Grandmother</option>
-                                        <option value="Grandfather" {{ old('guardian_relationship') == 'Grandfather' ? 'selected' : '' }}>Grandfather</option>
-                                        <option value="Auntie" {{ old('guardian_relationship') == 'Auntie' ? 'selected' : '' }}>Auntie</option>
-                                        <option value="Uncle" {{ old('guardian_relationship') == 'Uncle' ? 'selected' : '' }}>Uncle</option>
-                                        <option value="Legal Guardian" {{ old('guardian_relationship') == 'Legal Guardian' ? 'selected' : '' }}>Legal Guardian</option>
-                                    </select>
-                                </div>
-                                <div>
-                                    <label class="block text-sm font-medium text-gray-700 mb-2">
-                                        Guardian Contact Number <span class="text-red-500">*</span>
-                                    </label>
-                                    <input type="text" name="guardian_phone" value="{{ old('guardian_phone') }}" required
-                                           placeholder="09XXXXXXXXX"
-                                           class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-yellow-400 focus:border-yellow-400 transition">
-                                </div>
-                            </div>
-                        </div>
-                        
-                        <!-- Academic Information Section -->
-                        <div class="mb-8">
-                            <h3 class="text-xl font-bold text-[#000035] mb-4 flex items-center">
-                                <svg class="w-6 h-6 mr-2 text-yellow-500" fill="currentColor" viewBox="0 0 20 20">
-                                    <path d="M10.394 2.08a1 1 0 00-.788 0l-7 3a1 1 0 000 1.84L5.25 8.051a.999.999 0 01.356-.257l4-1.714a1 1 0 11.788 1.838L7.667 9.088l1.94.831a1 1 0 00.787 0l7-3a1 1 0 000-1.838l-7-3zM3.31 9.397L5 10.12v4.102a8.969 8.969 0 00-1.05-.174 1 1 0 01-.89-.89 11.115 11.115 0 01.25-3.762zM9.3 16.573A9.026 9.026 0 007 14.935v-3.957l1.818.78a3 3 0 002.364 0l5.508-2.361a11.026 11.026 0 01.25 3.762 1 1 0 01-.89.89 8.968 8.968 0 00-5.35 2.524 1 1 0 01-1.4 0zM6 18a1 1 0 001-1v-2.065a8.935 8.935 0 00-2-.712V17a1 1 0 001 1z"/>
-                                </svg>
-                                Academic Information
-                            </h3>
-                            <div class="grid md:grid-cols-2 gap-6">
-                                <div>
-                                    <label class="block text-sm font-medium text-gray-700 mb-2">
-                                        Student Type <span class="text-red-500">*</span>
-                                    </label>
-                                    <select name="student_type" required id="student_type"
-                                            class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-yellow-400 focus:border-yellow-400 transition">
-                                        <option value="">Select Student Type</option>
-                                        <option value="Regular" {{ old('student_type') == 'Regular' ? 'selected' : '' }}>Regular</option>
-                                        <option value="Irregular" {{ old('student_type') == 'Irregular' ? 'selected' : '' }}>Irregular</option>
-                                        <option value="Transferee" {{ old('student_type') == 'Transferee' ? 'selected' : '' }}>Transferee</option>
-                                    </select>
-                                </div>
-                                <div>
-                                    <label class="block text-sm font-medium text-gray-700 mb-2">
-                                        Preferred Campus <span class="text-red-500">*</span>
-                                    </label>
-                                    <select name="campus" required id="campus"
-                                            class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-yellow-400 focus:border-yellow-400 transition">
-                                        <option value="">Select Campus</option>
-                                        @foreach($campuses as $campus)
-                                            <option value="{{ $campus->name }}" {{ old('campus') == $campus->name ? 'selected' : '' }}>{{ $campus->name }}</option>
+                                <div class="sm:w-48">
+                                    <label class="field-label">Name Extender</label>
+                                    <select name="name_extender" class="field-input">
+                                        <option value="">None</option>
+                                        @foreach(['Jr.','Sr.','I','II','III'] as $ext)
+                                            <option value="{{ $ext }}" {{ old('name_extender') == $ext ? 'selected' : '' }}>{{ $ext }}</option>
                                         @endforeach
                                     </select>
                                 </div>
                             </div>
-                            
-                            <div class="grid md:grid-cols-2 gap-6 mt-4">
-                                <div>
-                                    <label class="block text-sm font-medium text-gray-700 mb-2">
-                                        College <span class="text-red-500">*</span>
-                                    </label>
-                                    <select name="college" required id="college"
-                                            class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-yellow-400 focus:border-yellow-400 transition">
-                                        <option value="">Select College</option>
-                                    </select>
+
+                            <!-- Personal Details -->
+                            <div class="section-card">
+                                <h3 class="section-title">
+                                    <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 20 20">
+                                        <path fill-rule="evenodd" d="M6 2a1 1 0 00-1 1v1H4a2 2 0 00-2 2v10a2 2 0 002 2h12a2 2 0 002-2V6a2 2 0 00-2-2h-1V3a1 1 0 10-2 0v1H7V3a1 1 0 00-1-1zm0 5a1 1 0 000 2h8a1 1 0 100-2H6z" clip-rule="evenodd"/>
+                                    </svg>
+                                    Personal Details
+                                </h3>
+                                <div class="grid sm:grid-cols-3 gap-4 mb-4">
+                                    <div>
+                                        <label class="field-label">Age <span class="text-red-500">*</span></label>
+                                        <input type="number" name="age" value="{{ old('age') }}" required
+                                               min="15" max="100" placeholder="e.g. 18"
+                                               class="field-input @error('age') is-error @enderror">
+                                        @error('age')<p class="text-red-500 text-xs mt-1">{{ $message }}</p>@enderror
+                                    </div>
+                                    <div>
+                                        <label class="field-label">Sex <span class="text-red-500">*</span></label>
+                                        <select name="sex" required class="field-input @error('sex') is-error @enderror">
+                                            <option value="">Select</option>
+                                            <option value="Male"   {{ old('sex') == 'Male'   ? 'selected' : '' }}>Male</option>
+                                            <option value="Female" {{ old('sex') == 'Female' ? 'selected' : '' }}>Female</option>
+                                        </select>
+                                        @error('sex')<p class="text-red-500 text-xs mt-1">{{ $message }}</p>@enderror
+                                    </div>
+                                    <div>
+                                        <label class="field-label">Civil Status <span class="text-red-500">*</span></label>
+                                        <select name="civil_status" required class="field-input @error('civil_status') is-error @enderror">
+                                            <option value="">Select</option>
+                                            @foreach(['Single','Married','Widowed','Divorced','Separated'] as $cs)
+                                                <option value="{{ $cs }}" {{ old('civil_status') == $cs ? 'selected' : '' }}>{{ $cs }}</option>
+                                            @endforeach
+                                        </select>
+                                        @error('civil_status')<p class="text-red-500 text-xs mt-1">{{ $message }}</p>@enderror
+                                    </div>
                                 </div>
-                                <div>
-                                    <label class="block text-sm font-medium text-gray-700 mb-2">
-                                        Course <span class="text-red-500">*</span>
-                                    </label>
-                                    <select name="course" required id="course"
-                                            class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-yellow-400 focus:border-yellow-400 transition">
-                                        <option value="">Select Course</option>
-                                    </select>
+                                <div class="grid sm:grid-cols-2 gap-4">
+                                    <div>
+                                        <label class="field-label">Date of Birth <span class="text-red-500">*</span></label>
+                                        <input type="date" name="date_of_birth" value="{{ old('date_of_birth') }}" required
+                                               class="field-input @error('date_of_birth') is-error @enderror">
+                                        @error('date_of_birth')<p class="text-red-500 text-xs mt-1">{{ $message }}</p>@enderror
+                                    </div>
+                                    <div>
+                                        <label class="field-label">Place of Birth <span class="text-red-500">*</span></label>
+                                        <input type="text" name="birth_place" value="{{ old('birth_place') }}" required
+                                               placeholder="City / Municipality, Province"
+                                               class="field-input @error('birth_place') is-error @enderror">
+                                        @error('birth_place')<p class="text-red-500 text-xs mt-1">{{ $message }}</p>@enderror
+                                    </div>
                                 </div>
                             </div>
-                            <!-- Document Uploads -->
-                            <div class="col-span-full mt-8">
-                                <h3 class="text-xl font-bold text-[#000035] mb-4 border-b pb-2">Required Documents</h3>
-                                <p class="text-sm text-gray-500 mb-6">Please upload clear copies of the following documents (Max 2MB per file. Formats: JPG, PNG, PDF).</p>
-                                
-                                <div class="grid md:grid-cols-3 gap-6">
-                                    <!-- 2x2 Photo -->
+
+                            <!-- Address -->
+                            <div class="section-card">
+                                <h3 class="section-title">
+                                    <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 20 20">
+                                        <path fill-rule="evenodd" d="M5.05 4.05a7 7 0 119.9 9.9L10 18.9l-4.95-4.95a7 7 0 010-9.9zM10 11a2 2 0 100-4 2 2 0 000 4z" clip-rule="evenodd"/>
+                                    </svg>
+                                    Address
+                                </h3>
+                                <div class="space-y-4">
                                     <div>
-                                        <label class="block text-sm font-medium text-gray-700 mb-2">
-                                            2x2 Photo <span class="text-red-500">*</span>
-                                        </label>
-                                        <div class="relative">
-                                            <input type="file" name="photo" required accept="image/*"
-                                                   class="w-full text-sm text-gray-500 file:mr-4 file:py-2 file:px-4 file:rounded-full file:border-0 file:text-sm file:font-semibold file:bg-yellow-50 file:text-yellow-700 hover:file:bg-yellow-100 border border-gray-300 rounded-lg p-2 focus:ring-2 focus:ring-yellow-400">
+                                        <label class="field-label">Temporary / Current Address <span class="text-red-500">*</span></label>
+                                        <textarea name="temporary_address" rows="2" required
+                                                  placeholder="House No., Street, Barangay, Municipality, Province"
+                                                  class="field-input @error('temporary_address') is-error @enderror">{{ old('temporary_address') }}</textarea>
+                                        @error('temporary_address')<p class="text-red-500 text-xs mt-1">{{ $message }}</p>@enderror
+                                    </div>
+                                    <div>
+                                        <label class="field-label">Permanent Address <span class="text-red-500">*</span></label>
+                                        <textarea name="permanent_address" rows="2" required
+                                                  placeholder="House No., Street, Barangay, Municipality, Province"
+                                                  class="field-input @error('permanent_address') is-error @enderror">{{ old('permanent_address') }}</textarea>
+                                        @error('permanent_address')<p class="text-red-500 text-xs mt-1">{{ $message }}</p>@enderror
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- Contact -->
+                            <div class="section-card">
+                                <h3 class="section-title">
+                                    <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 20 20">
+                                        <path d="M2 3a1 1 0 011-1h2.153a1 1 0 01.986.836l.74 4.435a1 1 0 01-.54 1.06l-1.548.773a11.037 11.037 0 006.105 6.105l.774-1.548a1 1 0 011.059-.54l4.435.74a1 1 0 01.836.986V17a1 1 0 01-1 1h-2C7.82 18 2 12.18 2 5V3z"/>
+                                    </svg>
+                                    Contact Information
+                                </h3>
+                                <div class="grid sm:grid-cols-2 gap-4">
+                                    <div>
+                                        <label class="field-label">Cellphone Number <span class="text-red-500">*</span></label>
+                                        <input type="text" name="contact_number" value="{{ old('contact_number') }}" required
+                                               placeholder="09XXXXXXXXX"
+                                               class="field-input @error('contact_number') is-error @enderror">
+                                        @error('contact_number')<p class="text-red-500 text-xs mt-1">{{ $message }}</p>@enderror
+                                    </div>
+                                    <div>
+                                        <label class="field-label">Gmail Account <span class="text-red-500">*</span></label>
+                                        <div class="flex">
+                                            <input type="email" name="gmail_account" value="{{ old('gmail_account') }}" required
+                                                   placeholder="youremail"
+                                                   class="field-input rounded-r-none border-r-0 @error('gmail_account') is-error @enderror">
+                                            <span class="inline-flex items-center px-3 bg-gray-100 border-l-0 border-y border-r border-gray-300 rounded-r-lg text-gray-500 text-sm font-medium whitespace-nowrap" style="border-width:1.5px">
+                                                @gmail.com
+                                            </span>
                                         </div>
-                                        @error('photo') <p class="text-red-500 text-xs mt-1">{{ $message }}</p> @enderror
+                                        @error('gmail_account')<p class="text-red-500 text-xs mt-1">{{ $message }}</p>@enderror
+                                        <p class="text-xs text-gray-400 mt-1">Admission updates will be sent here</p>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- Nav -->
+                            <div class="flex justify-end pt-2">
+                                <button type="button" data-goto="2" class="btn-primary">
+                                    Next: Guardian Info
+                                    <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M9 5l7 7-7 7"/>
+                                    </svg>
+                                </button>
+                            </div>
+                        </div><!-- /step-1 -->
+
+
+                        <!-- ─── STEP 2 : Guardian Information ─── -->
+                        <div id="step-2" class="form-step">
+
+                            <div class="section-card">
+                                <h3 class="section-title">
+                                    <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 20 20">
+                                        <path d="M13 6a3 3 0 11-6 0 3 3 0 016 0zM18 8a2 2 0 11-4 0 2 2 0 014 0zM14 15a4 4 0 00-8 0v3h8v-3zM6 8a2 2 0 11-4 0 2 2 0 014 0zM16 18v-3a5.972 5.972 0 00-.75-2.906A3.005 3.005 0 0119 15v3h-3zM4.75 12.094A5.973 5.973 0 004 15v3H1v-3a3 3 0 013.75-2.906z"/>
+                                    </svg>
+                                    Guardian / Parent Details
+                                </h3>
+                                <div class="grid sm:grid-cols-3 gap-4">
+                                    <div class="sm:col-span-1">
+                                        <label class="field-label">Complete Name <span class="text-red-500">*</span></label>
+                                        <input type="text" name="guardian_name" value="{{ old('guardian_name') }}" required
+                                               placeholder="Last Name, First Name"
+                                               class="field-input @error('guardian_name') is-error @enderror">
+                                        @error('guardian_name')<p class="text-red-500 text-xs mt-1">{{ $message }}</p>@enderror
+                                    </div>
+                                    <div>
+                                        <label class="field-label">Relationship <span class="text-red-500">*</span></label>
+                                        <select name="guardian_relationship" required
+                                                class="field-input @error('guardian_relationship') is-error @enderror">
+                                            <option value="">Select</option>
+                                            @foreach(['Mother','Father','Brother','Sister','Grandmother','Grandfather','Auntie','Uncle','Legal Guardian'] as $rel)
+                                                <option value="{{ $rel }}" {{ old('guardian_relationship') == $rel ? 'selected' : '' }}>{{ $rel }}</option>
+                                            @endforeach
+                                        </select>
+                                        @error('guardian_relationship')<p class="text-red-500 text-xs mt-1">{{ $message }}</p>@enderror
+                                    </div>
+                                    <div>
+                                        <label class="field-label">Contact Number <span class="text-red-500">*</span></label>
+                                        <input type="text" name="guardian_phone" value="{{ old('guardian_phone') }}" required
+                                               placeholder="09XXXXXXXXX"
+                                               class="field-input @error('guardian_phone') is-error @enderror">
+                                        @error('guardian_phone')<p class="text-red-500 text-xs mt-1">{{ $message }}</p>@enderror
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- Info note -->
+                            <div class="flex items-start gap-3 p-4 bg-blue-50 border border-blue-100 rounded-xl mb-4">
+                                <svg class="w-5 h-5 text-blue-500 mt-0.5 flex-shrink-0" fill="currentColor" viewBox="0 0 20 20">
+                                    <path fill-rule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7-4a1 1 0 11-2 0 1 1 0 012 0zM9 9a1 1 0 000 2v3a1 1 0 001 1h1a1 1 0 100-2v-3a1 1 0 00-1-1H9z" clip-rule="evenodd"/>
+                                </svg>
+                                <p class="text-sm text-blue-700">
+                                    Guardian information is used for official correspondence and emergency contact purposes.
+                                    Please ensure the contact number is reachable.
+                                </p>
+                            </div>
+
+                            <!-- Nav -->
+                            <div class="flex justify-between pt-2">
+                                <button type="button" data-goto="1" class="btn-secondary">
+                                    <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M15 19l-7-7 7-7"/>
+                                    </svg>
+                                    Back
+                                </button>
+                                <button type="button" data-goto="3" class="btn-primary">
+                                    Next: Academic &amp; Docs
+                                    <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M9 5l7 7-7 7"/>
+                                    </svg>
+                                </button>
+                            </div>
+                        </div><!-- /step-2 -->
+
+
+                        <!-- ─── STEP 3 : Academic Info + Documents ─── -->
+                        <div id="step-3" class="form-step">
+
+                            <!-- Academic -->
+                            <div class="section-card">
+                                <h3 class="section-title">
+                                    <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 20 20">
+                                        <path d="M10.394 2.08a1 1 0 00-.788 0l-7 3a1 1 0 000 1.84L5.25 8.051a.999.999 0 01.356-.257l4-1.714a1 1 0 11.788 1.838L7.667 9.088l1.94.831a1 1 0 00.787 0l7-3a1 1 0 000-1.838l-7-3zM3.31 9.397L5 10.12v4.102a8.969 8.969 0 00-1.05-.174 1 1 0 01-.89-.89 11.115 11.115 0 01.25-3.762z"/>
+                                    </svg>
+                                    Academic Information
+                                </h3>
+                                <div class="grid sm:grid-cols-2 gap-4 mb-4">
+                                    <div>
+                                        <label class="field-label">Student Type <span class="text-red-500">*</span></label>
+                                        <select name="student_type" id="student_type" required
+                                                class="field-input @error('student_type') is-error @enderror">
+                                            <option value="">Select Student Type</option>
+                                            @foreach(['Regular','Irregular','Transferee'] as $type)
+                                                <option value="{{ $type }}" {{ old('student_type') == $type ? 'selected' : '' }}>{{ $type }}</option>
+                                            @endforeach
+                                        </select>
+                                        @error('student_type')<p class="text-red-500 text-xs mt-1">{{ $message }}</p>@enderror
+                                    </div>
+                                    <div>
+                                        <label class="field-label">Preferred Campus <span class="text-red-500">*</span></label>
+                                        <select name="campus" id="campus" required
+                                                class="field-input @error('campus') is-error @enderror">
+                                            <option value="">Select Campus</option>
+                                            @foreach($campuses as $campus)
+                                                <option value="{{ $campus->name }}" {{ old('campus') == $campus->name ? 'selected' : '' }}>
+                                                    {{ $campus->name }}
+                                                </option>
+                                            @endforeach
+                                        </select>
+                                        @error('campus')<p class="text-red-500 text-xs mt-1">{{ $message }}</p>@enderror
+                                    </div>
+                                </div>
+                                <div class="grid sm:grid-cols-2 gap-4">
+                                    <div>
+                                        <label class="field-label">College <span class="text-red-500">*</span></label>
+                                        <select name="college" id="college" required
+                                                class="field-input @error('college') is-error @enderror">
+                                            <option value="">Select Campus first</option>
+                                        </select>
+                                        @error('college')<p class="text-red-500 text-xs mt-1">{{ $message }}</p>@enderror
+                                    </div>
+                                    <div>
+                                        <label class="field-label">Course / Program <span class="text-red-500">*</span></label>
+                                        <select name="course" id="course" required
+                                                class="field-input @error('course') is-error @enderror">
+                                            <option value="">Select College first</option>
+                                        </select>
+                                        @error('course')<p class="text-red-500 text-xs mt-1">{{ $message }}</p>@enderror
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- Documents -->
+                            <div class="section-card">
+                                <h3 class="section-title">
+                                    <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                              d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"/>
+                                    </svg>
+                                    Required Documents
+                                </h3>
+                                <p class="text-xs text-gray-500 mb-4">
+                                    Upload clear copies — max <strong>2 MB</strong> per file. Accepted formats: JPG, PNG, PDF.
+                                </p>
+
+                                <div class="grid sm:grid-cols-3 gap-4">
+                                    <!-- Photo -->
+                                    <div>
+                                        <label class="field-label">2x2 Photo <span class="text-red-500">*</span></label>
+                                        <div class="upload-zone @error('photo') is-error @enderror" id="zone-photo">
+                                            <input type="file" name="photo" id="input-photo" required accept="image/*"
+                                                   onchange="handleFileChange(this,'zone-photo','label-photo')">
+                                            <div class="pointer-events-none">
+                                                <svg class="w-8 h-8 mx-auto mb-2 text-gray-300" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5"
+                                                          d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z"/>
+                                                </svg>
+                                                <p id="label-photo" class="text-xs text-gray-500 font-medium">Click or drag to upload</p>
+                                                <p class="text-xs text-gray-400 mt-0.5">JPG or PNG only</p>
+                                            </div>
+                                        </div>
+                                        @error('photo')<p class="text-red-500 text-xs mt-1">{{ $message }}</p>@enderror
                                     </div>
 
                                     <!-- Birth Certificate -->
                                     <div>
-                                        <label class="block text-sm font-medium text-gray-700 mb-2">
-                                            Birth Certificate (PSA) <span class="text-red-500">*</span>
-                                        </label>
-                                        <div class="relative">
-                                            <input type="file" name="birth_certificate" required accept=".pdf,image/*"
-                                                   class="w-full text-sm text-gray-500 file:mr-4 file:py-2 file:px-4 file:rounded-full file:border-0 file:text-sm file:font-semibold file:bg-yellow-50 file:text-yellow-700 hover:file:bg-yellow-100 border border-gray-300 rounded-lg p-2 focus:ring-2 focus:ring-yellow-400">
+                                        <label class="field-label">Birth Certificate (PSA) <span class="text-red-500">*</span></label>
+                                        <div class="upload-zone @error('birth_certificate') is-error @enderror" id="zone-bc">
+                                            <input type="file" name="birth_certificate" id="input-bc" required accept=".pdf,image/*"
+                                                   onchange="handleFileChange(this,'zone-bc','label-bc')">
+                                            <div class="pointer-events-none">
+                                                <svg class="w-8 h-8 mx-auto mb-2 text-gray-300" fill="currentColor" viewBox="0 0 20 20">
+                                                    <path fill-rule="evenodd" d="M4 4a2 2 0 012-2h4.586A2 2 0 0112 2.586L15.414 6A2 2 0 0116 7.414V16a2 2 0 01-2 2H6a2 2 0 01-2-2V4zm2 6a1 1 0 011-1h6a1 1 0 110 2H7a1 1 0 01-1-1zm1 3a1 1 0 100 2h6a1 1 0 100-2H7z" clip-rule="evenodd"/>
+                                                </svg>
+                                                <p id="label-bc" class="text-xs text-gray-500 font-medium">Click or drag to upload</p>
+                                                <p class="text-xs text-gray-400 mt-0.5">PDF, JPG or PNG</p>
+                                            </div>
                                         </div>
-                                        @error('birth_certificate') <p class="text-red-500 text-xs mt-1">{{ $message }}</p> @enderror
+                                        @error('birth_certificate')<p class="text-red-500 text-xs mt-1">{{ $message }}</p>@enderror
                                     </div>
 
                                     <!-- Report Card -->
                                     <div>
-                                        <label class="block text-sm font-medium text-gray-700 mb-2">
-                                            Report Card (Form 137) <span class="text-red-500">*</span>
-                                        </label>
-                                        <div class="relative">
-                                            <input type="file" name="report_card" required accept=".pdf,image/*"
-                                                   class="w-full text-sm text-gray-500 file:mr-4 file:py-2 file:px-4 file:rounded-full file:border-0 file:text-sm file:font-semibold file:bg-yellow-50 file:text-yellow-700 hover:file:bg-yellow-100 border border-gray-300 rounded-lg p-2 focus:ring-2 focus:ring-yellow-400">
+                                        <label class="field-label">Report Card (Form 137) <span class="text-red-500">*</span></label>
+                                        <div class="upload-zone @error('report_card') is-error @enderror" id="zone-rc">
+                                            <input type="file" name="report_card" id="input-rc" required accept=".pdf,image/*"
+                                                   onchange="handleFileChange(this,'zone-rc','label-rc')">
+                                            <div class="pointer-events-none">
+                                                <svg class="w-8 h-8 mx-auto mb-2 text-gray-300" fill="currentColor" viewBox="0 0 20 20">
+                                                    <path fill-rule="evenodd" d="M4 4a2 2 0 012-2h4.586A2 2 0 0112 2.586L15.414 6A2 2 0 0116 7.414V16a2 2 0 01-2 2H6a2 2 0 01-2-2V4zm2 6a1 1 0 011-1h6a1 1 0 110 2H7a1 1 0 01-1-1zm1 3a1 1 0 100 2h6a1 1 0 100-2H7z" clip-rule="evenodd"/>
+                                                </svg>
+                                                <p id="label-rc" class="text-xs text-gray-500 font-medium">Click or drag to upload</p>
+                                                <p class="text-xs text-gray-400 mt-0.5">PDF, JPG or PNG</p>
+                                            </div>
                                         </div>
-                                        @error('report_card') <p class="text-red-500 text-xs mt-1">{{ $message }}</p> @enderror
+                                        @error('report_card')<p class="text-red-500 text-xs mt-1">{{ $message }}</p>@enderror
                                     </div>
                                 </div>
                             </div>
-                        </div>
 
-                        <!-- Terms and Conditions -->
-                        <div class="mb-8 p-4 bg-gray-50 rounded-lg">
-                            <label class="flex items-start">
-                                <input type="checkbox" name="terms" required class="mt-1 mr-3">
-                                <span class="text-sm text-gray-600">
-                                    I hereby certify that the information provided is true and correct to the best of my knowledge. I understand that any false information may result in the cancellation of my application. 
+                            <!-- Terms -->
+                            <div class="flex items-start gap-3 p-4 bg-yellow-50 border border-yellow-200 rounded-xl mb-6">
+                                <input type="checkbox" name="terms" id="terms" required
+                                       class="mt-0.5 w-4 h-4 accent-yellow-500 flex-shrink-0">
+                                <label for="terms" class="text-sm text-gray-700 cursor-pointer">
+                                    I hereby certify that all information provided is <strong>true and correct</strong> to the best of my knowledge.
+                                    I understand that any false information may result in the cancellation of my application.
                                     <span class="text-red-500">*</span>
-                                </span>
-                            </label>
-                        </div>
-                        
-                        <!-- Form Actions -->
-                        <div class="flex justify-between items-center pt-4 border-t">
-                            <div class="flex space-x-3">
-                                <a href="{{ route('home') }}" class="text-gray-500 hover:text-[#000035] transition flex items-center">
-                                    <svg class="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6"></path>
-                                    </svg>
-                                    Back to Home
-                                </a>
-                                <a href="{{ route('student.track') }}" class="text-[#000035] hover:text-yellow-600 transition flex items-center">
-                                    <svg class="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"></path>
-                                    </svg>
-                                    Track Application
-                                </a>
+                                </label>
                             </div>
-                            <button type="submit"
-                                    class="psu-blue-bg text-white px-10 py-4 rounded-xl font-bold text-lg hover:bg-opacity-90 transition transform hover:scale-105 shadow-lg flex items-center">
-                                Submit Application
-                                <svg class="w-5 h-5 ml-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14 5l7 7m0 0l-7 7m7-7H3"/>
-                                </svg>
-                            </button>
-                        </div>
-                    </form>
-                </div>
-            </div>
 
-            <!-- Quick Application Lookup -->
-            <div class="mt-8 grid md:grid-cols-2 gap-6">
-                <div class="bg-white rounded-xl shadow-lg p-6 border-t-4 border-yellow-400">
-                    <h3 class="text-lg font-bold text-[#000035] mb-3 flex items-center">
-                        <svg class="w-5 h-5 mr-2 text-yellow-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"></path>
-                        </svg>
-                        Already Applied?
-                    </h3>
-                    <p class="text-sm text-gray-600 mb-4">Enter your Application ID to check your application status</p>
-                    <form action="{{ route('student.lookup') }}" method="GET" class="space-y-3">
-                        <div class="flex gap-2">
-                            <input type="text" name="application_id" placeholder="Application ID" 
-                                   class="flex-1 px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-yellow-400 focus:border-yellow-400 transition">
-                            
-                        </div>
-                        <button type="submit" 
-                                class="w-full bg-[#000035] text-white px-4 py-2 rounded-lg hover:bg-opacity-90 transition flex items-center justify-center">
-                            <svg class="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"></path>
-                            </svg>
-                            Check Status
-                        </button>
-                    </form>
-                </div>
+                            <!-- Nav -->
+                            <div class="flex justify-between items-center pt-2">
+                                <button type="button" data-goto="2" class="btn-secondary">
+                                    <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M15 19l-7-7 7-7"/>
+                                    </svg>
+                                    Back
+                                </button>
+                                <button type="submit" class="btn-submit">
+                                    <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                              d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"/>
+                                    </svg>
+                                    Submit Application
+                                </button>
+                            </div>
+                        </div><!-- /step-3 -->
 
-                <div class="bg-white rounded-xl shadow-lg p-6 border-t-4 border-yellow-400">
-                    <h3 class="text-lg font-bold text-[#000035] mb-3 flex items-center">
-                        <svg class="w-5 h-5 mr-2 text-yellow-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"></path>
-                        </svg>
-                        Need Help?
-                    </h3>
-                    <p class="text-sm text-gray-600 mb-3">Contact the Office of Admissions for assistance</p>
-                    <div class="space-y-2 text-sm">
-                        <div class="flex items-center">
-                            <svg class="w-4 h-4 text-yellow-500 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"></path>
-                            </svg>
-                            <span class="text-gray-600">admissions@psu.edu.ph</span>
-                        </div>
-                        <div class="flex items-center">
-                            <svg class="w-4 h-4 text-yellow-500 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 5a2 2 0 012-2h3.28a1 1 0 01.948.684l1.498 4.493a1 1 0 01-.502 1.21l-2.257 1.13a11.042 11.042 0 005.516 5.516l1.13-2.257a1 1 0 011.21-.502l4.493 1.498a1 1 0 01.684.949V19a2 2 0 01-2 2h-1C9.716 21 3 14.284 3 6V5z"></path>
-                            </svg>
-                            <span class="text-gray-600">(054) 123-4567</span>
-                        </div>
                     </div>
-                </div>
+                </form>
             </div>
 
-            <!-- Important Notes -->
-            <div class="mt-6 bg-blue-50 border-l-4 border-[#000035] p-4 rounded-r-lg">
-                <div class="flex">
-                    <svg class="w-6 h-6 text-[#000035] mr-3" fill="currentColor" viewBox="0 0 20 20">
+            <!-- Footer info -->
+            <div class="mt-6 bg-blue-50 border-l-4 border-[#000035] p-4 rounded-r-xl">
+                <div class="flex gap-3">
+                    <svg class="w-5 h-5 text-[#000035] mt-0.5 flex-shrink-0" fill="currentColor" viewBox="0 0 20 20">
                         <path fill-rule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7-4a1 1 0 11-2 0 1 1 0 012 0zM9 9a1 1 0 000 2v3a1 1 0 001 1h1a1 1 0 100-2v-3a1 1 0 00-1-1H9z" clip-rule="evenodd"/>
                     </svg>
                     <div>
-                        <h4 class="font-bold text-[#000035] mb-1">Important Reminders:</h4>
-                        <ul class="text-sm text-gray-600 list-disc list-inside space-y-1">
-                            <li>All fields marked with <span class="text-red-500">*</span> are required</li>
-                            <li>Make sure your Gmail account is active - we'll send admission updates there</li>
-                            <li>Double-check your contact number for any admission interviews</li>
-                            <li>You can edit your application until it is reviewed by the admissions office</li>
+                        <h4 class="font-bold text-[#000035] text-sm mb-1">Important Reminders</h4>
+                        <ul class="text-sm text-gray-600 list-disc list-inside space-y-0.5">
+                            <li>All fields marked with <span class="text-red-500 font-bold">*</span> are required</li>
+                            <li>Make sure your Gmail is active — admission updates will be sent there</li>
                             <li>Save your Application ID after submission to track your status</li>
+                            <li>You can edit your application while it is still <strong>Pending</strong></li>
+                            <li>For assistance: <span class="font-semibold">admissions@psu.edu.ph</span> | (054) 123-4567</li>
                         </ul>
                     </div>
                 </div>
             </div>
+
         </div>
     </div>
-    
+
     <script>
-        const campusData = {};
-        
-        @foreach($campuses as $campus)
-            campusData['{{ $campus->name }}'] = {};
-            @foreach($campus->colleges as $college)
-                campusData['{{ $campus->name }}']['{{ $college->name }}'] = [
-                    @foreach($college->courses as $course)
-                        '{{ $course->name }}',
-                    @endforeach
-                ];
-            @endforeach
-        @endforeach
+    (function () {
+        /* ── Campus data (built server-side) ── */
+        var campusData = @json(
+            $campuses->mapWithKeys(fn($c) => [
+                $c->name => $c->colleges->mapWithKeys(fn($col) => [
+                    $col->name => $col->courses->pluck('name')
+                ])
+            ])
+        );
 
-        const campusSelect = document.getElementById('campus');
-        const collegeSelect = document.getElementById('college');
-        const courseSelect = document.getElementById('course');
+        /* ── Campus → College → Course cascade ── */
+        function initCascade() {
+            var campusSelect  = document.getElementById('campus');
+            var collegeSelect = document.getElementById('college');
+            var courseSelect  = document.getElementById('course');
+            if (!campusSelect) return;
 
-        campusSelect.addEventListener('change', function() {
-            const campus = this.value;
-            collegeSelect.innerHTML = '<option value="">Select College</option>';
-            courseSelect.innerHTML = '<option value="">Select Course</option>';
-            
-            if (campus && campusData[campus]) {
-                Object.keys(campusData[campus]).forEach(college => {
-                    const option = document.createElement('option');
-                    option.value = college;
-                    option.textContent = college;
-                    collegeSelect.appendChild(option);
-                });
-            }
-        });
+            campusSelect.addEventListener('change', function () {
+                var campus = this.value;
+                collegeSelect.innerHTML = '<option value="">Select College</option>';
+                courseSelect.innerHTML  = '<option value="">Select Course</option>';
+                if (campus && campusData[campus]) {
+                    Object.keys(campusData[campus]).forEach(function (col) {
+                        var o = document.createElement('option');
+                        o.value = col; o.textContent = col;
+                        collegeSelect.appendChild(o);
+                    });
+                }
+            });
 
-        collegeSelect.addEventListener('change', function() {
-            const campus = campusSelect.value;
-            const college = this.value;
-            courseSelect.innerHTML = '<option value="">Select Course</option>';
-            
-            if (campus && college && campusData[campus] && campusData[campus][college]) {
-                campusData[campus][college].forEach(course => {
-                    const option = document.createElement('option');
-                    option.value = course;
-                    option.textContent = course;
-                    courseSelect.appendChild(option);
-                });
-            }
-        });
+            collegeSelect.addEventListener('change', function () {
+                var campus  = campusSelect.value;
+                var college = this.value;
+                courseSelect.innerHTML = '<option value="">Select Course</option>';
+                if (campus && college && campusData[campus] && campusData[campus][college]) {
+                    campusData[campus][college].forEach(function (c) {
+                        var o = document.createElement('option');
+                        o.value = c; o.textContent = c;
+                        courseSelect.appendChild(o);
+                    });
+                }
+            });
 
-        // Set initial values if editing
-        const oldCampus = '{{ old('campus') }}';
-        const oldCollege = '{{ old('college') }}';
-        const oldCourse = '{{ old('course') }}';
-        
-        if (oldCampus) {
-            campusSelect.value = oldCampus;
-            campusSelect.dispatchEvent(new Event('change'));
-            
-            if (oldCollege) {
-                setTimeout(() => {
-                    collegeSelect.value = oldCollege;
-                    collegeSelect.dispatchEvent(new Event('change'));
-                    
-                    setTimeout(() => {
-                        courseSelect.value = oldCourse;
-                    }, 100);
-                }, 100);
+            /* Restore old values after a server-side validation failure */
+            var oldCampus  = @json(old('campus',  ''));
+            var oldCollege = @json(old('college', ''));
+            var oldCourse  = @json(old('course',  ''));
+
+            if (oldCampus) {
+                campusSelect.value = oldCampus;
+                campusSelect.dispatchEvent(new Event('change'));
+                if (oldCollege) {
+                    setTimeout(function () {
+                        collegeSelect.value = oldCollege;
+                        collegeSelect.dispatchEvent(new Event('change'));
+                        setTimeout(function () { courseSelect.value = oldCourse; }, 80);
+                    }, 80);
+                }
             }
         }
+
+        /* ── Multi-step navigation ── */
+        var TITLES = {
+            1: 'Personal Information',
+            2: 'Guardian Information',
+            3: 'Academic Info & Documents'
+        };
+        var current = 1;
+
+        function goToStep(n) {
+            n = parseInt(n, 10);
+            if (isNaN(n) || n === current) return;
+            var from = document.getElementById('step-' + current);
+            var to   = document.getElementById('step-' + n);
+            if (!from || !to) return;
+
+            // Hide all steps first to be safe
+            document.querySelectorAll('.form-step').forEach(function(s) {
+                s.classList.remove('active');
+            });
+            to.classList.add('active');
+            current = n;
+
+            /* update header bar */
+            var title = document.getElementById('step-title');
+            var ind   = document.getElementById('step-indicator');
+            if (title) title.textContent = TITLES[n] || 'Admission Form';
+            if (ind)   ind.textContent   = n;
+
+            /* update progress circles */
+            for (var i = 1; i <= 3; i++) {
+                var circle = document.getElementById('circle-' + i);
+                var label  = document.getElementById('label-'  + i);
+                if (!circle || !label) continue;
+                if (i < n) {
+                    circle.className = 'step-circle done';
+                    circle.innerHTML = '<svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="3" d="M5 13l4 4L19 7"/></svg>';
+                    label.classList.remove('current', 'upcoming');
+                    label.classList.add('step-label', 'done');
+                } else if (i === n) {
+                    circle.className = 'step-circle current';
+                    circle.textContent = i;
+                    label.classList.remove('done', 'upcoming');
+                    label.classList.add('step-label', 'current');
+                } else {
+                    circle.className = 'step-circle upcoming';
+                    circle.textContent = i;
+                    label.classList.remove('done', 'current');
+                    label.classList.add('step-label', 'upcoming');
+                }
+                if (i < 3) {
+                    var line = document.getElementById('line-' + i);
+                    if (line) line.className = 'step-line ' + (i < n ? 'done' : 'upcoming');
+                }
+            }
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+        }
+
+        function initSteps() {
+            /* Wire data-goto buttons */
+            document.querySelectorAll('button[data-goto]').forEach(function (btn) {
+                btn.addEventListener('click', function () {
+                    goToStep(parseInt(this.getAttribute('data-goto'), 10));
+                });
+            });
+
+            /* Make step circles + labels clickable */
+            for (var i = 1; i <= 3; i++) {
+                (function (n) {
+                    ['circle-' + n, 'label-' + n].forEach(function (id) {
+                        var el = document.getElementById(id);
+                        if (el) {
+                            el.style.cursor = 'pointer';
+                            el.addEventListener('click', function () { goToStep(n); });
+                        }
+                    });
+                })(i);
+            }
+
+            /* Jump to error step on server-side validation failure */
+            @if($errors->any())
+            var step1 = ['lastname','firstname','middlename','age','sex','civil_status',
+                         'date_of_birth','birth_place','temporary_address','permanent_address',
+                         'contact_number','gmail_account'];
+            var step2 = ['guardian_name','guardian_relationship','guardian_phone'];
+            var errorKeys = @json(array_keys($errors->toArray()));
+            if (errorKeys.some(function(k){ return step1.indexOf(k) !== -1; })) {
+                goToStep(1);
+            } else if (errorKeys.some(function(k){ return step2.indexOf(k) !== -1; })) {
+                goToStep(2);
+            } else {
+                goToStep(3);
+            }
+            @endif
+        }
+
+        /* ── File upload feedback ── */
+        function handleFileChange(input, zoneId, labelId) {
+            var zone  = document.getElementById(zoneId);
+            var label = document.getElementById(labelId);
+            if (input.files.length > 0) {
+                var name = input.files[0].name;
+                label.textContent = name.length > 28 ? name.slice(0, 26) + '…' : name;
+                zone.classList.add('has-file');
+                zone.classList.remove('is-error');
+            }
+        }
+
+        /* ── Boot everything when DOM is ready ── */
+        document.addEventListener('DOMContentLoaded', function () {
+            initCascade();
+            initSteps();
+
+            /* Clear error highlighting on input */
+            document.querySelectorAll('.field-input').forEach(function (f) {
+                f.addEventListener('input',  function () { f.classList.remove('is-error'); });
+                f.addEventListener('change', function () { f.classList.remove('is-error'); });
+            });
+        });
+
+        /* Expose handleFileChange globally (used via onchange attribute) */
+        window.handleFileChange = handleFileChange;
+
+    })();
     </script>
 </body>
 </html>
