@@ -32,7 +32,6 @@ class StudentApplication extends Model
         'guardian_name',
         'guardian_relationship',
         'guardian_phone',
-        'student_type',
         'campus',
         'college',
         'course',

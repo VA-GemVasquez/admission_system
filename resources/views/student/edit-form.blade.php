@@ -315,16 +315,6 @@
                             <div class="grid md:grid-cols-2 gap-6">
                                 <div>
                                     <label class="block text-sm font-medium text-gray-700 mb-2">
-                                        Student Type <span class="text-red-500">*</span>
-                                    </label>
-                                    <select name="student_type" required id="student_type" class="input-field">
-                                        <option value="Regular" {{ old('student_type', $application->student_type) == 'Regular' ? 'selected' : '' }}>Regular</option>
-                                        <option value="Irregular" {{ old('student_type', $application->student_type) == 'Irregular' ? 'selected' : '' }}>Irregular</option>
-                                        <option value="Transferee" {{ old('student_type', $application->student_type) == 'Transferee' ? 'selected' : '' }}>Transferee</option>
-                                    </select>
-                                </div>
-                                <div>
-                                    <label class="block text-sm font-medium text-gray-700 mb-2">
                                         Preferred Campus <span class="text-red-500">*</span>
                                     </label>
                                     <select name="campus" required id="campus" class="input-field">

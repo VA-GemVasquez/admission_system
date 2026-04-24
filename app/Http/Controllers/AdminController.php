@@ -44,9 +44,6 @@ class AdminController extends Controller
     public function dashboard()
     {
         $totalApplicants   = StudentApplication::count();
-        $regularStudents   = StudentApplication::where('student_type', 'Regular')->count();
-        $irregularStudents = StudentApplication::where('student_type', 'Irregular')->count();
-        $transferees       = StudentApplication::where('student_type', 'Transferee')->count();
 
         $pendingCount    = StudentApplication::where('status', 'Pending')->count();
         $approvedCount   = StudentApplication::where('status', 'Approved')->count();
@@ -72,9 +69,6 @@ class AdminController extends Controller
 
         return view('admin.dashboard', compact(
             'totalApplicants',
-            'regularStudents',
-            'irregularStudents',
-            'transferees',
             'pendingCount',
             'approvedCount',
             'rejectedCount',
@@ -109,9 +103,6 @@ class AdminController extends Controller
         }
         if ($request->filled('course')) {
             $query->where('course', $request->course);
-        }
-        if ($request->filled('student_type')) {
-            $query->where('student_type', $request->student_type);
         }
         if ($request->filled('status')) {
             $query->where('status', $request->status);
@@ -201,7 +192,6 @@ class AdminController extends Controller
             'permanent_address' => 'required|string',
             'guardian_name' => 'required|string|max:255',
             'guardian_phone' => 'required|string|max:20',
-            'student_type' => 'required|in:Regular,Irregular,Transferee',
             'campus' => 'required|string',
             'college' => 'required|string',
             'course' => 'required|string',

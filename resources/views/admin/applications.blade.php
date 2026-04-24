@@ -179,16 +179,6 @@
                         </div>
                         
                         <div>
-                            <label class="block text-sm font-medium text-gray-700 mb-2">Student Type</label>
-                            <select name="student_type" class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-yellow-400 focus:border-yellow-400">
-                                <option value="">All Types</option>
-                                <option value="Regular" {{ request('student_type') == 'Regular' ? 'selected' : '' }}>Regular</option>
-                                <option value="Irregular" {{ request('student_type') == 'Irregular' ? 'selected' : '' }}>Irregular</option>
-                                <option value="Transferee" {{ request('student_type') == 'Transferee' ? 'selected' : '' }}>Transferee</option>
-                            </select>
-                        </div>
-                        
-                        <div>
                             <label class="block text-sm font-medium text-gray-700 mb-2">Status</label>
                             <select name="status" class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-yellow-400 focus:border-yellow-400">
                                 <option value="">All Status</option>
@@ -218,7 +208,7 @@
             </div>
             
             <!-- Active Filters -->
-            @if(request()->anyFilled(['search', 'campus', 'student_type', 'status']))
+            @if(request()->anyFilled(['search', 'campus', 'status']))
             <div class="mb-4 flex items-center space-x-2 flex-wrap gap-2">
                 <span class="text-sm text-gray-600">Active Filters:</span>
                 @if(request('search'))
@@ -231,12 +221,6 @@
                 <span class="px-3 py-1 bg-blue-100 text-blue-800 rounded-full text-sm flex items-center">
                     Campus: {{ request('campus') }}
                     <a href="{{ route('admin.applications', array_merge(request()->except('campus'), ['page' => null])) }}" class="ml-2 hover:text-blue-900 font-bold">×</a>
-                </span>
-                @endif
-                @if(request('student_type'))
-                <span class="px-3 py-1 bg-blue-100 text-blue-800 rounded-full text-sm flex items-center">
-                    Type: {{ request('student_type') }}
-                    <a href="{{ route('admin.applications', array_merge(request()->except('student_type'), ['page' => null])) }}" class="ml-2 hover:text-blue-900 font-bold">×</a>
                 </span>
                 @endif
                 @if(request('status'))
@@ -257,7 +241,6 @@
                                 <th class="table-header">Student Name</th>
                                 <th class="table-header hidden sm:table-cell">Campus</th>
                                 <th class="table-header hidden md:table-cell">Course</th>
-                                <th class="table-header hidden lg:table-cell">Type</th>
                                 <th class="table-header hidden lg:table-cell">Contact</th>
                                 <th class="table-header hidden xl:table-cell">Gmail</th>
                                 <th class="table-header">Status</th>
@@ -291,9 +274,6 @@
                                 <td class="px-4 py-4 max-w-[180px] hidden md:table-cell">
                                     <div class="text-sm font-medium text-gray-900 truncate" title="{{ $application->course }}">{{ $application->course }}</div>
                                     <div class="text-xs text-gray-500 truncate" title="{{ $application->college }}">{{ $application->college }}</div>
-                                </td>
-                                <td class="px-4 py-4 whitespace-nowrap text-xs text-gray-500 hidden lg:table-cell">
-                                    {{ $application->student_type }}
                                 </td>
                                 <td class="px-4 py-4 whitespace-nowrap text-xs text-gray-500 font-mono hidden lg:table-cell">
                                     {{ $application->contact_number }}
