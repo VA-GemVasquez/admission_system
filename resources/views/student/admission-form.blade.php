@@ -125,24 +125,7 @@
                         <p class="text-yellow-300 text-xs">Online Admission Application</p>
                     </div>
                 </div>
-                <div class="hidden sm:flex items-center gap-4 text-sm">
-                    <a href="{{ route('student.track') }}"
-                       class="text-yellow-300 hover:text-white transition flex items-center gap-1.5">
-                        <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                                  d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"/>
-                        </svg>
-                        Track Application
-                    </a>
-                    <a href="{{ route('home') }}"
-                       class="text-gray-300 hover:text-white transition flex items-center gap-1.5">
-                        <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                                  d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6"/>
-                        </svg>
-                        Home
-                    </a>
-                </div>
+               
             </div>
         </div>
     </div>
@@ -166,6 +149,26 @@
                     </ul>
                 </div>
             @endif
+
+            <!-- Quick Links -->
+            <div class="flex items-center justify-between mb-4">
+                <a href="{{ route('home') }}"
+                   class="inline-flex items-center gap-1.5 text-sm text-gray-500 hover:text-[#000035] transition font-medium">
+                    <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                              d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6"/>
+                    </svg>
+                    Home
+                </a>
+                <a href="{{ route('student.track') }}"
+                   class="inline-flex items-center gap-1.5 text-sm font-semibold text-[#000035] bg-yellow-50 border border-yellow-200 hover:bg-yellow-100 transition px-3 py-1.5 rounded-lg">
+                    <svg class="w-4 h-4 text-yellow-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                              d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"/>
+                    </svg>
+                    Track Application
+                </a>
+            </div>
 
             <!-- Progress Steps -->
             <div class="bg-white rounded-2xl shadow-sm border border-gray-100 px-4 sm:px-6 py-4 sm:py-5 mb-6">
@@ -470,17 +473,6 @@
                                     Academic Information
                                 </h3>
                                 <div class="grid sm:grid-cols-2 gap-4 mb-4">
-                                    <div>
-                                        <label class="field-label">Student Type <span class="text-red-500">*</span></label>
-                                        <select name="student_type" id="student_type" required
-                                                class="field-input @error('student_type') is-error @enderror">
-                                            <option value="">Select Student Type</option>
-                                            @foreach(['Regular','Irregular','Transferee'] as $type)
-                                                <option value="{{ $type }}" {{ old('student_type') == $type ? 'selected' : '' }}>{{ $type }}</option>
-                                            @endforeach
-                                        </select>
-                                        @error('student_type')<p class="text-red-500 text-xs mt-1">{{ $message }}</p>@enderror
-                                    </div>
                                     <div>
                                         <label class="field-label">Preferred Campus <span class="text-red-500">*</span></label>
                                         <select name="campus" id="campus" required

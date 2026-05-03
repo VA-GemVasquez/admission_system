@@ -2,8 +2,10 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Admin;
 use App\Models\Campus;
 use App\Models\StudentApplication;
+use App\Notifications\NewApplicationNotification;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Support\Facades\Mail;
@@ -54,7 +56,6 @@ class StudentController extends Controller
             'guardian_name' => $request->guardian_name,
             'guardian_relationship' => $request->guardian_relationship,
             'guardian_phone' => $request->guardian_phone,
-            'student_type' => $request->student_type,
             'campus' => $request->campus,
             'college' => $request->college,
             'course' => $request->course,
@@ -71,6 +72,8 @@ class StudentController extends Controller
         } catch (\Exception $e) {
             \Log::error('Mail failed: ' . $e->getMessage());
         }
+
+        Admin::all()->each(fn($admin) => $admin->notify(new NewApplicationNotification($application)));
 
         return redirect()->route('student.review', $application->id)
             ->with('success', 'Application submitted successfully! A confirmation email has been sent to your Gmail.');
@@ -130,7 +133,6 @@ class StudentController extends Controller
             'guardian_name' => $request->guardian_name,
             'guardian_relationship' => $request->guardian_relationship,
             'guardian_phone' => $request->guardian_phone,
-            'student_type' => $request->student_type,
             'campus' => $request->campus,
             'college' => $request->college,
             'course' => $request->course,
@@ -145,6 +147,19 @@ class StudentController extends Controller
         $application = StudentApplication::findOrFail($id);
         $this->authorizeOwnership($request, (int) $id);
         return view('student.status', compact('application'));
+    }
+
+    public function enrollmentSlip(Request $request, $id)
+    {
+        $application = StudentApplication::findOrFail($id);
+        $this->authorizeOwnership($request, (int) $id);
+
+        if ($application->status !== 'Approved') {
+            return redirect()->route('student.status', $id)
+                ->with('error', 'Enrollment slip is only available for approved applications.');
+        }
+
+        return view('student.enrollment-slip', compact('application'));
     }
 
     public function showTrackPage()
@@ -205,7 +220,6 @@ class StudentController extends Controller
             'guardian_name' => 'required|string|max:255',
             'guardian_relationship' => 'required|in:Mother,Father,Brother,Sister,Grandmother,Grandfather,Auntie,Uncle,Legal Guardian',
             'guardian_phone' => ['required', 'regex:/^[0-9\+\-\s\(\)]{7,20}$/'],
-            'student_type' => 'required|in:Regular,Irregular,Transferee',
             'campus' => 'required|string',
             'college' => 'required|string',
             'course' => 'required|string',

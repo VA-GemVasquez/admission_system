@@ -18,8 +18,65 @@
         </div>
     </div>
     
+    <!-- Notifications Panel -->
+    <div class="px-4 pt-4 pb-2" x-data="notificationPanel()" x-init="init()">
+        <button @click="toggle()"
+                class="w-full flex items-center justify-between px-4 py-3 rounded-xl transition-all duration-200 text-blue-100 hover:bg-white hover:bg-opacity-10 group">
+            <span class="flex items-center gap-3">
+                <span class="relative">
+                    <svg class="w-5 h-5 text-yellow-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                              d="M15 17h5l-1.405-1.405A2.032 2.032 0 0118 14.158V11a6.002 6.002 0 00-4-5.659V5a2 2 0 10-4 0v.341C7.67 6.165 6 8.388 6 11v3.159c0 .538-.214 1.055-.595 1.436L4 17h5m6 0v1a3 3 0 11-6 0v-1m6 0H9"/>
+                    </svg>
+                    <span x-show="count > 0"
+                          x-text="count > 9 ? '9+' : count"
+                          class="absolute -top-1.5 -right-1.5 bg-red-500 text-white text-[10px] font-black rounded-full w-4 h-4 flex items-center justify-center leading-none"></span>
+                </span>
+                <span class="text-sm tracking-wide uppercase font-black">Notifications</span>
+            </span>
+            <svg :class="open ? 'rotate-180' : ''" class="w-4 h-4 transition-transform duration-300 text-yellow-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"/>
+            </svg>
+        </button>
+
+        <!-- Dropdown Panel -->
+        <div x-show="open"
+             x-transition:enter="transition ease-out duration-200"
+             x-transition:enter-start="opacity-0 -translate-y-2"
+             x-transition:enter-end="opacity-100 translate-y-0"
+             class="mt-1 rounded-xl bg-[#000028] border border-white/10 overflow-hidden"
+             style="display:none">
+
+            <div class="px-3 py-2 border-b border-white/10 flex items-center justify-between">
+                <span class="text-[10px] uppercase tracking-widest font-black text-yellow-400">New Applications</span>
+                <button @click="markRead()" x-show="count > 0"
+                        class="text-[10px] text-blue-300 hover:text-white transition">Mark all read</button>
+            </div>
+
+            <!-- Notification List -->
+            <div class="max-h-64 overflow-y-auto">
+                <template x-if="notifications.length === 0">
+                    <p class="text-center text-xs text-blue-400 py-6">No new notifications</p>
+                </template>
+                <template x-for="n in notifications" :key="n.id">
+                    <a :href="'/admin/application/' + n.application_id"
+                       class="block px-3 py-3 hover:bg-white/5 transition border-b border-white/5 last:border-0">
+                        <div class="flex items-start gap-2">
+                            <div class="w-1.5 h-1.5 rounded-full bg-yellow-400 mt-1.5 flex-shrink-0"></div>
+                            <div class="min-w-0">
+                                <p class="text-white text-xs font-bold truncate" x-text="n.applicant_name"></p>
+                                <p class="text-blue-300 text-[11px] truncate" x-text="n.course"></p>
+                                <p class="text-blue-400 text-[10px] mt-0.5" x-text="n.campus + ' · ' + n.time"></p>
+                            </div>
+                        </div>
+                    </a>
+                </template>
+            </div>
+        </div>
+    </div>
+
     <!-- Navigation Menu -->
-    <nav class="mt-8 flex-1 px-4 space-y-2">
+    <nav class="mt-2 flex-1 px-4 space-y-2">
         <!-- Dashboard Link -->
         <a href="{{ route('admin.dashboard') }}" 
            class="group flex items-center px-4 py-3.5 rounded-xl transition-all duration-200 {{ request()->routeIs('admin.dashboard') ? 'sidebar-active shadow-lg' : 'text-blue-100 hover:bg-white hover:bg-opacity-10' }}">
@@ -102,3 +159,51 @@
         </form>
     </div>
 </div>
+
+<script>
+function notificationPanel() {
+    return {
+        open: false,
+        count: 0,
+        notifications: [],
+        poller: null,
+
+        init() {
+            this.fetch();
+            this.poller = setInterval(() => this.fetch(), 30000);
+        },
+
+        toggle() {
+            this.open = !this.open;
+        },
+
+        fetch() {
+            fetch('{{ route("admin.notifications") }}', {
+                headers: { 'X-Requested-With': 'XMLHttpRequest' }
+            })
+            .then(r => r.json())
+            .then(data => {
+                this.count = data.count;
+                this.notifications = data.notifications;
+            })
+            .catch(() => {});
+        },
+
+        markRead() {
+            fetch('{{ route("admin.notifications.read") }}', {
+                method: 'POST',
+                headers: {
+                    'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]')?.content
+                        || '{{ csrf_token() }}',
+                    'X-Requested-With': 'XMLHttpRequest'
+                }
+            })
+            .then(() => {
+                this.count = 0;
+                this.notifications = [];
+            })
+            .catch(() => {});
+        }
+    };
+}
+</script>

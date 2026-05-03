@@ -319,14 +319,6 @@
                                 </h3>
                                 <div class="space-y-4">
                                     <div>
-                                        <p class="info-label">Student Type</p>
-                                        <p class="info-value">
-                                            <span class="px-3 py-1 bg-blue-100 text-blue-800 rounded-full text-sm">
-                                                {{ $application->student_type }}
-                                            </span>
-                                        </p>
-                                    </div>
-                                    <div>
                                         <p class="info-label">Preferred Campus</p>
                                         <p class="info-value">{{ $application->campus }} Campus</p>
                                     </div>

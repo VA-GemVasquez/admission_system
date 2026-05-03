@@ -94,54 +94,6 @@
                 </div>
             </div>
 
-            <!-- Regular -->
-            <div class="stat-card bg-white rounded-xl shadow-lg p-6 border-l-4 border-green-600">
-                <div class="flex items-center justify-between">
-                    <div>
-                        <p class="text-sm text-gray-500 font-medium">Regular Students</p>
-                        <p class="text-2xl md:text-3xl font-bold text-green-700 mt-2">{{ $regularStudents }}</p>
-                        <p class="text-xs text-gray-500 mt-2">{{ $totalApplicants > 0 ? round(($regularStudents/$totalApplicants)*100) : 0 }}% of total</p>
-                    </div>
-                    <div class="p-4 bg-green-100 rounded-full">
-                        <svg class="w-8 h-8 text-green-700" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                            <path d="M12 14l9-5-9-5-9 5 9 5z"></path>
-                            <path d="M12 14l6.16-3.422a12.083 12.083 0 01.665 6.479A11.952 11.952 0 0012 20.055a11.952 11.952 0 00-6.824-2.998 12.078 12.078 0 01.665-6.479L12 14z"></path>
-                        </svg>
-                    </div>
-                </div>
-            </div>
-
-            <!-- Irregular -->
-            <div class="stat-card bg-white rounded-xl shadow-lg p-6 border-l-4 border-yellow-500">
-                <div class="flex items-center justify-between">
-                    <div>
-                        <p class="text-sm text-gray-500 font-medium">Irregular Students</p>
-                        <p class="text-2xl md:text-3xl font-bold text-yellow-600 mt-2">{{ $irregularStudents }}</p>
-                        <p class="text-xs text-gray-500 mt-2">{{ $totalApplicants > 0 ? round(($irregularStudents/$totalApplicants)*100) : 0 }}% of total</p>
-                    </div>
-                    <div class="p-4 bg-yellow-100 rounded-full">
-                        <svg class="w-8 h-8 text-yellow-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"></path>
-                        </svg>
-                    </div>
-                </div>
-            </div>
-
-            <!-- Transferees -->
-            <div class="stat-card bg-white rounded-xl shadow-lg p-6 border-l-4 border-purple-600">
-                <div class="flex items-center justify-between">
-                    <div>
-                        <p class="text-sm text-gray-500 font-medium">Transferees</p>
-                        <p class="text-2xl md:text-3xl font-bold text-purple-700 mt-2">{{ $transferees }}</p>
-                        <p class="text-xs text-gray-500 mt-2">{{ $totalApplicants > 0 ? round(($transferees/$totalApplicants)*100) : 0 }}% of total</p>
-                    </div>
-                    <div class="p-4 bg-purple-100 rounded-full">
-                        <svg class="w-8 h-8 text-purple-700" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0zm6 3a2 2 0 11-4 0 2 2 0 014 0zM7 10a2 2 0 11-4 0 2 2 0 014 0z"></path>
-                        </svg>
-                    </div>
-                </div>
-            </div>
         </div>
 
         <!-- Row 2: Status breakdown cards -->
@@ -298,7 +250,6 @@
                                 </td>
                                 <td class="px-4 py-3">
                                     <p class="text-xs text-gray-700 font-medium max-w-[130px] truncate" title="{{ $app->course }}">{{ $app->course }}</p>
-                                    <p class="text-xs text-gray-400">{{ $app->student_type }}</p>
                                 </td>
                                 <td class="px-4 py-3">
                                     <span class="status-badge
