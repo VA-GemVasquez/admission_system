@@ -92,11 +92,11 @@ class ComprehensiveCampusSeeder extends Seeder
         ];
 
         foreach ($data as $campusName => $colleges) {
-            $campus = Campus::create(['name' => $campusName]);
+            $campus = Campus::firstOrCreate(['name' => $campusName]);
             foreach ($colleges as $collegeName => $courses) {
-                $college = $campus->colleges()->create(['name' => $collegeName]);
+                $college = College::firstOrCreate(['name' => $collegeName, 'campus_id' => $campus->id]);
                 foreach ($courses as $courseName) {
-                    $college->courses()->create(['name' => $courseName]);
+                    Course::firstOrCreate(['name' => $courseName, 'college_id' => $college->id]);
                 }
             }
         }
