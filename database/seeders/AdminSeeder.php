@@ -10,18 +10,15 @@ class AdminSeeder extends Seeder
 {
     public function run(): void
     {
-        if (Admin::where('email', 'admin@university.edu')->exists()) {
-            $this->command->info('Admin account already exists, skipping.');
-            return;
-        }
+        Admin::updateOrCreate(
+            ['email' => 'admin@university.edu'],
+            [
+                'name' => 'Administrator',
+                'password' => Hash::make('group1admin2026'),
+            ]
+        );
 
-        Admin::create([
-            'name' => 'Administrator',
-            'email' => 'admin@university.edu',
-            'password' => Hash::make('group1admin2026'),
-        ]);
-
-        $this->command->info('Admin account created.');
+        $this->command->info('Admin account created/updated.');
         $this->command->info('  Email:    admin@university.edu');
         $this->command->info('  Password: group1admin2026');
     }
