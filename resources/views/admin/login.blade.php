@@ -64,7 +64,7 @@
                 </div>
             </div>
             <h2 class="text-2xl font-bold text-white">Partido State University</h2>
-            <p class="text-yellow-300">Administrator Portal</p>
+           
         </div>
 
         <div class="bg-white rounded-2xl shadow-2xl overflow-hidden">
@@ -77,8 +77,8 @@
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4.354a4 4 0 110 5.292M15 21H3v-1a6 6 0 0112 0v1zm0 0h6v-1a6 6 0 00-9-5.197M13 7a4 4 0 11-8 0 4 4 0 018 0z"></path>
                         </svg>
                     </div>
-                    <h1 class="text-2xl md:text-3xl font-bold text-white mb-2">Admin Login</h1>
-                    <p class="text-yellow-300">Access the administration panel</p>
+                    <h1 class="text-2xl md:text-3xl font-bold text-white mb-2">Admin</h1>
+                    
                 </div>
             </div>
             
@@ -152,7 +152,7 @@
                         <svg class="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 16l-4-4m0 0l4-4m-4 4h14m-5 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h7a3 3 0 013 3v1"></path>
                         </svg>
-                        Login to Dashboard
+                        Login 
                     </button>
                 </form>
                 
@@ -166,14 +166,8 @@
                         </a>
                     </div>
                     
-                    <!-- Default Credentials Hint (remove in production) -->
-                    <div class="mt-4 p-3 bg-blue-50 rounded-lg">
-                        <p class="text-xs text-blue-700 text-center">
-                            <span class="font-bold">Demo Credentials:</span><br>
-                            Email: admin@university.edu<br>
-                            Password: password123
-                        </p>
-                    </div>
+                    
+                    
                 </div>
             </div>
         </div>
