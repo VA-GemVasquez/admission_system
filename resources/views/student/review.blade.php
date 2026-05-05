@@ -22,9 +22,9 @@
             @apply flex items-center px-4 py-2 rounded-full text-sm font-bold shadow-sm border transition-all duration-300;
         }
         .status-pending {
-            background-color: #000035;
-            color: #FFD700;
-            border-color: #000035;
+            background-color: rgba(254, 240, 138, 0.4);
+            color: #854d0e;
+            border-color: rgba(234, 179, 8, 1);
         }
         .status-approved {
             background-color: rgba(187, 247, 208, 0.4);
@@ -159,23 +159,6 @@
                                 <p class="text-[#000035] text-xs md:text-sm">Please review your information carefully</p>
                             </div>
                         </div>
-                        <div class="flex flex-wrap items-center gap-2">
-                            <span class="text-sm font-medium text-[#000035]">Status:</span>
-                            <span class="status-badge 
-                                @if($application->status == 'Pending') status-pending
-                                @elseif($application->status == 'Approved') status-approved
-                                @elseif($application->status == 'Rejected') status-rejected
-                                @else status-waitlisted
-                                @endif">
-                                <span class="status-dot 
-                                    @if($application->status == 'Pending') bg-yellow-500 pulse
-                                    @elseif($application->status == 'Approved') bg-green-500
-                                    @elseif($application->status == 'Rejected') bg-red-500
-                                    @else bg-blue-500
-                                    @endif"></span>
-                                {{ $application->status }}
-                            </span>
-                        </div>
                     </div>
                 </div>
                 
@@ -204,6 +187,25 @@
                                 </p>
                             </div>
                         </div>
+                        <!-- Status + Application ID -->
+                        <div class="flex flex-wrap items-center gap-3">
+                            <div class="flex flex-col items-center">
+                                <span class="text-xs font-medium text-gray-500 mb-1">Status</span>
+                                <span class="status-badge
+                                    @if($application->status == 'Pending') status-pending
+                                    @elseif($application->status == 'Approved') status-approved
+                                    @elseif($application->status == 'Rejected') status-rejected
+                                    @else status-waitlisted
+                                    @endif">
+                                    <span class="status-dot
+                                        @if($application->status == 'Pending') bg-yellow-500 pulse
+                                        @elseif($application->status == 'Approved') bg-green-500
+                                        @elseif($application->status == 'Rejected') bg-red-500
+                                        @else bg-blue-500
+                                        @endif"></span>
+                                    {{ $application->status }}
+                                </span>
+                            </div>
                         <!-- Application ID Badge -->
                         <div class="id-reminder">
                             <svg class="w-6 h-6 text-[#000035]" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -213,6 +215,7 @@
                                 <p class="text-xs text-[#000035] font-medium">Application ID</p>
                                 <p class="id-number">#{{ str_pad($application->id, 5, '0', STR_PAD_LEFT) }}</p>
                             </div>
+                        </div>
                         </div>
                     </div>
                     <!-- Reminder Note -->
