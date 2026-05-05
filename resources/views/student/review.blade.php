@@ -187,35 +187,34 @@
                                 </p>
                             </div>
                         </div>
-                        <!-- Status + Application ID -->
+                        <!-- Application ID + Status Badges -->
                         <div class="flex flex-wrap items-center gap-3">
-                            <div class="flex flex-col items-center">
-                                <span class="text-xs font-medium text-gray-500 mb-1">Status</span>
-                                <span class="status-badge
-                                    @if($application->status == 'Pending') status-pending
-                                    @elseif($application->status == 'Approved') status-approved
-                                    @elseif($application->status == 'Rejected') status-rejected
-                                    @else status-waitlisted
-                                    @endif">
-                                    <span class="status-dot
-                                        @if($application->status == 'Pending') bg-yellow-500 pulse
-                                        @elseif($application->status == 'Approved') bg-green-500
-                                        @elseif($application->status == 'Rejected') bg-red-500
-                                        @else bg-blue-500
-                                        @endif"></span>
-                                    {{ $application->status }}
-                                </span>
+                            <!-- Application ID Badge -->
+                            <div class="id-reminder">
+                                <svg class="w-6 h-6 text-[#000035]" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 6H5a2 2 0 00-2 2v9a2 2 0 002 2h14a2 2 0 002-2V8a2 2 0 00-2-2h-5m-4 0V5a2 2 0 114 0v1m-4 0a2 2 0 104 0m-5 8a2 2 0 100-4 2 2 0 000 4zm0 0c1.306 0 2.417.835 2.83 2M9 14a3.001 3.001 0 00-2.83 2M15 11h3m-3 4h2"></path>
+                                </svg>
+                                <div>
+                                    <p class="text-xs text-[#000035] font-medium">Application ID</p>
+                                    <p class="id-number">#{{ str_pad($application->id, 5, '0', STR_PAD_LEFT) }}</p>
+                                </div>
                             </div>
-                        <!-- Application ID Badge -->
-                        <div class="id-reminder">
-                            <svg class="w-6 h-6 text-[#000035]" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 6H5a2 2 0 00-2 2v9a2 2 0 002 2h14a2 2 0 002-2V8a2 2 0 00-2-2h-5m-4 0V5a2 2 0 114 0v1m-4 0a2 2 0 104 0m-5 8a2 2 0 100-4 2 2 0 000 4zm0 0c1.306 0 2.417.835 2.83 2M9 14a3.001 3.001 0 00-2.83 2M15 11h3m-3 4h2"></path>
-                            </svg>
-                            <div>
-                                <p class="text-xs text-[#000035] font-medium">Application ID</p>
-                                <p class="id-number">#{{ str_pad($application->id, 5, '0', STR_PAD_LEFT) }}</p>
+                            <!-- Status Badge (same design as Application ID) -->
+                            <div class="id-reminder">
+                                <svg class="w-6 h-6 text-[#000035]" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+                                </svg>
+                                <div>
+                                    <p class="text-xs text-[#000035] font-medium">Status</p>
+                                    <p class="id-number
+                                        @if($application->status == 'Approved') !bg-green-700
+                                        @elseif($application->status == 'Rejected') !bg-red-700
+                                        @elseif($application->status == 'Waitlisted') !bg-blue-700
+                                        @endif">
+                                        {{ $application->status }}
+                                    </p>
+                                </div>
                             </div>
-                        </div>
                         </div>
                     </div>
                     <!-- Reminder Note -->
