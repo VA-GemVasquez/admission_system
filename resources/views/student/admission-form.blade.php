@@ -241,21 +241,21 @@
                                     <div>
                                         <label class="field-label">Last Name <span class="text-red-500">*</span></label>
                                         <input type="text" name="lastname" value="{{ old('lastname') }}" required
-                                               placeholder="e.g. Dela Cruz"
+                                               placeholder="Last Name"
                                                class="field-input @error('lastname') is-error @enderror">
                                         @error('lastname')<p class="text-red-500 text-xs mt-1">{{ $message }}</p>@enderror
                                     </div>
                                     <div>
                                         <label class="field-label">First Name <span class="text-red-500">*</span></label>
                                         <input type="text" name="firstname" value="{{ old('firstname') }}" required
-                                               placeholder="e.g. Juan"
+                                               placeholder="First Name"
                                                class="field-input @error('firstname') is-error @enderror">
                                         @error('firstname')<p class="text-red-500 text-xs mt-1">{{ $message }}</p>@enderror
                                     </div>
                                     <div>
                                         <label class="field-label">Middle Name</label>
                                         <input type="text" name="middlename" value="{{ old('middlename') }}"
-                                               placeholder="e.g. Santos"
+                                               placeholder="Optional"
                                                class="field-input @error('middlename') is-error @enderror">
                                     </div>
                                 </div>
@@ -282,7 +282,7 @@
                                     <div>
                                         <label class="field-label">Age <span class="text-red-500">*</span></label>
                                         <input type="number" name="age" value="{{ old('age') }}" required
-                                               min="15" max="100" placeholder="e.g. 18"
+                                               min="15" max="100" placeholder=""
                                                class="field-input @error('age') is-error @enderror">
                                         @error('age')<p class="text-red-500 text-xs mt-1">{{ $message }}</p>@enderror
                                     </div>
