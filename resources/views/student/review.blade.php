@@ -22,9 +22,9 @@
             @apply flex items-center px-4 py-2 rounded-full text-sm font-bold shadow-sm border transition-all duration-300;
         }
         .status-pending {
-            background-color: rgba(254, 240, 138, 0.4);
-            color: #854d0e;
-            border-color: rgba(254, 240, 138, 1);
+            background-color: #ffffff;
+            color: #92400e;
+            border-color: #d97706;
         }
         .status-approved {
             background-color: rgba(187, 247, 208, 0.4);
