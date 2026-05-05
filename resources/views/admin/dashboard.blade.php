@@ -285,17 +285,13 @@
                                                 </svg>
                                             </button>
                                         </form>
-                                        <form action="{{ route('admin.reject', $app->id) }}" method="POST" class="inline"
-                                              onsubmit="return confirm('Reject {{ $app->firstname }} {{ $app->lastname }}?')">
-                                            @csrf
-                                            <button type="submit"
-                                                    class="p-1.5 bg-red-50 text-red-600 hover:bg-red-100 rounded-lg transition"
-                                                    title="Reject">
-                                                <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path>
-                                                </svg>
-                                            </button>
-                                        </form>
+                                        <a href="{{ route('admin.view', $app->id) }}"
+                                           class="p-1.5 bg-red-50 text-red-600 hover:bg-red-100 rounded-lg transition inline-flex items-center"
+                                           title="Reject (requires reason)">
+                                            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path>
+                                            </svg>
+                                        </a>
                                         @endif
                                     </div>
                                 </td>

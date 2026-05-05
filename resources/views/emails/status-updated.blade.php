@@ -28,7 +28,14 @@
         @if($application->status === 'Approved')
             <p>Congratulations! Your application has been approved. Please visit the campus registrar with your original documents to complete your enrollment.</p>
         @elseif($application->status === 'Rejected')
-            <p>We regret to inform you that your application was not successful at this time. We wish you the best in your future academic endeavors.</p>
+            <p>We regret to inform you that your application was not successful at this time.</p>
+            @if($application->rejection_reason)
+            <div style="background-color:#fff5f5;border-left:4px solid #f87171;padding:12px 16px;border-radius:6px;margin:16px 0;">
+                <p style="margin:0;font-weight:700;color:#991b1b;font-size:13px;">Reason for Rejection:</p>
+                <p style="margin:6px 0 0;color:#7f1d1d;font-size:14px;">{{ $application->rejection_reason }}</p>
+            </div>
+            @endif
+            <p>We wish you the best in your future academic endeavors.</p>
         @elseif($application->status === 'Waitlisted')
             <p>Your application has been placed on the waitlist. We will notify you if a slot becomes available in your chosen program.</p>
         @endif

@@ -134,7 +134,7 @@ class AdminController extends Controller
         return redirect()->back()->with('success', 'Application approved successfully!');
     }
 
-    public function rejectApplication($id)
+    public function rejectApplication(Request $request, $id)
     {
         $application = StudentApplication::findOrFail($id);
 
@@ -142,7 +142,14 @@ class AdminController extends Controller
             return redirect()->back()->with('info', 'Application is already rejected.');
         }
 
-        $application->update(['status' => 'Rejected']);
+        $request->validate([
+            'rejection_reason' => 'required|string|max:1000',
+        ]);
+
+        $application->update([
+            'status' => 'Rejected',
+            'rejection_reason' => $request->rejection_reason,
+        ]);
         $this->sendStatusEmail($application);
 
         return redirect()->back()->with('success', 'Application rejected successfully!');

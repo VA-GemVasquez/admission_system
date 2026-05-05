@@ -38,6 +38,7 @@ class StudentApplication extends Model
         'photo_path',
         'birth_certificate_path',
         'report_card_path',
-        'status'
+        'status',
+        'rejection_reason'
     ];
 }

@@ -52,6 +52,7 @@
         .action-btn {
             @apply px-6 py-3 rounded-xl font-bold transition-all duration-300 flex items-center shadow-md transform hover:-translate-y-1 hover:shadow-xl;
         }
+        [x-cloak] { display: none !important; }
     </style>
 </head>
 <body class="bg-gray-100">
@@ -152,7 +153,7 @@
                         </div>
                         
                         <!-- Status Action Buttons -->
-                        <div class="flex flex-wrap gap-2">
+                        <div class="flex flex-wrap gap-2" x-data="{ rejectModal: {{ $errors->has('rejection_reason') ? 'true' : 'false' }} }">
                             <form action="{{ route('admin.approve', $application->id) }}" method="POST" class="inline"
                                   onsubmit="return confirm('Approve this application for {{ $application->firstname }} {{ $application->lastname }}?')">
                                 @csrf
@@ -173,16 +174,70 @@
                                     Waitlist
                                 </button>
                             </form>
-                            <form action="{{ route('admin.reject', $application->id) }}" method="POST" class="inline"
-                                  onsubmit="return confirm('Reject this application for {{ $application->firstname }} {{ $application->lastname }}? This will notify the applicant.')">
-                                @csrf
-                                <button type="submit" class="bg-red-600 text-white px-5 py-2.5 rounded-xl hover:bg-red-700 transition-all duration-300 transform hover:-translate-y-1 flex items-center text-sm font-bold shadow-md hover:shadow-xl">
-                                    <svg class="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path>
-                                    </svg>
-                                    Reject
-                                </button>
-                            </form>
+
+                            <!-- Reject Button (opens modal) -->
+                            <button type="button" @click="rejectModal = true"
+                                    class="bg-red-600 text-white px-5 py-2.5 rounded-xl hover:bg-red-700 transition-all duration-300 transform hover:-translate-y-1 flex items-center text-sm font-bold shadow-md hover:shadow-xl">
+                                <svg class="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path>
+                                </svg>
+                                Reject
+                            </button>
+
+                            <!-- Rejection Reason Modal -->
+                            <div x-show="rejectModal" x-cloak
+                                 class="fixed inset-0 z-50 flex items-center justify-center p-4"
+                                 x-transition:enter="transition ease-out duration-200"
+                                 x-transition:enter-start="opacity-0"
+                                 x-transition:enter-end="opacity-100"
+                                 x-transition:leave="transition ease-in duration-150"
+                                 x-transition:leave-start="opacity-100"
+                                 x-transition:leave-end="opacity-0">
+                                <!-- Backdrop -->
+                                <div class="absolute inset-0 bg-black/60" @click="rejectModal = false"></div>
+                                <!-- Modal Box -->
+                                <div class="relative bg-white rounded-2xl shadow-2xl w-full max-w-md p-6 z-10"
+                                     x-transition:enter="transition ease-out duration-200"
+                                     x-transition:enter-start="opacity-0 scale-95"
+                                     x-transition:enter-end="opacity-100 scale-100">
+                                    <div class="flex items-center mb-4">
+                                        <div class="p-2 bg-red-100 rounded-full mr-3">
+                                            <svg class="w-6 h-6 text-red-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path>
+                                            </svg>
+                                        </div>
+                                        <div>
+                                            <h3 class="text-lg font-bold text-gray-900">Reject Application</h3>
+                                            <p class="text-sm text-gray-500">{{ $application->firstname }} {{ $application->lastname }}</p>
+                                        </div>
+                                    </div>
+                                    <form action="{{ route('admin.reject', $application->id) }}" method="POST">
+                                        @csrf
+                                        <div class="mb-4">
+                                            <label class="block text-sm font-semibold text-gray-700 mb-2">
+                                                Reason for Rejection <span class="text-red-500">*</span>
+                                            </label>
+                                            <textarea name="rejection_reason" rows="4" required
+                                                      class="w-full border border-gray-300 rounded-xl px-4 py-3 text-sm text-gray-800 focus:outline-none focus:ring-2 focus:ring-red-400 focus:border-transparent resize-none"
+                                                      placeholder="State the reason why this application is being rejected...">{{ old('rejection_reason') }}</textarea>
+                                            @error('rejection_reason')
+                                                <p class="text-red-500 text-xs mt-1">{{ $message }}</p>
+                                            @enderror
+                                        </div>
+                                        <p class="text-xs text-gray-400 mb-4">This reason will be included in the email notification sent to the applicant.</p>
+                                        <div class="flex gap-3">
+                                            <button type="button" @click="rejectModal = false"
+                                                    class="flex-1 px-4 py-2.5 border border-gray-300 text-gray-700 rounded-xl font-semibold hover:bg-gray-50 transition text-sm">
+                                                Cancel
+                                            </button>
+                                            <button type="submit"
+                                                    class="flex-1 px-4 py-2.5 bg-red-600 text-white rounded-xl font-bold hover:bg-red-700 transition text-sm shadow-md">
+                                                Confirm Rejection
+                                            </button>
+                                        </div>
+                                    </form>
+                                </div>
+                            </div>
                         </div>
                     </div>
                 </div>
@@ -219,6 +274,21 @@
                     </div>
                 </div>
                 
+                <!-- Rejection Reason Banner -->
+                @if($application->status === 'Rejected' && $application->rejection_reason)
+                <div class="mx-4 md:mx-8 mt-6 p-4 bg-red-50 border border-red-200 rounded-xl flex items-start gap-3">
+                    <div class="p-1.5 bg-red-100 rounded-full flex-shrink-0 mt-0.5">
+                        <svg class="w-4 h-4 text-red-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+                        </svg>
+                    </div>
+                    <div>
+                        <p class="text-sm font-bold text-red-700 mb-1">Reason for Rejection</p>
+                        <p class="text-sm text-red-600">{{ $application->rejection_reason }}</p>
+                    </div>
+                </div>
+                @endif
+
                 <!-- Details Grid -->
                 <div class="p-4 md:p-8">
                     <div class="grid md:grid-cols-2 gap-6 md:gap-8">
