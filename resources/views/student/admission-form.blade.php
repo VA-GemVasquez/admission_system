@@ -367,14 +367,9 @@
                                     </div>
                                     <div>
                                         <label class="field-label">Gmail Account <span class="text-red-500">*</span></label>
-                                        <div class="flex">
-                                            <input type="email" name="gmail_account" value="{{ old('gmail_account') }}" required
-                                                   placeholder="youremail"
-                                                   class="field-input rounded-r-none border-r-0 @error('gmail_account') is-error @enderror">
-                                            <span class="inline-flex items-center px-3 bg-gray-100 border-l-0 border-y border-r border-gray-300 rounded-r-lg text-gray-500 text-sm font-medium whitespace-nowrap" style="border-width:1.5px">
-                                                @gmail.com
-                                            </span>
-                                        </div>
+                                        <input type="email" name="gmail_account" value="{{ old('gmail_account') }}" required
+                                               placeholder="youremail@gmail.com"
+                                               class="field-input @error('gmail_account') is-error @enderror">
                                         @error('gmail_account')<p class="text-red-500 text-xs mt-1">{{ $message }}</p>@enderror
                                         <p class="text-xs text-gray-400 mt-1">Admission updates will be sent here</p>
                                     </div>
