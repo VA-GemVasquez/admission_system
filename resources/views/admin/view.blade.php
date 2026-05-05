@@ -53,6 +53,20 @@
             @apply px-6 py-3 rounded-xl font-bold transition-all duration-300 flex items-center shadow-md transform hover:-translate-y-1 hover:shadow-xl;
         }
         [x-cloak] { display: none !important; }
+        .id-number {
+            font-family: monospace;
+            font-size: clamp(13px, 2.5vw, 16px);
+            font-weight: bold;
+            letter-spacing: 1px;
+            background: #000035;
+            padding: 4px 12px;
+            border-radius: 8px;
+            color: #FFD700;
+            display: inline-block;
+        }
+        .id-number.approved { background: #166534; }
+        .id-number.rejected { background: #991b1b; }
+        .id-number.waitlisted { background: #1e40af; }
     </style>
 </head>
 <body class="bg-gray-100">
@@ -133,19 +147,12 @@
                             </div>
                             <div>
                                 <span class="text-sm text-[#000035] font-medium">Current Status</span>
-                                <div class="flex items-center mt-1">
-                                    <span class="status-badge 
-                                        @if($application->status == 'Pending') status-pending
-                                        @elseif($application->status == 'Approved') status-approved
-                                        @elseif($application->status == 'Rejected') status-rejected
-                                        @else status-waitlisted
+                                <div class="mt-1">
+                                    <span class="id-number
+                                        @if($application->status == 'Approved') approved
+                                        @elseif($application->status == 'Rejected') rejected
+                                        @elseif($application->status == 'Waitlisted') waitlisted
                                         @endif">
-                                        <span class="status-dot 
-                                            @if($application->status == 'Pending') bg-yellow-500 pulse
-                                            @elseif($application->status == 'Approved') bg-green-500
-                                            @elseif($application->status == 'Rejected') bg-red-500
-                                            @else bg-blue-500
-                                            @endif"></span>
                                         {{ $application->status }}
                                     </span>
                                 </div>
