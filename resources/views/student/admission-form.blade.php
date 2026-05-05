@@ -692,6 +692,93 @@
             }
         }
 
+        /* ── Step validation ── */
+        var STEP_FIELDS = {
+            1: ['lastname','firstname','age','sex','civil_status','date_of_birth',
+                'birth_place','temporary_address','permanent_address','contact_number','gmail_account'],
+            2: ['guardian_name','guardian_relationship','guardian_phone'],
+            3: ['campus','college','course']
+        };
+        var STEP_FILES = {
+            3: [
+                { name: 'photo',             zone: 'zone-photo' },
+                { name: 'birth_certificate', zone: 'zone-bc'    },
+                { name: 'report_card',       zone: 'zone-rc'    }
+            ]
+        };
+
+        function showStepError(msg) {
+            var existing = document.getElementById('step-error-banner');
+            if (existing) existing.remove();
+            var banner = document.createElement('div');
+            banner.id = 'step-error-banner';
+            banner.className = 'flex items-center gap-2 mb-4 p-3 bg-red-50 border border-red-300 rounded-xl text-red-700 text-sm font-medium';
+            banner.innerHTML = '<svg class="w-4 h-4 flex-shrink-0" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7 4a1 1 0 11-2 0 1 1 0 012 0zm-1-9a1 1 0 00-1 1v4a1 1 0 102 0V6a1 1 0 00-1-1z" clip-rule="evenodd"/></svg>' + msg;
+            var activeStep = document.querySelector('.form-step.active');
+            if (activeStep) activeStep.insertBefore(banner, activeStep.firstChild);
+            setTimeout(function () { if (banner.parentNode) banner.remove(); }, 5000);
+        }
+
+        function clearStepError() {
+            var b = document.getElementById('step-error-banner');
+            if (b) b.remove();
+        }
+
+        function validateStep(step) {
+            var valid = true;
+            var firstError = null;
+
+            function markField(el, isEmpty) {
+                if (!el) return;
+                if (isEmpty) {
+                    el.classList.add('is-error');
+                    if (!firstError) firstError = el;
+                    valid = false;
+                } else {
+                    el.classList.remove('is-error');
+                }
+            }
+
+            /* Text / select / date / textarea inputs */
+            (STEP_FIELDS[step] || []).forEach(function (name) {
+                var el = document.querySelector('[name="' + name + '"]');
+                markField(el, !el || el.value.trim() === '');
+            });
+
+            /* File inputs (step 3) */
+            (STEP_FILES[step] || []).forEach(function (f) {
+                var el   = document.querySelector('[name="' + f.name + '"]');
+                var zone = document.getElementById(f.zone);
+                var empty = !el || el.files.length === 0;
+                if (zone) {
+                    if (empty) { zone.classList.add('is-error'); if (!firstError) firstError = zone; valid = false; }
+                    else       { zone.classList.remove('is-error'); }
+                }
+            });
+
+            /* Terms checkbox (step 3) */
+            if (step === 3) {
+                var terms = document.getElementById('terms');
+                if (terms && !terms.checked) {
+                    terms.classList.add('is-error');
+                    if (!firstError) firstError = terms;
+                    valid = false;
+                }
+            }
+
+            if (!valid) {
+                showStepError('Please fill in all required fields before proceeding.');
+                if (firstError && typeof firstError.focus === 'function') {
+                    firstError.scrollIntoView({ behavior: 'smooth', block: 'center' });
+                    setTimeout(function () { firstError.focus(); }, 300);
+                }
+            } else {
+                clearStepError();
+            }
+
+            return valid;
+        }
+
         /* ── Multi-step navigation ── */
         var TITLES = {
             1: 'Personal Information',
@@ -703,9 +790,15 @@
         function goToStep(n) {
             n = parseInt(n, 10);
             if (isNaN(n) || n === current) return;
+
+            /* Block forward movement if current step has empty required fields */
+            if (n > current && !validateStep(current)) return;
+
             var from = document.getElementById('step-' + current);
             var to   = document.getElementById('step-' + n);
             if (!from || !to) return;
+
+            clearStepError();
 
             // Hide all steps first to be safe
             document.querySelectorAll('.form-step').forEach(function(s) {
@@ -796,6 +889,7 @@
                 label.textContent = name.length > 28 ? name.slice(0, 26) + '…' : name;
                 zone.classList.add('has-file');
                 zone.classList.remove('is-error');
+                input.classList.remove('is-error');
             }
         }
 
