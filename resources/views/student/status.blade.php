@@ -64,6 +64,29 @@
             @apply px-5 py-3 rounded-xl font-bold transition-all duration-300 flex items-center shadow-md transform hover:-translate-y-1 hover:shadow-xl text-sm;
         }
         .logo-container { width: 44px; height: 44px; }
+        .id-reminder {
+            background: linear-gradient(135deg, #FFD700 15%, #FDB931 100%);
+            border-radius: 12px;
+            padding: 10px 14px;
+            display: inline-flex;
+            align-items: center;
+            gap: 10px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+            flex-shrink: 0;
+        }
+        .id-number {
+            font-family: monospace;
+            font-size: clamp(14px, 3vw, 18px);
+            font-weight: bold;
+            letter-spacing: 2px;
+            background: #000035;
+            padding: 4px 12px;
+            border-radius: 8px;
+            color: #FFD700;
+        }
+        .id-number.approved { background: #166534; }
+        .id-number.rejected { background: #991b1b; }
+        .id-number.waitlisted { background: #1e40af; }
     </style>
 </head>
 <body class="bg-gray-100">
@@ -130,21 +153,20 @@
                                 <p class="text-[#000035] text-xs md:text-sm">Track your application progress</p>
                             </div>
                         </div>
-                        <div class="flex items-center">
-                            <span class="status-badge 
-                                @if($application->status == 'Pending') status-pending
-                                @elseif($application->status == 'Approved') status-approved
-                                @elseif($application->status == 'Rejected') status-rejected
-                                @else status-waitlisted
-                                @endif">
-                                <span class="status-dot 
-                                    @if($application->status == 'Pending') bg-yellow-500 pulse
-                                    @elseif($application->status == 'Approved') bg-green-500
-                                    @elseif($application->status == 'Rejected') bg-red-500
-                                    @else bg-blue-500
-                                    @endif"></span>
-                                {{ $application->status }}
-                            </span>
+                        <div class="id-reminder">
+                            <svg class="w-6 h-6 text-[#000035]" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+                            </svg>
+                            <div>
+                                <p class="text-xs text-[#000035] font-medium">Status</p>
+                                <p class="id-number
+                                    @if($application->status == 'Approved') approved
+                                    @elseif($application->status == 'Rejected') rejected
+                                    @elseif($application->status == 'Waitlisted') waitlisted
+                                    @endif">
+                                    {{ $application->status }}
+                                </p>
+                            </div>
                         </div>
                     </div>
                 </div>
