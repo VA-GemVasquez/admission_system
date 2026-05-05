@@ -119,9 +119,19 @@
                    Pending Only
                 </a>
 
-                <a href="{{ route('admin.applications', ['status' => 'Approved']) }}" 
+                <a href="{{ route('admin.applications', ['status' => 'Approved']) }}"
                    class="block py-2 text-xs font-black uppercase tracking-widest transition duration-200 {{ (request('status') == 'Approved') ? 'text-yellow-400' : 'text-blue-300 hover:text-white' }}">
                    Approved Only
+                </a>
+
+                <a href="{{ route('admin.applications', ['status' => 'Waitlisted']) }}"
+                   class="block py-2 text-xs font-black uppercase tracking-widest transition duration-200 {{ (request('status') == 'Waitlisted') ? 'text-yellow-400' : 'text-blue-300 hover:text-white' }}">
+                   Waitlisted Only
+                </a>
+
+                <a href="{{ route('admin.applications', ['status' => 'Rejected']) }}"
+                   class="block py-2 text-xs font-black uppercase tracking-widest transition duration-200 {{ (request('status') == 'Rejected') ? 'text-yellow-400' : 'text-blue-300 hover:text-white' }}">
+                   Rejected Only
                 </a>
 
                 <!-- Conditional Sub-functions -->
