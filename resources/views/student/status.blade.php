@@ -256,6 +256,12 @@
                                             <span class="text-green-700">Congratulations! Your application has been approved. You will receive enrollment instructions via email.</span>
                                         @elseif($application->status == 'Rejected')
                                             <span class="text-red-700">We regret to inform you that your application was not approved for this academic year.</span>
+                                            @if($application->rejection_reason)
+                                            <div class="mt-3 p-3 bg-red-50 border border-red-200 rounded-lg">
+                                                <p class="text-xs font-bold text-red-700 mb-1">Reason:</p>
+                                                <p class="text-xs text-red-600">{{ $application->rejection_reason }}</p>
+                                            </div>
+                                            @endif
                                         @elseif($application->status == 'Waitlisted')
                                             <span class="text-blue-700">Your application has been waitlisted. We will contact you if a slot becomes available.</span>
                                         @else
